@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+// Upload.jsx
+import { useEffect, useState } from "react";
 import Dropzone from "../../components/DropZone/Dropzone";
 import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
-import { useState } from "react";
 import axios from "axios";
 import UploadVideo from "../../utils/upload";
 import { useNavigate } from "react-router-dom";
@@ -14,23 +14,34 @@ import DOMPurify from "dompurify";
 
 const Upload = () => {
   const [caption, setCaption] = useState("");
-  const [test, setTest] = useState("");
   const [desc, setDesc] = useState("");
-
   const [videoFile, setVideoFile] = useState("");
-  const [answer, setAnswer] = useState("");
   const [success, setSuccess] = useState("");
-  const [options, setOptions] = useState({
-    optionA: "",
-    optionB: "",
-    optionC: "",
-    optionD: "",
-  });
   const [feedPreview, setFeedPreview] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const userData = currentUser.user;
   const [loading, setLoading] = useState(false);
-
+  const [tests, setTests] = useState([
+    { question: "", options: { A: "", B: "", C: "", D: "" }, answer: "" },
+  ]);
+  const [category, setCategory] = useState("");
+  const categories = [
+    "Science & Technology",
+    "Mathematics",
+    "Literature",
+    "History",
+    "Geography",
+    "Languages",
+    "Arts & Music",
+    "Health & Fitness",
+    "Business & Finance",
+    "Programming & Computer Science",
+    "Philosophy & Psychology",
+    "Education & Teaching",
+    "Engineering & Architecture",
+    "Law & Government",
+    "Medicine & Healthcare",
+  ];
   useEffect(() => {
     // Revoke the old feed preview Blob URL
     return () => URL.revokeObjectURL(feedPreview);
@@ -38,54 +49,61 @@ const Upload = () => {
 
   const navigate = useNavigate();
 
+  const addTest = () => {
+    setTests([
+      ...tests,
+      { question: "", options: { A: "", B: "", C: "", D: "" }, answer: "" },
+    ]);
+  };
+
+  const updateTest = (index, updatedTest) => {
+    const updatedTests = tests.map((test, i) =>
+      i === index ? updatedTest : test
+    );
+    setTests(updatedTests);
+  };
+
+  const removeTest = (index) => {
+    const newTests = [...tests];
+    newTests.splice(index, 1);
+    setTests(newTests);
+  };
+
+  console.log(tests);
+
+  // Upload.jsx
   const handleSubmit = async (e) => {
     setLoading(true);
 
     e.preventDefault();
-    const url = await UploadVideo(videoFile);
-    setFeedPreview(url);
+    const url =  await UploadVideo(videoFile);
+    const data = {
+      caption,
+      video: url,
+      description: desc,
+      category,
+      tests,
+    };
 
     try {
-      await axios.post(
-        "https://neural-feed-backend.onrender.com/api/upload/feeds",
-        {
-          userId: userData._id,
-          username: userData.username,
-          profileImage: userData.profileImage,
-          admissions: userData.admissions,
-          video: url,
-          caption: caption,
-          description: desc,
-          test: test,
-          answer: answer,
-          options: {
-            A: options.optionA,
-            B: options.optionB,
-            C: options.optionC,
-            D: options.optionD,
-          },
+      await axios.post("http://localhost:3000/api/upload/feeds", data, {
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          withCredentials: true,
-        }
-      );
+        withCredentials: true,
+      });
       setLoading(false);
-      setSuccess("Video Uploaded Sucessfully");
+      setSuccess("Video Uploaded Successfully");
       navigate("/");
     } catch (error) {
       setLoading(false);
       console.log(error);
     }
   };
-
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
+        <BarLoader width={100} height={25} color="#38a169" />
       </div>
     );
 
@@ -99,7 +117,8 @@ const Upload = () => {
           // left: '50%',
           // transform: 'translate(-50%, -50%)',
         }
-      }>
+      }
+    >
       <form onSubmit={handleSubmit}>
         <div className="UploadTitle ">
           <h1 className="text-xl font-bold">Upload Your Neural Feed</h1>
@@ -111,7 +130,8 @@ const Upload = () => {
                 <video
                   src={feedPreview}
                   className=" rounded transition  h-full flex self-center justify-center items-center"
-                  controls></video>
+                  controls
+                ></video>
               </>
             ) : (
               <>
@@ -138,102 +158,118 @@ const Upload = () => {
             </div>
             <div className="captionDiv">
               <h1 className="Caption font-semibold">Description</h1>
-              {/* <textarea
-                name="Desc"
-                id=""
-                onChange={(e) => setDesc(e.target.value)}
-                className=" resize-none  outline-none border rounded p-3 w-full h-48"
-              /> */}
               <ReactQuill
                 value={desc}
                 onChange={setDesc}
                 className="resize-none outline-none  rounded  w-full "
               />
             </div>
+            {tests.map((test, index) => (
+              <div key={index} className="border p-5 rounded-md shadow-md">
+                <h1
+                  className={`Caption font-semibold text-center text-2xl text-green-600`}
+                >
+                  Test {index + 1}
+                </h1>
+                <input
+                  type="text"
+                  placeholder="Question..."
+                  value={test.question}
+                  onChange={(e) =>
+                    updateTest(index, { ...test, question: e.target.value })
+                  }
+                  className="  outline-none border rounded p-3 w-full"
+                />
+                <h1 className={`Caption font-semibold`}>Option A</h1>
+                <input
+                  type="text"
+                  value={test.options.A}
+                  onChange={(e) =>
+                    updateTest(index, {
+                      ...test,
+                      options: { ...test.options, A: e.target.value },
+                    })
+                  }
+                  className="  outline-none border rounded p-3 w-full"
+                />
+                <h1 className={`Caption font-semibold`}>Option B</h1>
+                <input
+                  type="text"
+                  value={test.options.B}
+                  onChange={(e) =>
+                    updateTest(index, {
+                      ...test,
+                      options: { ...test.options, B: e.target.value },
+                    })
+                  }
+                  className="  outline-none border rounded p-3 w-full"
+                />
+                <h1 className={`Caption font-semibold`}>Option C</h1>
+                <input
+                  type="text"
+                  value={test.options.C}
+                  onChange={(e) =>
+                    updateTest(index, {
+                      ...test,
+                      options: { ...test.options, C: e.target.value },
+                    })
+                  }
+                  className="  outline-none border rounded p-3 w-full"
+                />
+                <h1 className={`Caption font-semibold`}>Option D</h1>
+                <input
+                  type="text"
+                  value={test.options.D}
+                  onChange={(e) =>
+                    updateTest(index, {
+                      ...test,
+                      options: { ...test.options, D: e.target.value },
+                    })
+                  }
+                  className="  outline-none border rounded p-3 w-full"
+                />
+                <h1 className={`Caption font-semibold`}>Answer</h1>
+                <input
+                  type="text"
+                  value={test.answer}
+                  onChange={(e) =>
+                    updateTest(index, { ...test, answer: e.target.value })
+                  }
+                  className="  outline-none border rounded p-3 w-full"
+                />
+                <button
+                  type="button"
+                  className="border bg-red-600 mt-2 text-white rounded-md p-2.5"
+                  onClick={() => removeTest(index)}
+                >
+                  Remove Test
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="border bg-green-600 text-white rounded-md p-2.5"
+              onClick={addTest}
+            >
+              Add Test
+            </button>
             <div className="captionDiv">
-              <h1 className="Caption font-semibold">Test</h1>
-              <input
-                type="text"
-                name="test"
+              <h1 className="Caption font-semibold">Category</h1>
+              <select
+                name="category"
                 id=""
-                onChange={(e) => setTest(e.target.value)}
+                onChange={(e) => setCategory(e.target.value)}
                 className="  outline-none border rounded p-3 w-full"
-              />
-            </div>
-            <div className="captionDiv">
-              <h1 className="Caption font-semibold">Answer</h1>
-              <input
-                type="text"
-                name="answer"
-                id=""
-                onChange={(e) => setAnswer(e.target.value)}
-                className="  outline-none border rounded p-3 w-full"
-              />
-            </div>
-            <div className="captionDiv">
-              <h1 className="Caption font-semibold">Option A</h1>
-              <input
-                type="text"
-                name="answer"
-                id=""
-                onChange={(e) =>
-                  setOptions({
-                    ...options,
-                    optionA: e.target.value,
-                  })
-                }
-                className="  outline-none border rounded p-3 w-full"
-              />
-            </div>
-            <div className="captionDiv">
-              <h1 className="Caption font-semibold">Option B</h1>
-              <input
-                type="text"
-                name="answer"
-                id=""
-                onChange={(e) =>
-                  setOptions({
-                    ...options,
-                    optionB: e.target.value,
-                  })
-                }
-                className="  outline-none border rounded p-3 w-full"
-              />
-            </div>
-            <div className="captionDiv">
-              <h1 className="Caption font-semibold">Option C</h1>
-              <input
-                type="text"
-                name="answer"
-                id=""
-                onChange={(e) =>
-                  setOptions({
-                    ...options,
-                    optionC: e.target.value,
-                  })
-                }
-                className="  outline-none border rounded p-3 w-full"
-              />
-            </div>
-            <div className="captionDiv">
-              <h1 className="Caption font-semibold">Option D</h1>
-              <input
-                type="text"
-                name="answer"
-                id=""
-                onChange={(e) =>
-                  setOptions({
-                    ...options,
-                    optionD: e.target.value,
-                  })
-                }
-                className="  outline-none border rounded p-3 w-full"
-              />
+              >
+                <option value="">Select a category</option>
+                {categories.map((category, index) => (
+                  <option key={index} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="ActionButtonsDiv flex gap-2 ">
-              {/* <div className="border rounded border-green-600 flex justify-center items-center font-semibold">
-              <button className="text-green-600 text-lg p-1">Discard</button>
-            </div> */}
               <SecondaryButton SecondaryButtonText="Discard" />
               <SubmitBtn ButtonText="Feed" />
             </div>

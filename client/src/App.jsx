@@ -11,6 +11,7 @@ import { useSelector } from "react-redux/es";
 import UserProfile from "./pages/profilePage/UserProfile";
 import FeedPage from "./pages/FeedPage.jsx/FeedPage";
 import ChatPage from "./pages/ChatPage.jsx/ChatPage";
+import TestPage from "./pages/TestPage/TestPage";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -23,31 +24,15 @@ function App() {
       )}
 
       <Routes>
-        <Route
-          exact
-          path="/register"
-          element={<SignUp />}
-        />
-        <Route
-          exact
-          path="/login"
-          element={<Login />}
-        />
+        <Route exact path="/register" element={<SignUp />} />
+        <Route exact path="/login" element={<Login />} />
         <Route
           exact
           path="/"
           element={currentUser ? <Home /> : <Navigate to="/login" />}
         />
-        <Route
-          exact
-          path="/feeds/:id"
-          element={<FeedPage />}
-        />
-        <Route
-          exact
-          path="/profile/:username"
-          element={<UserProfile />}
-        />
+        <Route exact path="/feeds/:id" element={<FeedPage />} />
+        <Route exact path="/profile/:username" element={<UserProfile />} />
 
         <Route
           exact
@@ -59,6 +44,7 @@ function App() {
           path="/chat"
           element={currentUser ? <ChatPage /> : <Navigate to="/login" />}
         />
+        <Route exact path="/test/:feedId" element={<TestPage />} />
       </Routes>
     </>
   );

@@ -16,6 +16,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addAttendance } from "../../redux/feedSlice";
 import { updateEnrollments, updateHats } from "../../redux/userSlice";
 import Alert from "../../components/Alert/Alert";
+import TestPage from "../TestPage/TestPage";
+import TestButton from "../../components/TestButton/TestButton";
 
 const FeedPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +51,7 @@ const FeedPage = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://neural-feed-backend.onrender.com/api/upload/feeds/${id}`
+          `http://localhost:3000/api/upload/feeds/${id}`
         );
         setLoading(false);
         setFeed(res.data.singleFeed);
@@ -67,7 +69,7 @@ const FeedPage = () => {
       setLoading(true);
       try {
         await axios
-          .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
+          .get(`http://localhost:3000/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
           });
@@ -83,9 +85,7 @@ const FeedPage = () => {
   useEffect(() => {
     const getFeedOwnerData = async () => {
       try {
-        const res = await axios.get(
-          `https://neural-feed-backend.onrender.com/api/users/${id}`
-        );
+        const res = await axios.get(`http://localhost:3000/api/users/${id}`);
         setFeedOwner(res.data.user);
       } catch (err) {
         console.log(err);
@@ -102,7 +102,7 @@ const FeedPage = () => {
 
       try {
         const res = await axios.get(
-          `https://neural-feed-backend.onrender.com/api/upload/feeder/${feed?.userId}`
+          `http://localhost:3000/api/upload/feeder/${feed?.userId}`
         );
 
         setLoading(false);
@@ -119,7 +119,7 @@ const FeedPage = () => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/upload/feeds/attendances/${id}`,
+        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -142,16 +142,15 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/enroll/${feed?.userId}`,
+        `http://localhost:3000/api/users/enroll/${feed?.userId}`,
         {},
         {
           withCredentials: true,
         }
       );
       setLoading(false);
-      // Create a new copy of the enrollments with the changes
-      const updatedEnrollments = [...currentUser.user.enrollments, id];
-      dispatch(updateEnrollments(updatedEnrollments));
+      // Append the new enrollment to the existing enrollments
+      dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
       console.log("Enrollment Successful");
     } catch (err) {
       setLoading(false);
@@ -162,6 +161,7 @@ const FeedPage = () => {
       setEnrollmentStatus(false);
     }
   };
+  
   const handleDropout = async (id) => {
     // Optimistically update state
     setLoading(true);
@@ -169,7 +169,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/dropout/${feed?.userId}`,
+        `http://localhost:3000/api/users/dropout/${feed?.userId}`,
         {},
         {
           withCredentials: true,
@@ -191,7 +191,7 @@ const FeedPage = () => {
   const handleAnswerSubmit = async (feed) => {
     try {
       const response = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/upload/updateComprehensionAndHats",
+        "http://localhost:3000/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -225,11 +225,7 @@ const FeedPage = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
+        <BarLoader width={100} height={25} color="#38a169" />
       </div>
     );
 
@@ -268,13 +264,14 @@ const FeedPage = () => {
               </Link>
             </div>
             <div className="enrollAndShareDiv flex">
-              {currentUser?.user.enrollments.includes(feed?.userId) ? (
+              {currentUser?.user.enrollments.includes(feed?._id) ? (
                 <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                   <button
                     onClick={() => {
                       handleDropout();
                     }}
-                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer">
+                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
+                  >
                     Enrolled
                   </button>
                 </div>
@@ -291,40 +288,7 @@ const FeedPage = () => {
               </div>
             </div>
           </div>
-          <div>
-            <Test
-              question={feed?.test}
-              optionA={feed?.options.A}
-              optionB={feed?.options.B}
-              optionC={feed?.options.C}
-              optionD={feed?.options.D}
-              onClickA={() => {
-                setSelectedOption(feed?.options.A);
-              }}
-              onClickB={() => {
-                setSelectedOption(feed?.options.B);
-              }}
-              onClickC={() => {
-                setSelectedOption(feed?.options.C);
-              }}
-              onClickD={() => {
-                setSelectedOption(feed?.options.D);
-              }}>
-              <SubmitBtn
-                onClick={() => handleAnswerSubmit(feed)}
-                ButtonText="Submit"
-                openModal={openModal}
-              />
-            </Test>
-          </div>
-          {alert.show && (
-            <Alert
-              isOpen={isOpen}
-              openModal={openModal}
-              closeModal={closeModal}
-              message={alert.message}
-            />
-          )}
+          <TestButton feedId={feed?._id} />
         </div>
         <div className="bg-gray-200 w-full border rounded-lg">
           <div className="attendances">
@@ -359,7 +323,8 @@ const FeedPage = () => {
                 />
                 <button
                   onClick={toggleExpanded}
-                  className="text-green-600 font-bold text-lg">
+                  className="text-green-600 font-bold text-lg"
+                >
                   {isExpanded ? "Show less" : "Show more..."}
                 </button>
               </p>
@@ -371,9 +336,7 @@ const FeedPage = () => {
         </div>
         <div className="FeedPosts">
           {video.map((post) => (
-            <Link
-              key={post._id}
-              to={`/feeds/${post._id}`}>
+            <Link key={post._id} to={`/feeds/${post._id}`}>
               <FeedPosts
                 video={post?.video}
                 title={post?.caption}

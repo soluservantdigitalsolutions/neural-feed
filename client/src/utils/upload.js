@@ -6,7 +6,7 @@ const UploadVideo = async (video) => {
   data.append("upload_preset", "neural-feed");
   try {
     const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/asantesylvester/upload",
+      "https://api.cloudinary.com/v1_1/ddhdyuktu/upload",
       data
     );
     const { url } = res.data;

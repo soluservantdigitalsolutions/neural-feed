@@ -4,19 +4,17 @@ const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
+const cloudinary = require("../config/cloudinary.js");
 dotenv.config();
 
-const Register = async (req, res, next) => {
+Register = async (req, res, next) => {
   try {
-    // const { username, email, password } = req.body;
-
     const passwordHash = bcrypt.hashSync(req.body.password, 10);
     const newUser = new User({
-      profileImage: req.body.profileImage,
+      profileImage: req.file ? req.file.path : null, // Use a default image URL instead of null if you want
       ...req.body,
       password: passwordHash,
     });
-
     const emailExistence = await User.findOne({ email: req.body.email });
 
     if (emailExistence) {

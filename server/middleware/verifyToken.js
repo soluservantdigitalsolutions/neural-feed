@@ -23,6 +23,7 @@ const verifyToken = async (req, res, next) => {
     });
   } catch (err) {
     console.log(err.message);
+    res.status(500).send("Invalid Token");
   }
 };
 

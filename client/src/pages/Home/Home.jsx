@@ -23,6 +23,7 @@ import { MdCoPresent } from "react-icons/md";
 import { addAttendance } from "../../redux/feedSlice";
 import { Link } from "react-router-dom";
 import { BarLoader } from "react-spinners";
+import TestButton from "../../components/TestButton/TestButton";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -55,7 +56,7 @@ const Home = ({ type }) => {
       setLoading(true);
       try {
         await axios
-          .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
+          .get(`http://localhost:3000/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
           });
@@ -75,7 +76,7 @@ const Home = ({ type }) => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/enroll/${id}`,
+        `http://localhost:3000/api/users/enroll/${id}`,
         {},
         {
           withCredentials: true,
@@ -112,7 +113,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/dropOut/${id}`,
+        `http://localhost:3000/api/users/dropOut/${id}`,
         {},
         {
           withCredentials: true,
@@ -172,7 +173,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/upload/updateComprehensionAndHats",
+        "http://localhost:3000/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -215,7 +216,7 @@ const Home = ({ type }) => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/upload/feeds/attendances/${id}`,
+        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -231,11 +232,7 @@ const Home = ({ type }) => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
+        <BarLoader width={100} height={25} color="#38a169" />
       </div>
     );
 
@@ -244,7 +241,8 @@ const Home = ({ type }) => {
       {video.map((feed) => (
         <div
           key={feed._id}
-          className="VideoDiv flex flex-col gap-3 w-full justify-between items-center ">
+          className="VideoDiv flex flex-col gap-3 w-full justify-between items-center "
+        >
           <div className="VideoMetaDataDiv flex gap-5 justify-start ">
             <div className="ProfileImageDiv ">
               <img
@@ -273,7 +271,8 @@ const Home = ({ type }) => {
                     onClick={() => {
                       handleDropOut(feed.userId);
                     }}
-                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer">
+                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
+                  >
                     Enrolled
                   </button>
                 </div>
@@ -294,7 +293,8 @@ const Home = ({ type }) => {
             onMouseLeave={() =>
               setIsHover((prevState) => ({ ...prevState, [feed._id]: false }))
             }
-            className="VideoFileDiv flex justify-center items-center rounded flex-col">
+            className="VideoFileDiv flex justify-center items-center rounded flex-col"
+          >
             <div className=" md:flex items-end gap-2">
               <div className=" flex justify-center flex-col">
                 <video
@@ -307,30 +307,8 @@ const Home = ({ type }) => {
                   controls
                   onPlay={() => handleAttendance(feed._id)} // Add this line
                 ></video>
-                <Test
-                  question={feed.test}
-                  optionA={feed.options.A}
-                  optionB={feed.options.B}
-                  optionC={feed.options.C}
-                  optionD={feed.options.D}
-                  onClickA={() => {
-                    setSelectedOption(feed.options.A);
-                  }}
-                  onClickB={() => {
-                    setSelectedOption(feed.options.B);
-                  }}
-                  onClickC={() => {
-                    setSelectedOption(feed.options.C);
-                  }}
-                  onClickD={() => {
-                    setSelectedOption(feed.options.D);
-                  }}>
-                  <SubmitBtn
-                    onClick={() => handleAnswerSubmit(feed)}
-                    ButtonText="Submit"
-                    openModal={openModal}
-                  />
-                </Test>
+
+                
               </div>
               <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
                 <div className="flex md:flex-col items-baseline md:items-center gap-1">
@@ -347,25 +325,8 @@ const Home = ({ type }) => {
                 </div>
               </div>
             </div>
+            
 
-            {/* {isHover[feed._id] && (
-              <div className="absolute text-white cursor-pointer transition">
-                <button onClick={() => onVideoPress(feed._id)}>
-                  {videoIsPlaying[feed._id] ? (
-                    <BsFillPauseFill className=" text-2xl lg:text-4xl transition" />
-                  ) : (
-                    <BsFillPlayFill className=" text-2xl lg:text-4xl" />
-                  )}
-                </button>
-                <button onClick={() => onMuteButtonPress(feed._id)}>
-                  {isVideoMuted[feed._id] ? (
-                    <HiVolumeOff className=" text-2xl lg:text-4xl" />
-                  ) : (
-                    <HiVolumeUp className=" text-2xl lg:text-4xl" />
-                  )}
-                </button>
-              </div>
-            )} */}
           </div>
           {alert.show && (
             <Alert
@@ -375,30 +336,7 @@ const Home = ({ type }) => {
               message={alert.message}
             />
           )}
-
-          {/* <div className="  userReaction flex flex-col gap-1  text- top-52  w-47 p- justify-center items-center  ">
-            <div className=" statisticsDiv flex gap-20  text- top-52  w-47 p-5 justify-center items-center">
-              <div className="GradHats flex flex-col justify-center items-center">
-                <FaHandsHelping className="cursor-pointer text-5xl p-3 border rounded-full bg-slate-200" />
-                <span>1M</span>
-              </div>
-              <div className="GradHats flex flex-col justify-center items-center">
-                <FaComments className=" cursor-pointer text-5xl p-3 border rounded-full bg-slate-200" />
-                <span>488</span>
-              </div>
-              <div className="GradHats flex flex-col justify-center items-center">
-                <FaGraduationCap className=" cursor-pointer text-5xl p-3  rounded-full bg-slate-200 " />
-                <span>477k</span>
-              </div>
-            </div>
-            <div className="ViewsDiv ">
-              <div className="viewsNumber flex flex-col justify-center items-center">
-                <CiStreamOn className="text-3xl" />
-                <span>1,334,489</span>
-              </div>
-            </div>
-          </div> */}
-          {/* <br /> */}
+     
           <hr className="text-black border w-48 border-black m-5" />
         </div>
       ))}

@@ -14,3 +14,4 @@ router.delete("/:id", verifyToken, deleteComment);
 router.get("/:feedId", verifyToken, getComments);
 
 module.exports = router;
+  

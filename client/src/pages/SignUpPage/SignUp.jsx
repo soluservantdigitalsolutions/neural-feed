@@ -13,6 +13,7 @@ import addProfilePhoto from "../../assets/addProfilePhoto.png";
 import axios from "axios";
 import UploadVideo from "../../utils/upload";
 import { BarLoader } from "react-spinners";
+import { registerUser } from "../../api/api";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const SignUp = () => {
   const [profileImgPreview, setProfileImgPreview] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [imgUrl, setImgUrl] = useState("");
+
   useEffect(() => {
     // Revoke the old feed preview Blob URL
     return () => URL.revokeObjectURL(profileImgPreview);
@@ -35,42 +36,27 @@ const SignUp = () => {
     setLoading(true);
     e.preventDefault();
     try {
-      const url = await UploadVideo(profileImg);
-      setProfileImg(url);
       if (password !== confirmPassword) {
         return setError("Passwords do not match");
       }
-      const res = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/auth/register",
-        {
-          username,
-          email,
-          password,
-          profileImage: url,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+
+      const data = await registerUser(username, email, password, profileImg);
       setLoading(false);
 
       setSuccessMessage("User has been registered successfully");
       navigate("/login");
     } catch (err) {
-      setLoading(false);
-
+      setError("Something Went Wrong!");
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
+        <BarLoader width={100} height={25} color="#38a169" />
       </div>
     );
 
@@ -83,7 +69,8 @@ const SignUp = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-        }}>
+        }}
+      >
         <div className="LogoDiv ">
           <Logo />
         </div>
@@ -91,10 +78,12 @@ const SignUp = () => {
           <form
             onSubmit={handleSubmit}
             action=""
-            className="flex flex-col gap-2.5 ">
+            className="flex flex-col gap-2.5 "
+          >
             <label
               htmlFor="ProfileImg"
-              className="flex self-center border border-slate-400  rounded-full cursor-pointer">
+              className="flex self-center border border-slate-400  rounded-full cursor-pointer"
+            >
               <img
                 src={profileImgPreview ? profileImgPreview : addProfilePhoto}
                 alt=""
@@ -159,10 +148,7 @@ const SignUp = () => {
                 setConfirmPassword(e.target.value);
               }}
             />
-            <SubmitBtn
-              disabled=""
-              ButtonText="Join"
-            />
+            <SubmitBtn disabled="" ButtonText="Join" />
           </form>
           {/* <div className="googleButtonDiv flex justify-center items-center">
             <GoogleButton />

@@ -25,9 +25,7 @@ const NavBar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const handleLogout = async (req, res) => {
     try {
-      await axios.post(
-        "https://neural-feed-backend.onrender.com/api/auth/logout"
-      );
+      await axios.post("http://localhost:3000/api/auth/logout");
       // localStorage.setItem("currentUser", null);
       dispatch(logout());
       navigate("/login");
@@ -61,19 +59,13 @@ const NavBar = () => {
           <>
             <div className="UploadDiv hidden md:block">
               <Link to="upload">
-                <SubmitBtn
-                  ButtonText="+ FEED"
-                  className="p-1"
-                />
+                <SubmitBtn ButtonText="+ FEED" className="p-1" />
               </Link>
             </div>
 
             <div className="UploadDiv lg:block md:block  ">
               <Link to="/chat">
-                <SubmitBtn
-                  ButtonText=" CHAT"
-                  className=""
-                />
+                <SubmitBtn ButtonText=" CHAT" className="" />
               </Link>
             </div>
 
@@ -86,23 +78,23 @@ const NavBar = () => {
             <div className="flex gap-1 items-center">
               <ProfileDropdown
                 isOpen={isDropdownOpen}
-                toggleOpen={toggleDropdown}>
+                toggleOpen={toggleDropdown}
+              >
                 <div className="py-2">
                   <div className="block px-4 py-2 text-gray-800 transition ">
                     Welcome Back <b>{currentUser.user.username}</b>!
                   </div>
                   <div className="UploadDiv lg:hidden md:hidden  ">
                     <Link to="upload">
-                      <SubmitBtn
-                        ButtonText="+ FEED"
-                        className=""
-                      />
+                      <SubmitBtn ButtonText="+ FEED" className="" />
                     </Link>
                   </div>
 
                   <Link
                     to={`/profile/${currentUser.user.username}`}
-                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white">
+                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white"
+                    onClick={toggleDropdown}
+                  >
                     Your Profile
                   </Link>
                   {/* <Link
@@ -115,7 +107,8 @@ const NavBar = () => {
                   <Link
                     to="/"
                     className="block px-4 py-2 text-gray-800 hover:bg-red-600 transition hover:text-white"
-                    onClick={handleLogout}>
+                    onClick={handleLogout}
+                  >
                     Log Out
                   </Link>
                 </div>

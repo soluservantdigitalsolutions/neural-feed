@@ -2,29 +2,26 @@
 const UserModel = require("../Models/UserModel.js");
 const feedModel = require("../Models/feed.model.js");
 const createError = require("../error.js");
+const { parser } = require("../config/cloudinary.js");
 
-const postFeed = async (req, res) => {
+const postFeed = async (req, res, next) => {
   try {
     const newFeed = await feedModel.create({
       userId: req.userId,
       username: req.username,
-      video: req.body.video,
-      answer: req.body.answer,
-      description: req.body.desc,
-      options: {
-        A: req.body.A,
-        B: req.body.B,
-        C: req.body.C,
-        D: req.body.D,
-      },
+      video: req.body.video, // Here
+      description: req.body.description,
       profileImage: req.profileImage,
       admissions: req.admissions,
+      tests: req.body.tests, // Make sure this is an array
+      category: req.body.category,
       ...req.body,
     });
 
     // Update the user's admissions field
     const user = await UserModel.findById(req.userId);
     user.admissions.push(newFeed._id);
+    
     await user.save();
 
     res.status(200).json({
@@ -213,10 +210,10 @@ const search = async (req, res, next) => {
   }
 };
 
-const updateComprehensionAndHats = async (req, res, next) => {
+updateComprehensionAndHats = async (req, res, next) => {
   try {
-    // Get selected option and feed id from request body
-    const { selectedOption, feedId } = req.body;
+    // Get selected options and feed id from request body
+    const { selectedOptions, feedId } = req.body;
 
     // Find the feed
     const feed = await feedModel.findById(feedId);
@@ -224,8 +221,13 @@ const updateComprehensionAndHats = async (req, res, next) => {
       return next(createError(404, "Feed not found!"));
     }
 
-    // Compare selected option with feed answer
-    if (selectedOption === feed.answer) {
+    // Compare selected options with feed answers
+    const correctAnswers = feed.tests.filter(
+      (test, index) => selectedOptions[test.question] === test.answer
+    ).length;
+    const totalQuestions = feed.tests.length;
+
+    if (correctAnswers === totalQuestions) {
       // Update feed's Comprehension array
       const updatedFeed = await feedModel.findByIdAndUpdate(
         feedId,
@@ -255,10 +257,14 @@ const updateComprehensionAndHats = async (req, res, next) => {
         message: "Updated successfully!",
         updatedFeed,
         updatedUser,
+        correctAnswers,
+        totalQuestions,
       });
     } else {
       res.status(200).json({
-        message: "Selected option does not match the feed answer.",
+        message: "Selected options do not match the feed answers.",
+        correctAnswers,
+        totalQuestions,
       });
     }
   } catch (err) {

@@ -6,6 +6,7 @@ import { Link, NavLink, useParams } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import axios from "axios";
 import ProfileFeed from "../../components/ProfileFeeds/ProfileFeed";
+import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
 
 const UserProfile = () => {
   // const [user] = useAuthState(Auth);
@@ -16,13 +17,13 @@ const UserProfile = () => {
   const [error, setError] = useState(null);
 
   const { currentUser } = useSelector((state) => state.user);
-
+  console.log(currentUser);
   useEffect(() => {
     const getUserProfile = async () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://neural-feed-backend.onrender.com/api/users/profile/${username}`
+          `http://localhost:3000/api/users/profile/${username}`
         );
         setLoading(false);
         setUser(res.data.user);
@@ -39,7 +40,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://neural-feed-backend.onrender.com/api/upload/profile/feeds/${username}`
+          `http://localhost:3000/api/upload/profile/feeds/${username}`
         );
         setLoading(false);
         setUserFeeds(response.data.feeds);
@@ -54,11 +55,7 @@ const UserProfile = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
+        <BarLoader width={100} height={25} color="#38a169" />
       </div>
     );
   return (
@@ -105,16 +102,30 @@ const UserProfile = () => {
         </NavLink>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-5 ">
-        {userFeeds.map((feed) => (
-          <Link
-            key={feed._id}
-            to={`/feeds/${feed._id}`}>
-            <ProfileFeed
-              video={feed.video}
-              caption={feed.caption}
-            />
-          </Link>
-        ))}
+        {userFeeds.length > 0 ? (
+          userFeeds.map((feed) => (
+            <Link key={feed._id} to={`/feeds/${feed._id}`}>
+              <ProfileFeed video={feed.video} caption={feed.caption} />
+            </Link>
+          ))
+        ) : (
+          <div className="flex flex-col items-center justify-center ">
+            <p className="text-lg font-bold text-gray-500 mb-4">
+              {currentUser.user.username === username
+                ? "Oops, You have no Feeds yet"
+                : "Oops this user doesn't have any feeds yet"}
+            </p>
+
+            {currentUser.user.username === username && (
+              <Link
+                to="/upload"
+                className="bg-green-600 font-bold text-white px-4 py-2 rounded"
+              >
+                CREATE ONE
+              </Link>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -16,6 +16,7 @@ const {
 } = require("./Controllers/Feed.controller.js");
 const verifyToken = require("./middleware/verifyToken.js");
 
+
 router.post("/feeds", verifyToken, postFeed);
 
 router.put("/feeds/:id", verifyToken, updateFeed);

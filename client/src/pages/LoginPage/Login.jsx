@@ -34,7 +34,7 @@ const Login = () => {
     dispatch(loginStart());
     try {
       const res = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/auth/login",
+        "http://localhost:3000/api/auth/login",
         {
           username,
           password,
@@ -70,11 +70,7 @@ const Login = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
+        <BarLoader width={100} height={25} color="#38a169" />
       </div>
     );
 
@@ -87,7 +83,8 @@ const Login = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-        }}>
+        }}
+      >
         <div className="LogoDiv w-92 ">
           <Logo />
         </div>
@@ -95,7 +92,8 @@ const Login = () => {
           <form
             action=""
             className="flex flex-col gap-2.5 "
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+          >
             <FormInput
               inputType="name"
               inputPlaceholder="Username"
