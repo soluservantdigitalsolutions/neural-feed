@@ -3,9 +3,25 @@ import Logo from '../../components/Logo/Logo';
 import FormInput from '../../components/formInput/FormInput';
 import SubmitBtn from '../../components/SubmitButton/SubmitBtn';
 import GoogleButton from 'react-google-button';
-import { signInWithGoogle } from "../../GoogleAuthFunc/GoogleAuth";
+// import { signInWithGoogle } from '../../constants/GoogleAuthFunc/GoogleAuth';
+import { useNavigate } from 'react-router-dom';
+import { Auth, Provider } from '../../../firebase.config';
+import { signInWithPopup } from 'firebase/auth';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const signInWithGoogle = () => {
+    signInWithPopup(Auth, Provider)
+      .then(() => {
+        navigate('/');
+        console.log('Signed In');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className="main border ">
       <div
