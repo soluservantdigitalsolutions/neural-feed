@@ -10,18 +10,22 @@ import { AiFillNotification } from 'react-icons/ai';
 import DropdownMenu from '../DropdownMenu.jsx/DropdownMenu';
 import { signOut } from 'firebase/auth';
 import { AiOutlineLogout } from 'react-icons/ai';
-
+import { useNavigate, Link } from 'react-router-dom';
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const [user] = useAuthState(Auth);
   const [toggleDropdown, setToggleDropdown] = useState(false);
-  const signOutUser =()=>{
-    signOut(Auth).then(()=>{
-        console.log("Uuser has been Signed Out");
-    }).catch((err)=>{
-        console.log(err);
-    })
-  }
+  // const signOutUser = () => {
+  //   signOut(Auth)
+  //     .then(() => {
+  //       console.log('User has been Signed Out');
+  //       navigate('/');
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   return (
     <div className="border flex  justify-between items-center p-3">
       <div className="LogoDiv">
@@ -38,11 +42,12 @@ const NavBar = () => {
       </div>
       <div className="UploadMessageNotificationsAndProfilediv flex items-center justify-center gap-2">
         <div className="UploadDiv">
-          <SubmitBtn
-            ButtonText="+ FEED"
-            className="p-1"
-            
-          />
+          <Link to="upload">
+            <SubmitBtn
+              ButtonText="+ FEED"
+              className="p-1"
+            />
+          </Link>
         </div>
         <div className="MessagesDiv">
           <FaRegHandPaper className="text-2xl cursor-pointer" />
