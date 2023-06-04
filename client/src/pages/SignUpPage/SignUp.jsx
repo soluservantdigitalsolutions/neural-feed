@@ -3,13 +3,28 @@ import Logo from '../../components/Logo/Logo';
 import FormInput from '../../components/formInput/FormInput';
 import SubmitBtn from '../../components/SubmitButton/SubmitBtn';
 import GoogleButton from 'react-google-button';
-import { signInWithGoogle } from '../../GoogleAuthFunc/GoogleAuth';
-
+// import { signInWithGoogle } from '../../GoogleAuthFunc/GoogleAuth';
+import { useNavigate } from 'react-router-dom';
+import { Auth, Provider } from '../../../firebase.config';
+import { signInWithPopup } from 'firebase/auth';
 
 
 const SignUp = () => {
+    const navigate = useNavigate();
+
+    const signInWithGoogle = () => {
+      signInWithPopup(Auth, Provider)
+        .then(() => {
+          navigate('/profile');
+          console.log('Signed In');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
   return (
-    <div className="main border ">
+    <div className="main border">
       <div
         className="MainFormCard border p-5 rounded flex justify-center items-center flex-col gap-2.5 shadow-xl"
         style={{
