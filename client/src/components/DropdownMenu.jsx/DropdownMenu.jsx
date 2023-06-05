@@ -4,6 +4,7 @@ import { AiOutlineLogout } from 'react-icons/ai';
 import { Auth } from '../../../firebase.config';
 import { signOut } from 'firebase/auth';
 import { useNavigate, Link } from 'react-router-dom';
+import { useRef } from 'react';
 
 
 const DropdownMenu = (props) => {
@@ -18,8 +19,10 @@ const DropdownMenu = (props) => {
         console.log(err);
       });
   };
+
+  const dropDownCardRef = useRef();
   return (
-    <div className="ProfileMenuItemsDiv transition rounded absolute right-0 top-14 m-3 shadow-xl border text-green-600 bg-transparent w-48">
+    <div ref={props.ref} className="ProfileMenuItemsDiv transition rounded absolute right-0 top-14 m-3 shadow-xl border text-green-600 bg-transparent w-48">
       <nav>
         <ul>
           <Link to="/profile">
