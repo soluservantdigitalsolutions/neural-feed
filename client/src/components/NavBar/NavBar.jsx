@@ -16,16 +16,7 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(Auth);
   const [toggleDropdown, setToggleDropdown] = useState(false);
-  // const signOutUser = () => {
-  //   signOut(Auth)
-  //     .then(() => {
-  //       console.log('User has been Signed Out');
-  //       navigate('/');
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+
   return (
     <div className="border flex  justify-between items-center p-3">
       <div className="LogoDiv">
