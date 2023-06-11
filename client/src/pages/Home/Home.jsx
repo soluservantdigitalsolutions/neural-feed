@@ -5,6 +5,7 @@ import TestVideo from '../../assets/Are You Using This EQ Trick- Left and Right 
 import { BsFillPauseFill, BsFillPlayFill } from 'react-icons/bs';
 import {HiVolumeUp, HiVolumeOff} from "react-icons/hi"
 import { useRef } from 'react';
+import testVideo2 from '../../assets/Fl studio 11 trick- how to use your own headphone with mic to record you voice on fl studio 11.mp4';
 
 const Home = () => {
   const [isHover, setIsHover] = useState(false);
@@ -36,10 +37,10 @@ const Home = () => {
   
 
   return (
-    <div className="flex justify-center border p-5 ">
-      <div className="VideoDiv flex flex-col gap-3">
-        <div className="VideoMetaDataDiv flex gap-5">
-          <div className="ProfileImageDiv">
+    <div className="flex flex-col gap-10 justify-center border p-5 ">
+      <div className="VideoDiv flex flex-col gap-3 w-full justify-between items-center">
+        <div className="VideoMetaDataDiv flex gap-5 justify-start ">
+          <div className="ProfileImageDiv ">
             <img
               src={UserProfileImage}
               alt=""
@@ -69,7 +70,7 @@ const Home = () => {
         >
           <video
             src={TestVideo}
-            className="w-80 rounded transition"
+            className="w-full max-w-2xl rounded transition"
             ref={videoRef}
             onClick={onVideoPress}
             loop
@@ -100,7 +101,10 @@ const Home = () => {
             </div>
           )}
         </div>
+        <br />
+        <hr  className='text-black border w-48 border-black m-5'/>
       </div>
+      
     </div>
   );
 };
