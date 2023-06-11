@@ -1,5 +1,4 @@
-import React from 'react';
-
+import React from "react";
 
 const FormInput = (props) => {
   return (
@@ -10,10 +9,10 @@ const FormInput = (props) => {
         placeholder={props.inputPlaceholder}
         className="outline-none border rounded-lg p-1 "
         name={props.inputName}
+        autoComplete="true"
       />
-     
     </div>
   );
-}
+};
 
-export default FormInput
+export default FormInput;
