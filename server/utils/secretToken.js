@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+dotenv.config();
 
 const createSecretToken = (id) => {
   return jwt.sign({ id }, process.env.TOKEN_KEY, {
@@ -7,4 +8,4 @@ const createSecretToken = (id) => {
   });
 };
 
-module.exports = createSecretToken
+module.exports = createSecretToken;
