@@ -10,6 +10,8 @@ const FormInput = (props) => {
         className="outline-none border rounded-lg p-1 "
         name={props.inputName}
         autoComplete="true"
+        onChange={props.onChange}
+        value={props.value}
       />
     </div>
   );
