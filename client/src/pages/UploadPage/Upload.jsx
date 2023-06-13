@@ -31,7 +31,7 @@ const Upload = () => {
               type="text"
               name="caption"
               id=""
-              className="outline-none border rounded p-3 w-full"
+              className="  outline-none border rounded p-3 w-full"
             />
           </div>
           <div className="ActionButtonsDiv flex gap-2 ">
