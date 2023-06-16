@@ -11,6 +11,7 @@ import DropdownMenu from '../DropdownMenu.jsx/DropdownMenu';
 import { signOut } from 'firebase/auth';
 import { AiOutlineLogout } from 'react-icons/ai';
 import { useNavigate, Link } from 'react-router-dom';
+// import { Logout } from '../../pages/Home/Home';
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -80,6 +81,7 @@ const NavBar = () => {
             </a>
           </div>
         )}
+        {/* <SecondaryButton  SecondaryButtonText="Logout"/> */}
       </div>
     </div>
   );
