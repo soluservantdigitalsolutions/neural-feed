@@ -5,11 +5,16 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const authRoute = require("./Routes/authRoute.js");
 const cookieParser = require("cookie-parser");
+const helmet = require("helmet");
+const feedsRoute = require("./Routes/feedsRoute.js");
+const requestAndRequestPathLogger = require("./middleware/requestLog.js");
 dotenv.config();
 
 //middlewares
 
+mongoose.set("strictQuery", true);
 app.use(express.json());
+app.use(helmet());
 app.use(
   cors({
     origin: ["http://localhost:5173"],
@@ -18,9 +23,10 @@ app.use(
   })
 );
 app.use(cookieParser());
-
+requestAndRequestPathLogger();
 
 app.use("/api/auth", authRoute);
+app.use("/api/upload", feedsRoute);
 
 mongoose
   .connect(process.env.DB_URL)
