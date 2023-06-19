@@ -13,74 +13,40 @@ import axios from "axios";
 
 const SignUp = () => {
   const navigate = useNavigate();
-  const [inputValue, setInputValue] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const { username, email, password, confirmPassword } = inputValue;
-
-  const HandleOnChange = (e) => {
-    const { name, value } = e.target;
-    setInputValue({
-      ...inputValue,
-      [name]: value,
-    });
-    console.log(inputValue);
-  };
-
-  const handleError = (err) => {
-    toast.error(err, {
-      position: "bottom-left",
-    });
-  };
-  const handleSuccess = (msg) => {
-    toast.success(msg, {
-      position: "bottom-right",
-    });
-  };
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const { data } = await axios.post(
+      if (password !== confirmPassword) {
+        return setError("Passwords do not match");
+      }
+      const res = await axios.post(
         "http://localhost:3000/api/auth/register",
         {
-          ...inputValue,
+          username,
+          email,
+          password,
         },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+        }
       );
-      const { success, message } = data;
-      if (success) {
-        handleSuccess(message);
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } else {
-        handleError(message);
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
-    setInputValue({
-      ...inputValue,
-      username:"",
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
-  };
 
-  const signInWithGoogle = () => {
-    signInWithPopup(Auth, Provider)
-      .then(() => {
-        navigate("/profile");
-        console.log("Signed In");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      setSuccessMessage("User has been registered successfully");
+      console.log(res);
+      setTimeout(() => {
+        navigate("/login");
+      }, 1000);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -104,12 +70,15 @@ const SignUp = () => {
             className="flex flex-col gap-2.5 "
           >
             <FormInput
-              inputType="name"
+              inputType="username"
               inputPlaceholder="Username"
               LabelForName="username"
               inputName="username"
               value={username}
-              onChange={HandleOnChange}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                console.log({ username: username });
+              }}
             />
             <FormInput
               inputType="email"
@@ -118,7 +87,10 @@ const SignUp = () => {
               LabelForName="email"
               inputName="email"
               value={email}
-              onChange={HandleOnChange}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                console.log({ email: email });
+              }}
             />
             <FormInput
               inputType="password"
@@ -127,7 +99,10 @@ const SignUp = () => {
               LabelForName="password"
               inputName="password"
               value={password}
-              onChange={HandleOnChange}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                console.log({ password: password });
+              }}
             />
             <FormInput
               inputType="password"
@@ -136,12 +111,18 @@ const SignUp = () => {
               LabelForName="password"
               inputName="confirmPassword"
               value={confirmPassword}
-              onChange={HandleOnChange}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                console.log({ confirmPassword: confirmPassword });
+              }}
             />
-            <SubmitBtn ButtonText="Join" />
+            <SubmitBtn
+              disabled=""
+              ButtonText="Join"
+            />
           </form>
-          <div className="googleButtonDiv">
-            <GoogleButton onClick={signInWithGoogle} />
+          <div className="googleButtonDiv flex justify-center items-center">
+            <GoogleButton />
           </div>
           <div className="LoginQuestionDiv">
             <p>
@@ -151,9 +132,17 @@ const SignUp = () => {
               </a>
             </p>
           </div>
+          {error ? (
+            <div className=" p-2.5 bg-red-300 border-2 border-red-500 ">
+              {error}
+            </div>
+          ) : (
+            <div className="  bg-green-300 border-2 border-green-500 ">
+              {successMessage}
+            </div>
+          )}
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };
