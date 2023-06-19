@@ -5,7 +5,8 @@ const postFeed = async (req, res) => {
   //   const username = UserModel.findOne({ username });
   try {
     const newFeed = await feedModel.create({
-      author: UserModel.find(),
+      userId: req.userId,
+      username: req.username,
       ...req.body,
     });
 
