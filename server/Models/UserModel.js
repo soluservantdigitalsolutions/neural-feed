@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
-const bcrypt = require("bcrypt");
 
 const UserSchema = new Schema(
   {
@@ -18,23 +17,29 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Your Password Must Match is Required"],
     },
-    confirmPassword: {
-      type: String,
-      required: [true, "Your Confirm Password is Required"],
-    },
     createdAt: {
       type: Date,
       default: new Date(),
+    },
+    profileImage: {
+      type: String,
+    },
+    enrollments: {
+      type: String,
+      default: 0,
+    },
+    hats: {
+      type: String,
+      default: 0,
+    },
+    students: {
+      type: String,
+      default: 0,
     },
   },
   {
     timestamps: true,
   }
 );
-
-UserSchema.pre("save", async function () {
-  this.password = await bcrypt.hash(this.password, 12);
-  this.confirmPassword = await bcrypt.hash(this.confirmPassword, 12);
-});
 
 module.exports = mongoose.model("User", UserSchema);
