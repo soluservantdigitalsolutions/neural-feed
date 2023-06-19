@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import "./DropZone.css";
 
-const Dropzone = () => {
+const Dropzone = (props) => {
   return (
     <div className="UploadCardSpaceDiv border-dashed border-green-600 bg-slate-100 cursor-pointer hover:bg-green-100 transition flex flex-col justify-center text-center p-5 border">
       <div className="UploadIconDiv flex flex-col justify-center items-center text-center">
@@ -27,6 +27,7 @@ const Dropzone = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onChange={props.onChange}
           />
         </div>
       </div>
