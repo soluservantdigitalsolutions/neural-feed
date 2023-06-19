@@ -1,67 +1,86 @@
-const UserModel = require("../Models/UserModel");
+const User = require("../Models/UserModel");
 const createSecretToken = require("../utils/secretToken");
 const bcrypt = require("bcrypt");
 const dotenv = require("dotenv");
+const validator = require("validator");
+const jwt = require("jsonwebtoken");
 dotenv.config();
 
 const Register = async (req, res, next) => {
   try {
-    const { username, email, password, confirmPassword } = req.body;
+    // const { username, email, password } = req.body;
 
-    const existingUser = await UserModel.findOne({ email });
-    // const existingUsername = await UserModel.findOne({ username });
-    if (existingUser) {
-      return res.json({ message: "User Already Exists" });
+    const passwordHash = bcrypt.hashSync(req.body.password, 10);
+    const newUser = new User({
+      ...req.body,
+      password: passwordHash,
+    });
+
+    const emailExistence = await User.findOne({ email: req.body.email });
+
+    if (emailExistence) {
+      return res.status(401).json({ message: "Email Already Exists" });
     }
 
-    const newUser = await UserModel.create({
-      username,
-      email,
-      password,
-      confirmPassword,
+    const usernameExistence = await User.findOne({
+      username: req.body.username,
     });
-    const token = createSecretToken(newUser._id);
-    res.cookie("token", token, {
-      withCredentials: true,
-      httpOnly: false,
-    });
-    // res.status(201).json(message : "user was created successfully")
-    res.status(200).send("User was created");
-    next();
+
+    if (usernameExistence) {
+      return res.status(402).json({ message: "Username has been used" });
+    }
+
+    await newUser.save();
+    res
+      .status(200)
+      .json({ message: "user has been created sucessfully", user: newUser });
   } catch (err) {
-    res.status(500).send("User couldn't be Created");
-    console.log(err);
+    res.status("501").json({ message: "User Registration Failed" });
+    console.log(err.message);
   }
 };
 
 const Login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(500).json({ message: "All fields are required!" });
-    }
-    const user = await UserModel.findOne({ email });
+    const user = await User.findOne({ username: req.body.username });
+
     if (!user) {
-      return res.json({ message: "Incorrect Email or Password!" });
+      return res.status(401).json({ message: "Username does not exist" });
     }
-    const userPassword = await bcrypt.compare(password, user.password);
-    if (!userPassword) {
-      return res.json({ message: "Incorrect Password or Email" });
+
+    const loginPassword = bcrypt.compareSync(req.body.password, user.password);
+    if (!loginPassword) {
+      return res.status(402).json({ message: "Incorrect Password" });
     }
-    const token = createSecretToken(user._id);
-    res.cookie("token", token, {
-      withCredentials: true,
+
+    const { password, ...userInfo } = user._doc;
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.SECRET_TOKEN
+    );
+
+    res.cookie("accessToken", token, {
       httpOnly: false,
     });
-    res
-      .status(201)
-      .json({ message: "User has been logged in successfully", success: true });
-  } catch (error) {
-    console.log(error.message);
+    res.status(200).json({ user: userInfo, message: "User has Logged In Successfully" });
+  } catch (err) {
+    res.status("501").json({ message: "User Registration Failed" });
+    console.log(err.message);
   }
+};
+
+const Logout = async (req, res) => {
+  await res.clearCookie("accessToken", {
+    sameSite: "none",
+    secure: "true",
+  }).status(200).json({message: "User has been logged out"})
 };
 
 module.exports = {
   Register,
   Login,
+  Logout,
 };
