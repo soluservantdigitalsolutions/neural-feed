@@ -1,10 +1,16 @@
-import React from 'react';
-import Dropzone from '../../components/DropZone/Dropzone';
-import FormInput from '../../components/formInput/FormInput';
-import SubmitBtn from '../../components/SubmitButton/SubmitBtn';
-import SecondaryButton from '../../components/SecondaryButton/SecondaryButton';
-
+import React from "react";
+import Dropzone from "../../components/DropZone/Dropzone";
+import FormInput from "../../components/formInput/FormInput";
+import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
+import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
+import { useState } from "react";
 const Upload = () => {
+  const [caption, setCaption] = useState("");
+  const [test, setTest] = useState("");
+  const [videoFile, setVideoFile] = useState("");
+
+  const handleSubmit = async () => {};
+
   return (
     <div
       className="  MainFormCard border p-5 rounded flex justify-center  flex-col gap-2.5 shadow-xl m-5 "
