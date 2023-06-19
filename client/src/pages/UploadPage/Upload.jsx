@@ -34,11 +34,20 @@ const Upload = () => {
               className="  outline-none border rounded p-3 w-full"
             />
           </div>
+          <div className="captionDiv">
+            <h1 className="Caption font-semibold">Test</h1>
+            <input
+              type="text"
+              name="caption"
+              id=""
+              className="  outline-none border rounded p-3 w-full"
+            />
+          </div>
           <div className="ActionButtonsDiv flex gap-2 ">
             {/* <div className="border rounded border-green-600 flex justify-center items-center font-semibold">
               <button className="text-green-600 text-lg p-1">Discard</button>
             </div> */}
-            <SecondaryButton SecondaryButtonText="Discard"/>
+            <SecondaryButton SecondaryButtonText="Discard" />
             <SubmitBtn ButtonText="Feed" />
           </div>
         </div>
