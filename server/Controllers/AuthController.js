@@ -58,6 +58,7 @@ const Login = async (req, res, next) => {
     const token = jwt.sign(
       {
         id: user._id,
+        username: user.username,
       },
       process.env.SECRET_TOKEN
     );
@@ -65,7 +66,9 @@ const Login = async (req, res, next) => {
     res.cookie("accessToken", token, {
       httpOnly: false,
     });
-    res.status(200).json({ user: userInfo, message: "User has Logged In Successfully" });
+    res
+      .status(200)
+      .json({ user: userInfo, message: "User has Logged In Successfully" });
   } catch (err) {
     res.status("501").json({ message: "User Registration Failed" });
     console.log(err.message);
@@ -73,10 +76,13 @@ const Login = async (req, res, next) => {
 };
 
 const Logout = async (req, res) => {
-  await res.clearCookie("accessToken", {
-    sameSite: "none",
-    secure: "true",
-  }).status(200).json({message: "User has been logged out"})
+  await res
+    .clearCookie("accessToken", {
+      sameSite: "none",
+      secure: "true",
+    })
+    .status(200)
+    .json({ message: "User has been logged out" });
 };
 
 module.exports = {
