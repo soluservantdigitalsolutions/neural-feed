@@ -11,19 +11,23 @@ import DropdownMenu from "../DropdownMenu.jsx/DropdownMenu";
 import { signOut } from "firebase/auth";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
-import { useLogout } from "../../hooks/useLogout";
-// import { Logout } from '../../pages/Home/Home';
-import { useAuthContext } from "../../hooks/useAuthContext";
+import axios from "axios";
 
 const NavBar = () => {
   const navigate = useNavigate();
-  // const [user] = useAuthState(Auth);
+  const [user] = useAuthState(Auth);
   const [toggleDropdown, setToggleDropdown] = useState(false);
-  const { logout } = useLogout();
-  const { user } = useAuthContext();
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  console.log(currentUser);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async (req, res) => {
+    try {
+      await axios.post("http://localhost:3000/api/auth/logout");
+      localStorage.setItem("currentUser", null);
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -55,19 +59,12 @@ const NavBar = () => {
         <div className="Notifications">
           <AiFillNotification className="text-2xl" />
         </div>
-        {user ? (
-          <div className="ProfileImage flex items-center gap-2">
-            <img
-              src={user.photoURL}
-              alt={user.displayName}
-              className="w-10 rounded-full cursor-pointer"
-              onClick={() => {
-                setToggleDropdown(!toggleDropdown);
-                console.log("HELLO");
-              }}
-            />
-            <div>{user.email}</div>
-            <div className="logoutBtn border rounded border-red-600 flex justify-center items-center font-bold">
+        {currentUser ? (
+          <div className="flex gap-1 items-center">
+            <div className="usernameDiv">
+              <h1 className="font-bold text-xl text-green-600">{currentUser.data.user.username}</h1>
+            </div>
+            <div className="LoginButtonDiv border rounded border-red-600 flex justify-center items-center font-bold">
               <button
                 onClick={handleLogout}
                 className="text-red-600 text-lg p-1 hover:bg-red-600 transition hover:text-white"
@@ -75,18 +72,6 @@ const NavBar = () => {
                 Logout
               </button>
             </div>
-            {/* <button className="border rounded border-red-600 flex justify-center items-center p-1 gap-1 font-bold" onClick={signOutUser}>
-              <AiOutlineLogout className="text-2xl text-red-600 " />
-              <span className='text-red-600'>Log out</span>
-            </button> */}
-            {toggleDropdown && (
-              <DropdownMenu
-                onClick={() => {
-                  setToggleDropdown(false);
-                  // signOutUser();
-                }}
-              />
-            )}
           </div>
         ) : (
           <div className="LoginButtonDiv flex gap-1">
