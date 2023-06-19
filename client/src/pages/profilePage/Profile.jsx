@@ -1,22 +1,21 @@
 import React from 'react';
-import { useAuthState } from 'react-firebase-hooks/auth';
-import { Auth } from '../../../firebase.config';
+import testProfilePic from "../../assets/user (1).png"
 
 const Profile = () => {
-  const [user] = useAuthState(Auth);
+  // const [user] = useAuthState(Auth);
 
   return (
     <div className="flex flex-col ">
       <div className="ProfileInfoAndStats flex flex-col justify-center items-center p-5 gap-5 border w-full">
-        <div className="ProfilePicDiv">
+        <div className="ProfilePicDiv ">
           <img
-            src={user.photoURL}
-            alt={user.displayName}
-            className="rounded-full"
+             src={testProfilePic}
+            alt="testUser"
+            className="rounded-full w-20"
           />
         </div>
         <div className="UserNameDiv">
-          <h1 className="font-bold">{user.displayName}</h1>
+          <h1 className="font-bold">This User</h1>
         </div>
         <div className="userStatsDiv flex gap-5">
           <div className="Admissions">
