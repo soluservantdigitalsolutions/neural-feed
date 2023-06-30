@@ -1,14 +1,12 @@
 const router = require("express").Router();
 const dotenv = require("dotenv");
-const { postFeed } = require("../Controllers/Feed.controller.js");
+const { postFeed, getFeed } = require("../Controllers/Feed.controller.js");
 const verifyToken = require("../middleware/verifyToken.js");
 dotenv.config();
 
 router.post("/feeds", verifyToken, postFeed);
 
-router.get("/feeds", (req, res) => {
-  res.json({ message: "get all feeds" });
-});
+router.get("/feeds", getFeed);
 
 router.get("/feeds/id:", (req, res) => {
   res.json({ message: "get a single feed" });
