@@ -24,7 +24,9 @@ app.use(
 );
 app.use(cookieParser());
 requestAndRequestPathLogger();
-
+app.get("/", (req,res)=>{
+  res.send("Server is running")
+})
 app.use("/api/auth", authRoute);
 app.use("/api/upload", feedsRoute);
 
