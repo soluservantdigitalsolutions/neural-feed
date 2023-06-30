@@ -75,12 +75,12 @@ const NavBar = () => {
           </div>
         ) : (
           <div className="LoginButtonDiv flex gap-1">
-            <a href="/login">
+            <Link to="/login">
               <SecondaryButton SecondaryButtonText="Login" />
-            </a>
-            <a href="/register">
+            </Link>
+            <Link to="/register">
               <SecondaryButton SecondaryButtonText="Enroll" />
-            </a>
+            </Link>
           </div>
         )}
       </div>
