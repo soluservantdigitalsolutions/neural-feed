@@ -17,7 +17,10 @@ app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
-    origin: ["https://neural-feed.vercel.app/"],
+    origin: [
+      "https://neural-feed.vercel.app/",
+      "https://neural-feed.vercel.app/register",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
