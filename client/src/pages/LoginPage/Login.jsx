@@ -24,7 +24,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "https://neural-feed-backend.vercel.app/api/auth/login",
+        "http://localhost:3000/api/auth/login",
         {
           username,
           password,
@@ -47,6 +47,8 @@ const Login = () => {
       setError(err.response.data.message);
     }
   };
+
+
 
   const signInWithGoogle = () => {
     signInWithPopup(Auth, Provider)

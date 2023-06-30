@@ -17,16 +17,14 @@ app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
-    origin: ["https://neural-feed.vercel.app"],
+    origin: ["http://localhost:5173"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 app.use(cookieParser());
 requestAndRequestPathLogger();
-app.get("/", (req,res)=>{
-  res.send("Server is running")
-})
+
 app.use("/api/auth", authRoute);
 app.use("/api/upload", feedsRoute);
 
