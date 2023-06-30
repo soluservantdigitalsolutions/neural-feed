@@ -4,12 +4,15 @@ import FormInput from "../../components/formInput/FormInput";
 import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
 import { useState } from "react";
+
 const Upload = () => {
   const [caption, setCaption] = useState("");
   const [test, setTest] = useState("");
   const [videoFile, setVideoFile] = useState("");
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    
+  };
 
   return (
     <div
