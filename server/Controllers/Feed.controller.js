@@ -19,7 +19,16 @@ const postFeed = async (req, res) => {
   }
 };
 
-const getFeed = async (req, res) => {};
+const getFeed = async (req, res) => {
+  try {
+    const feeds = await feedModel.find();
+    res.status(200).json({
+      feeds: feeds,
+    });
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 module.exports = {
   postFeed,
