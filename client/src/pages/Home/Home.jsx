@@ -23,7 +23,9 @@ const Home = () => {
   useEffect(() => {
     const getFeeds = async () => {
       try {
-        const feeds = await axios.get("http://localhost:3000/api/upload/feeds");
+        const feeds = await axios.get(
+          "https://neural-feed-backend.vercel.app/api/upload/feeds"
+        );
         console.log(feeds);
         setVideo(feeds.data.feeds[0].video);
         setUsername(feeds.data.feeds[0].username);

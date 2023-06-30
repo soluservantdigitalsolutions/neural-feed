@@ -1,5 +1,5 @@
 {
-  "proxy": "http://localhost:3000",
+  "proxy": "https://neural-feed-backend.vercel.app/",
   "name": "client",
   "private": true,
   "version": "0.0.0",

@@ -28,7 +28,7 @@ const SignUp = () => {
         return setError("Passwords do not match");
       }
       const res = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://neural-feed-backend.vercel.app/api/auth/register",
         {
           username,
           email,
