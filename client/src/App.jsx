@@ -22,18 +22,22 @@ function App() {
           element={<Home />}
         />
         <Route
+          exact
           path="/register"
           element={<SignUp />}
         />
         <Route
+          exact
           path="/login"
           element={<Login />}
         />
         <Route
+          exact
           path="/profile"
           element={<Profile />}
         />
         <Route
+          exact
           path="/upload"
           element={<Upload />}
         />
