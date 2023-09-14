@@ -80,14 +80,14 @@ const Home = () => {
             <div className="UserNameAndDetailsDiv">
               <div className="UsernameDiv">
                 <h1
-                  key={feed.username}
+                  key={feed.id}
                   className="font-bold"
                 >
                   {feed.username}
                 </h1>
               </div>
               <div className="VideoCaptionDiv">
-                <p key={feed.caption}>{feed.caption}</p>
+                <p key={feed.id}>{feed.caption}</p>
               </div>
             </div>
             <div className="EnrollButtonDiv flex items-center justify-center">
@@ -104,7 +104,7 @@ const Home = () => {
             className="VideoFileDiv flex justify-center items-center rounded flex-col"
           >
             <video
-              key={feed.video}
+              key={feed.id}
               src={feed.video}
               className="w-80 rounded transition max-w-lg"
               ref={videoRef}

@@ -1,5 +1,17 @@
 const UserModel = require("../Models/UserModel.js");
 const feedModel = require("../Models/feed.model.js");
+const multer = require("multer");
+
+const storage = multer.diskStorage({
+  destination: (req, file, callback) => {
+    callback(null, "./client/public");
+  },
+  filename: (req, file, callback) => {
+    callback(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 const postFeed = async (req, res) => {
   //   const username = UserModel.findOne({ username });
@@ -7,6 +19,7 @@ const postFeed = async (req, res) => {
     const newFeed = await feedModel.create({
       userId: req.userId,
       username: req.username,
+      video: req.file.video,
       ...req.body,
     });
 
@@ -33,4 +46,5 @@ const getFeed = async (req, res) => {
 module.exports = {
   postFeed,
   getFeed,
+  upload,
 };
