@@ -91,6 +91,7 @@ const SignUp = () => {
                 setEmail(e.target.value);
                 console.log({ email: email });
               }}
+              autoComplete="false"
             />
             <FormInput
               inputType="password"
