@@ -7,16 +7,17 @@ import SecondaryButton from "../SecondaryButton/SecondaryButton";
 import { Auth } from "../../../firebase.config";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { AiFillNotification } from "react-icons/ai";
-import DropdownMenu from "../DropdownMenu.jsx/DropdownMenu";
+import DropdownMenu from "../ProfileDropdown/ProfileDropdown";
 import { signOut } from "firebase/auth";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
+
 import axios from "axios";
+import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(Auth);
-  const [toggleDropdown, setToggleDropdown] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   console.log(currentUser);
 
@@ -28,6 +29,12 @@ const NavBar = () => {
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -61,17 +68,32 @@ const NavBar = () => {
         </div>
         {currentUser ? (
           <div className="flex gap-1 items-center">
-            <div className="usernameDiv">
-              <h1 className="font-bold text-xl text-green-600">{currentUser.data.user.username}</h1>
-            </div>
-            <div className="LoginButtonDiv border rounded border-red-600 flex justify-center items-center font-bold">
-              <button
-                onClick={handleLogout}
-                className="text-red-600 text-lg p-1 hover:bg-red-600 transition hover:text-white"
-              >
-                Logout
-              </button>
-            </div>
+            <ProfileDropdown
+              isOpen={isDropdownOpen}
+              toggleOpen={toggleDropdown}
+            >
+              <div className="py-2">
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
+                >
+                  Your Profile
+                </Link>
+                {/* <Link
+                  to="#"
+                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
+                >
+                  Settings
+                </Link> */}
+                <Link
+                  to="/"
+                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
+                  onClick={handleLogout}
+                >
+                  Log Out
+                </Link>
+              </div>
+            </ProfileDropdown>
           </div>
         ) : (
           <div className="LoginButtonDiv flex gap-1">
