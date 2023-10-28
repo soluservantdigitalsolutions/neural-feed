@@ -12,6 +12,7 @@ const Register = async (req, res, next) => {
 
     const passwordHash = bcrypt.hashSync(req.body.password, 10);
     const newUser = new User({
+      profileImage: req.body.profileImage,
       ...req.body,
       password: passwordHash,
     });
@@ -59,6 +60,7 @@ const Login = async (req, res, next) => {
       {
         id: user._id,
         username: user.username,
+        profileImage: user.profileImage
       },
       process.env.SECRET_TOKEN
     );
@@ -66,9 +68,10 @@ const Login = async (req, res, next) => {
     res.cookie("accessToken", token, {
       httpOnly: false,
     });
-    res
-      .status(200)
-      .json({ user: userInfo, message: "User has Logged In Successfully" });
+    res.status(200).json({
+      user: userInfo,
+      message: "User has Logged In Successfully",
+    });
   } catch (err) {
     res.status("501").json({ message: "User Registration Failed" });
     console.log(err.message);
