@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
       if (err) {
         return res.status(403).json({ message: "Token is not valid" });
       }
-
+      req.user = payload;
       req.userId = payload.id;
       req.username = payload.username;
       req.profileImage = payload.profileImage;
