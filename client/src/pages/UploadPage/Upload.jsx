@@ -1,23 +1,49 @@
-import React from "react";
+import { useEffect } from "react";
 import Dropzone from "../../components/DropZone/Dropzone";
-import FormInput from "../../components/formInput/FormInput";
 import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
 import { useState } from "react";
 import axios from "axios";
 import UploadVideo from "../../utils/upload";
-
+import { useNavigate } from "react-router-dom";
+import { BarLoader } from "react-spinners";
 const Upload = () => {
   const [caption, setCaption] = useState("");
   const [test, setTest] = useState("");
   const [videoFile, setVideoFile] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [success, setSuccess] = useState("");
+  const [options, setOptions] = useState({
+    optionA: "",
+    optionB: "",
+    optionC: "",
+    optionD: "",
+  });
+  const [feedPreview, setFeedPreview] = useState(null);
+
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    console.log(options);
+  }, [options]);
+
+  useEffect(() => {
+    // Revoke the old feed preview Blob URL
+    return () => URL.revokeObjectURL(feedPreview);
+  }, [feedPreview]);
+
+  const navigate = useNavigate();
+
   console.log(videoFile);
   console.log(caption);
   console.log(test);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
+
     e.preventDefault();
     const url = await UploadVideo(videoFile);
+    setFeedPreview(url);
 
     try {
       await axios.post(
@@ -26,15 +52,37 @@ const Upload = () => {
           video: url,
           caption: caption,
           test: test,
+          answer: answer,
+          options: {
+            A: options.optionA,
+            B: options.optionB,
+            C: options.optionC,
+            D: options.optionD,
+          },
         },
         {
           withCredentials: true,
         }
       );
+      setSuccess("Video Uploaded Sucessfully");
+      navigate("/");
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.log(error);
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader
+          width={100}
+          height={50}
+          color="#38a169"
+        />
+      </div>
+    );
 
   return (
     <div
@@ -52,13 +100,27 @@ const Upload = () => {
         <div className="UploadTitle ">
           <h1 className="text-xl font-bold">Upload Your Neural Feed</h1>
         </div>
-        <div className="UploadVideoDiv flex gap-5">
-          <div className="VideoDropZoneDiv">
-            <Dropzone
-              onChange={(e) => {
-                console.log(setVideoFile(e.target.files[0]));
-              }}
-            />
+        <div className="UploadVideoDiv flex flex-col lg:flex-row gap-5">
+          <div className="VideoDropZoneDiv flex   ">
+            {feedPreview ? (
+              <>
+                <video
+                  src={feedPreview}
+                  className=" rounded transition  h-full flex self-center justify-center items-center"
+                  controls
+                ></video>
+              </>
+            ) : (
+              <>
+                <Dropzone
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    console.log(setVideoFile(file));
+                    setFeedPreview(URL.createObjectURL(file));
+                  }}
+                />
+              </>
+            )}
           </div>
           <div className="VideoUploadDetailsDiv w-full flex flex-col gap-5">
             <div className="captionDiv">
@@ -75,9 +137,79 @@ const Upload = () => {
               <h1 className="Caption font-semibold">Test</h1>
               <input
                 type="text"
-                name="Test"
+                name="test"
                 id=""
                 onChange={(e) => setTest(e.target.value)}
+                className="  outline-none border rounded p-3 w-full"
+              />
+            </div>
+            <div className="captionDiv">
+              <h1 className="Caption font-semibold">Answer</h1>
+              <input
+                type="text"
+                name="answer"
+                id=""
+                onChange={(e) => setAnswer(e.target.value)}
+                className="  outline-none border rounded p-3 w-full"
+              />
+            </div>
+            <div className="captionDiv">
+              <h1 className="Caption font-semibold">Option A</h1>
+              <input
+                type="text"
+                name="answer"
+                id=""
+                onChange={(e) =>
+                  setOptions({
+                    ...options,
+                    optionA: e.target.value,
+                  })
+                }
+                className="  outline-none border rounded p-3 w-full"
+              />
+            </div>
+            <div className="captionDiv">
+              <h1 className="Caption font-semibold">Option B</h1>
+              <input
+                type="text"
+                name="answer"
+                id=""
+                onChange={(e) =>
+                  setOptions({
+                    ...options,
+                    optionB: e.target.value,
+                  })
+                }
+                className="  outline-none border rounded p-3 w-full"
+              />
+            </div>
+            <div className="captionDiv">
+              <h1 className="Caption font-semibold">Option C</h1>
+              <input
+                type="text"
+                name="answer"
+                id=""
+                onChange={(e) =>
+                  setOptions({
+                    ...options,
+                    optionC: e.target.value,
+                  })
+                }
+                className="  outline-none border rounded p-3 w-full"
+              />
+            </div>
+            <div className="captionDiv">
+              <h1 className="Caption font-semibold">Option D</h1>
+              <input
+                type="text"
+                name="answer"
+                id=""
+                onChange={(e) =>
+                  setOptions({
+                    ...options,
+                    optionD: e.target.value,
+                  })
+                }
                 className="  outline-none border rounded p-3 w-full"
               />
             </div>
@@ -91,6 +223,11 @@ const Upload = () => {
           </div>
         </div>
       </form>
+      {success && (
+        <div className="  bg-green-300 border-2 border-green-500 ">
+          {success}
+        </div>
+      )}
     </div>
   );
 };
