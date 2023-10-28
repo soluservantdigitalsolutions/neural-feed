@@ -3,10 +3,13 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const authRoute = require("./Routes/authRoute.js");
+const authRoute = require("./routes/authRoute.js");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
-const feedsRoute = require("./Routes/feedsRoute.js");
+const feedsRoute = require("./routes/feeds.route.js");
+const userRoute = require("./routes/user.route.js");
+const commentRoute = require("./routes/comments.route.js");
+
 const requestAndRequestPathLogger = require("./middleware/requestLog.js");
 dotenv.config();
 
@@ -17,9 +20,10 @@ app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
-    origin: ["https://neural-feed.vercel.app", "http://localhost:5173"],
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
+    
   })
 );
 app.use(cookieParser());
@@ -27,6 +31,18 @@ requestAndRequestPathLogger();
 
 app.use("/api/auth", authRoute);
 app.use("/api/upload", feedsRoute);
+app.use("/api/users", userRoute);
+app.use("/api/comments", commentRoute);
+
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Something Went Wrong!";
+  return res.status(status).json({
+    success: false,
+    status: status,
+    message: message,
+  });
+});
 
 app.listen(process.env.PORT || 4000, () => {
   mongoose
