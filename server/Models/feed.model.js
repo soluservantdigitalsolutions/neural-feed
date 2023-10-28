@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const mongoose = require("mongoose");
 const { Schema } = require("mongoose");
 
@@ -6,6 +7,17 @@ const feedSchema = new Schema(
     userId: {
       type: String,
       required: true,
+    },
+    profileImage: {
+      type: String,
+    },
+    enrollments: {
+      type: [String],
+      default: [],
+    },
+    admissions: {
+      type: [String],
+      default: [],
     },
     username: {
       type: String,
@@ -20,16 +32,24 @@ const feedSchema = new Schema(
       required: [true, "Video is required"],
     },
     comprehensions: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
+    },
+    confusions: {
+      type: Array,
+      default: [],
     },
     hats: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
     },
     attendances: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
+    },
+    tags: {
+      type: Array,
+      default: [],
     },
     comments: {
       type: Number,
@@ -37,7 +57,17 @@ const feedSchema = new Schema(
     },
     test: {
       type: String,
-      required: [true, "Test Question is required"],
+      // required: [true, "Test Question is required"],
+    },
+    answer: {
+      type: String,
+      // required: [true, "Expected answer is required"],
+    },
+    options: {
+      A: { type: String, required: true },
+      B: { type: String, required: true },
+      C: { type: String, required: true },
+      D: { type: String, required: true },
     },
   },
   {
