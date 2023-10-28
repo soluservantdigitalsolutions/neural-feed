@@ -43,6 +43,10 @@ app.use((err, req, res, next) => {
   });
 });
 
+app.get("/", (res, req)=>{
+  res.send("Backend Is running!")
+})
+
 app.listen(process.env.PORT || 4000, () => {
   mongoose
     .connect(process.env.DB_URL)
