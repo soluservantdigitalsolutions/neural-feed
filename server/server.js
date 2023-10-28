@@ -43,9 +43,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.get("/", (res, req)=>{
-  res.send("Backend Is running!")
-})
+ app.get("/", function (req, res) {
+   res.send("Backend is running!");
+ });
 
 app.listen(process.env.PORT || 4000, () => {
   mongoose
