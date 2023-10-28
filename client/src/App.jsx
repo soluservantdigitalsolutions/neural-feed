@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./App.css";
 import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/LoginPage/Login";
@@ -9,18 +8,15 @@ import NavBar from "./components/NavBar/NavBar";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Auth } from "../firebase.config";
 import Upload from "./pages/UploadPage/Upload";
+import { useSelector } from "react-redux/es";
 
 function App() {
+  const { currentUser } = useSelector((state) => state.user);
+
   return (
     <>
       <NavBar />
       <Routes>
-        <Route
-          index
-          exact
-          path="/"
-          element={<Home />}
-        />
         <Route
           exact
           path="/register"
@@ -33,13 +29,18 @@ function App() {
         />
         <Route
           exact
-          path="/profile"
-          element={<Profile />}
+          path="/"
+          element={currentUser ? <Home /> : <Navigate to="/login" />}
+        />
+        <Route
+          exact
+          path="/profile/:id"
+          element={currentUser ? <Profile /> : <Navigate to="/login" />}
         />
         <Route
           exact
           path="/upload"
-          element={<Upload />}
+          element={currentUser ? <Upload /> : <Navigate to="/login" />}
         />
       </Routes>
     </>
