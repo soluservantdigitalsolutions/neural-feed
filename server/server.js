@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
-const authRoute = require("./routes/auth.route.js");
+const authRoute = require("./auth.route.js");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
 const feedsRoute = require("./routes/feeds.route.js");
@@ -43,9 +43,9 @@ app.use((err, req, res, next) => {
   });
 });
 
- app.get("/", function (req, res) {
-   res.send("Backend is running!");
- });
+app.get("/", function (req, res) {
+  res.send("Backend is running!");
+});
 
 app.listen(process.env.PORT || 4000, () => {
   mongoose
