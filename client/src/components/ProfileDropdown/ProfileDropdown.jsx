@@ -2,11 +2,13 @@ import React from "react";
 import { CSSTransition } from "react-transition-group";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import testProfilePic from "../../assets/user (1).png";
+import { useSelector } from "react-redux/es";
 
 
 const ProfileDropdown = ({ isOpen, toggleOpen, children }) => {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  const userData = user.data.user;
+  const {currentUser} = useSelector(state=>state.user)
+  console.log(currentUser);
+  const userData = currentUser.user
   return (
     <div className="relative">
       <button
@@ -15,7 +17,7 @@ const ProfileDropdown = ({ isOpen, toggleOpen, children }) => {
       >
         <div className="ProfilePicDiv ">
           <img
-            src={userData.img ? userData.img : testProfilePic}
+            src={userData.profileImage ? userData.profileImage : testProfilePic}
             alt="testUser"
             className="rounded-full w-10 h-10 object-cover"
           />
