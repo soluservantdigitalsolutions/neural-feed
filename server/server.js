@@ -6,9 +6,9 @@ const cors = require("cors");
 const authRoute = require("./auth.route.js");
 const cookieParser = require("cookie-parser");
 const helmet = require("helmet");
-const feedsRoute = require("./routes/feeds.route.js");
-const userRoute = require("./routes/user.route.js");
-const commentRoute = require("./routes/comments.route.js");
+const feedsRoute = require("./feeds.route.js");
+const userRoute = require("./user.route.js");
+const commentRoute = require("./comments.route.js");
 
 const requestAndRequestPathLogger = require("./middleware/requestLog.js");
 dotenv.config();

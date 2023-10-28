@@ -4,11 +4,11 @@ const {
   getUser,
   enroll,
   dropOut,
-} = require("../Controllers/user.controller");
-const UserModel = require("../Models/UserModel");
-const feedModel = require("../Models/feed.model");
-const { createError } = require("../error");
-const verifyToken = require("../middleware/verifyToken");
+} = require("./Controllers/user.controller");
+const UserModel = require("./Models/UserModel");
+const feedModel = require("./Models/feed.model");
+const { createError } = require("./error");
+const verifyToken = require("./middleware/verifyToken");
 
 const router = require("express").Router();
 //Update a User

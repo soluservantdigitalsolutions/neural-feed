@@ -12,8 +12,8 @@ const {
   search,
   awardPoints,
   updateComprehensionAndHats,
-} = require("../Controllers/Feed.controller.js");
-const verifyToken = require("../middleware/verifyToken.js");
+} = require("./Controllers/Feed.controller.js");
+const verifyToken = require("./middleware/verifyToken.js");
 
 router.post("/feeds", verifyToken, postFeed);
 
