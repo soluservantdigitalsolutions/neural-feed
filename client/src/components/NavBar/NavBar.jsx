@@ -14,18 +14,21 @@ import { useNavigate, Link } from "react-router-dom";
 
 import axios from "axios";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux/es";
+import { logout } from "../../redux/userSlice";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(Auth);
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  console.log(currentUser);
-
+  const dispatch = useDispatch();
+  const { currentUser } = useSelector((state) => state.user);
   const handleLogout = async (req, res) => {
     try {
       await axios.post("http://localhost:3000/api/auth/logout");
-      localStorage.setItem("currentUser", null);
-      navigate("/");
+      // localStorage.setItem("currentUser", null);
+      dispatch(logout());
+      navigate("/login");
     } catch (err) {
       console.log(err);
     }
@@ -42,7 +45,7 @@ const NavBar = () => {
       <div className="LogoDiv">
         <Logo />
       </div>
-      <div className="SearchBarDiv">
+      {/* <div className="SearchBarDiv">
         <FormInput
           inputType="Search"
           inputPlaceholder="Looking For..."
@@ -50,51 +53,65 @@ const NavBar = () => {
           LabelForName="Search"
           inputName="Search"
         />
-      </div>
+      </div> */}
       <div className="UploadMessageNotificationsAndProfilediv flex items-center justify-center gap-2">
-        <div className="UploadDiv">
-          <Link to="upload">
-            <SubmitBtn
-              ButtonText="+ FEED"
-              className="p-1"
-            />
-          </Link>
-        </div>
-        <div className="MessagesDiv">
-          <FaRegHandPaper className="text-2xl cursor-pointer" />
-        </div>
-        <div className="Notifications">
-          <AiFillNotification className="text-2xl" />
-        </div>
         {currentUser ? (
-          <div className="flex gap-1 items-center">
-            <ProfileDropdown
-              isOpen={isDropdownOpen}
-              toggleOpen={toggleDropdown}
-            >
-              <div className="py-2">
-                <Link
-                  to="/profile"
-                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-                >
-                  Your Profile
-                </Link>
-                {/* <Link
+          <>
+            <div className="UploadDiv hidden md:block">
+              <Link to="upload">
+                <SubmitBtn
+                  ButtonText="+ FEED"
+                  className="p-1"
+                />
+              </Link>
+            </div>
+            {/* <div className="MessagesDiv">
+              <FaRegHandPaper className="text-2xl cursor-pointer" />
+            </div>
+            <div className="Notifications">
+              <AiFillNotification className="text-2xl" />
+            </div> */}
+            <div className="flex gap-1 items-center">
+              <ProfileDropdown
+                isOpen={isDropdownOpen}
+                toggleOpen={toggleDropdown}
+              >
+                <div className="py-2">
+                  <div className="block px-4 py-2 text-gray-800 transition ">
+                    Welcome Back <b>{currentUser.user.username}</b>!
+                  </div>
+                  <div className="UploadDiv lg:hidden md:hidden  ">
+                    <Link to="upload">
+                      <SubmitBtn
+                        ButtonText="+ FEED"
+                        className=""
+                      />
+                    </Link>
+                  </div>
+                  <Link
+                    to={`/profile/${currentUser.user.username}`}
+                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white"
+                  >
+                    Your Profile
+                  </Link>
+                  {/* <Link
                   to="#"
                   className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
                 >
                   Settings
                 </Link> */}
-                <Link
-                  to="/"
-                  className="block px-4 py-2 text-gray-800 hover:bg-indigo-500 hover:text-white"
-                  onClick={handleLogout}
-                >
-                  Log Out
-                </Link>
-              </div>
-            </ProfileDropdown>
-          </div>
+
+                  <Link
+                    to="/"
+                    className="block px-4 py-2 text-gray-800 hover:bg-red-600 transition hover:text-white"
+                    onClick={handleLogout}
+                  >
+                    Log Out
+                  </Link>
+                </div>
+              </ProfileDropdown>
+            </div>
+          </>
         ) : (
           <div className="LoginButtonDiv flex gap-1">
             <Link to="/login">
