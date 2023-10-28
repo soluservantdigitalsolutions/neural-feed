@@ -3,10 +3,13 @@ const { Schema } = require("mongoose");
 
 const UserSchema = new Schema(
   {
+    userId: {
+      type: String,
+    },
     username: {
       type: String,
       required: [true, "Your Username is Required"],
-      unique: true,
+      unique: [true, "This Username is not available"],
     },
     email: {
       type: String,
@@ -24,17 +27,20 @@ const UserSchema = new Schema(
     profileImage: {
       type: String,
     },
-    enrollments: {
+    bio: {
       type: String,
-      default: 0,
+    },
+    enrollments: {
+      type: Array,
+      default: [],
+    },
+    admissions: {
+      type: Array,
+      default: [],
     },
     hats: {
-      type: String,
-      default: 0,
-    },
-    students: {
-      type: String,
-      default: 0,
+      type: Array,
+      default: [],
     },
   },
   {
