@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Logo from "../../components/Logo/Logo";
 import FormInput from "../../components/formInput/FormInput";
 import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
@@ -9,7 +9,9 @@ import { Auth, Provider } from "../../../firebase.config";
 import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
+import addProfilePhoto from "../../assets/addProfilePhoto.png";
 import axios from "axios";
+import UploadVideo from "../../utils/upload";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -19,10 +21,19 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [profileImgPreview, setProfileImgPreview] = useState(null);
+  const [profileImg, setProfileImg] = useState(null);
+
+  useEffect(() => {
+    // Revoke the old feed preview Blob URL
+    return () => URL.revokeObjectURL(profileImgPreview);
+  }, [profileImgPreview]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const url = await UploadVideo(profileImg);
+    setProfileImg(url);
+    console.log(profileImg);
     try {
       if (password !== confirmPassword) {
         return setError("Passwords do not match");
@@ -33,6 +44,7 @@ const SignUp = () => {
           username,
           email,
           password,
+          profileImage: profileImg,
         },
         {
           withCredentials: true,
@@ -50,9 +62,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="main border">
+    <div className="main ">
       <div
-        className="MainFormCard border p-5 rounded flex justify-center items-center flex-col gap-2.5 shadow-xl"
+        className="MainFormCard h-full w-full p-5 rounded flex justify-center items-center flex-col gap-2.5 shadow-xl"
         style={{
           position: "absolute",
           top: "50%",
@@ -69,6 +81,28 @@ const SignUp = () => {
             action=""
             className="flex flex-col gap-2.5 "
           >
+            <label
+              htmlFor="ProfileImg"
+              className="flex self-center border border-black  rounded-full cursor-pointer"
+            >
+              <img
+                src={profileImgPreview ? profileImgPreview : addProfilePhoto}
+                alt=""
+                className=" rounded-full w-24 h-24 object-cover"
+              />
+              <input
+                type="file"
+                id="ProfileImg"
+                className="hidden rounded-full"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  setProfileImgPreview(URL.createObjectURL(file));
+                  setProfileImg(file);
+                }}
+              />
+            </label>
+
             <FormInput
               inputType="username"
               inputPlaceholder="Username"
@@ -104,6 +138,7 @@ const SignUp = () => {
                 setPassword(e.target.value);
                 console.log({ password: password });
               }}
+              autoComplete="false"
             />
             <FormInput
               inputType="password"
@@ -122,9 +157,9 @@ const SignUp = () => {
               ButtonText="Join"
             />
           </form>
-          <div className="googleButtonDiv flex justify-center items-center">
+          {/* <div className="googleButtonDiv flex justify-center items-center">
             <GoogleButton />
-          </div>
+          </div> */}
           <div className="LoginQuestionDiv">
             <p>
               Already Have an Account?{" "}
