@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unescaped-entities */
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import Logo from "../../components/Logo/Logo";
 import FormInput from "../../components/formInput/FormInput";
@@ -10,7 +12,8 @@ import { signInWithPopup } from "firebase/auth";
 import { useState } from "react";
 
 import axios from "axios";
-import { ToastContainer } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,9 +22,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSucessMessage] = useState("");
+  const { currentUser } = useSelector((state) => state.user);
+  console.log("login", currentUser);
+  const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(loginStart());
     try {
       const res = await axios.post(
         "http://localhost:3000/api/auth/login",
@@ -33,22 +40,18 @@ const Login = () => {
           withCredentials: true,
         }
       );
-      console.log(res);
+
+      dispatch(loginSuccess(res.data));
+      navigate(`/profile/${currentUser.user.username}`);
+      console.log(res.data);
       setSucessMessage(res.data.message);
 
-      const currentUser = JSON.stringify(res);
-      localStorage.setItem("currentUser", currentUser);
-
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
     } catch (err) {
+      dispatch(loginFailure());
       console.log(err);
       setError(err.response.data.message);
     }
   };
-
-
 
   const signInWithGoogle = () => {
     signInWithPopup(Auth, Provider)
@@ -64,7 +67,7 @@ const Login = () => {
   return (
     <div className="main border ">
       <div
-        className="MainFormCard border p-5 rounded flex justify-center items-center flex-col gap-2.5 shadow-xl"
+        className="MainFormCard h-full w-full p-5 rounded flex justify-center items-center flex-col gap-2.5 shadow-xl"
         style={{
           position: "absolute",
           top: "50%",
@@ -72,7 +75,7 @@ const Login = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-        <div className="LogoDiv ">
+        <div className="LogoDiv w-92 ">
           <Logo />
         </div>
         <div className="FormDiv flex flex-col gap-2">
@@ -107,9 +110,9 @@ const Login = () => {
             />
             <SubmitBtn ButtonText="Login" />
           </form>
-          <div className="googleButtonDiv">
+          {/* <div className="googleButtonDiv">
             <GoogleButton onClick={signInWithGoogle} />
-          </div>
+          </div> */}
           <div className="SigUpQuestionDiv">
             <p>
               Don't have an account?{" "}
