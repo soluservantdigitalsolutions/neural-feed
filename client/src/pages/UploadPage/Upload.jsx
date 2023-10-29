@@ -64,9 +64,9 @@ const Upload = () => {
           withCredentials: true,
         }
       );
+      setLoading(false);
       setSuccess("Video Uploaded Sucessfully");
       navigate("/");
-      setLoading(false);
     } catch (error) {
       setLoading(false);
       console.log(error);
