@@ -21,6 +21,7 @@ import Alert from "../../components/Alert/Alert";
 import { FcIdea } from "react-icons/fc";
 import { MdCoPresent } from "react-icons/md";
 import { addAttendance } from "../../redux/feedSlice";
+import { Link } from "react-router-dom";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -53,7 +54,7 @@ const Home = ({ type }) => {
   useEffect(() => {
     const fetchFeeds = async () => {
       await axios
-        .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
+        .get(`http://localhost:3000/api/upload/random`)
         .then((response) => {
           setVideo(response.data.randomFeeds);
           console.log(response.data.randomFeeds);
@@ -66,32 +67,33 @@ const Home = ({ type }) => {
   }, [type]);
 
   const handleEnroll = async (id) => {
+    // Optimistically update state
     setEnroll((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
+
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/enroll/${id}`,
-        {
-          // enrollments: id,
-          // admissions: req.user.id,
-        },
+        `http://localhost:3000/api/users/enroll/${id}`,
+        {},
         {
           withCredentials: true,
         }
       );
       console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
-
-      // update your state here
-
       console.log("Enrollment Successful");
     } catch (err) {
       console.log(err);
       console.log("Enrollment failed");
-    }
 
+      // Revert state if request failed
+      setEnroll((prevState) => ({
+        ...prevState,
+        [id]: !prevState[id],
+      }));
+    }
     console.log(id);
   };
 
@@ -133,7 +135,7 @@ const Home = ({ type }) => {
   const handleAnswerSubmit = async (feed) => {
     try {
       const response = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/upload/updateComprehensionAndHats",
+        "http://localhost:3000/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -174,7 +176,7 @@ const Home = ({ type }) => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/upload/feeds/attendances/${id}`,
+        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -199,14 +201,17 @@ const Home = ({ type }) => {
               <img
                 src={feed.profileImage ? feed.profileImage : UserProfileImage}
                 alt=""
-                className="w-10 h-10 rounded-full object-cover transition "
+                className="w-10 h-10 rounded-full object-cover transition cursor-pointer "
                 // loading="true"
               />
             </div>
             <div className="UserNameAndDetailsDiv">
-              <div className="UsernameDiv">
-                <h1 className="font-bold">{feed.username}</h1>
-              </div>
+              <Link to={`/profile/${feed.username}`}>
+                <div className="UsernameDiv cursor-pointer">
+                  <h1 className="font-bold">{feed.username}</h1>
+                </div>
+              </Link>
+
               <div className="VideoCaptionDiv">
                 <p>{feed.caption}</p>
               </div>
