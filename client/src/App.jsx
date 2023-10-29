@@ -15,8 +15,8 @@ function App() {
 
   return (
     <>
-      <NavBar />
       <Routes>
+      <NavBar />
         <Route
           exact
           path="/register"
