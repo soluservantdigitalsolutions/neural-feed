@@ -4,7 +4,7 @@ test("getting auth data info", () => {
       e.preventDefault();
       try {
         const { data } = await axios.post(
-          "https://neural-feed-backend.onrender.com/api/auth/login",
+          "http://localhost:3000/api/auth/login",
           {
             ...inputValue,
           },
