@@ -68,9 +68,7 @@ const Login = async (req, res, next) => {
     res.cookie("accessToken", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "None",
-      domain: "https://neural-feed-backend.onrender.com",
-      path: "/",
+      sameSite: "none",
     });
     res.status(200).json({
       user: userInfo,

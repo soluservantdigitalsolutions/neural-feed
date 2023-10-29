@@ -35,7 +35,7 @@ const Login = () => {
     dispatch(loginStart());
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "https://neural-feed-backend.onrender.com/api/auth/login",
         {
           username,
           password,
@@ -51,6 +51,7 @@ const Login = () => {
       setSucessMessage(res.data.message);
       navigate("/");
     } catch (err) {
+      setLoading(false);
       dispatch(loginFailure());
       console.log(err);
       setError(err.response.data.message);

@@ -42,7 +42,7 @@ const SignUp = () => {
         return setError("Passwords do not match");
       }
       const res = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://neural-feed-backend.onrender.com/api/auth/register",
         {
           username,
           email,
@@ -58,6 +58,8 @@ const SignUp = () => {
       setSuccessMessage("User has been registered successfully");
       navigate("/login");
     } catch (err) {
+      setLoading(false);
+
       console.log(err);
     }
   };
