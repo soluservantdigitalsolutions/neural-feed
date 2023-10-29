@@ -60,13 +60,17 @@ const Login = async (req, res, next) => {
       {
         id: user._id,
         username: user.username,
-        profileImage: user.profileImage
+        profileImage: user.profileImage,
       },
       process.env.SECRET_TOKEN
     );
 
     res.cookie("accessToken", token, {
       httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      domain: "https://neural-feed-backend.onrender.com",
+      path: "/",
     });
     res.status(200).json({
       user: userInfo,
