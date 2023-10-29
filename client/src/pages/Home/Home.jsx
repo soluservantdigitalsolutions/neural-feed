@@ -275,7 +275,7 @@ const Home = ({ type }) => {
                   />
                 </Test>
               </div>
-              <div className="flex flex-row justify-center items-center mb-10 ">
+              <div className="flex flex-row md:flex-col justify-center items-center mb-10 ">
                 <FcIdea className="text-5xl " />
                 <h1 className=" font-bold text-green-600">
                   {feed.comprehensions.length}
