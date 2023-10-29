@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
-    origin: "https://neural-feed.netlify.app",
+    origin: " http://localhost:5173/",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
