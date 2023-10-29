@@ -54,6 +54,7 @@ const Upload = () => {
         {
           userId: userData._id,
           username: userData.username,
+          profileImage: userData.profileImage,
           video: url,
           caption: caption,
           test: test,
