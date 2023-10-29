@@ -22,11 +22,14 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSucessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const { currentUser } = useSelector((state) => state.user);
   console.log("login", currentUser);
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     dispatch(loginStart());
     try {
@@ -42,12 +45,13 @@ const Login = () => {
       );
 
       dispatch(loginSuccess(res.data));
+      setLoading(false);
       navigate("/");
       console.log(res.data);
       setSucessMessage(res.data.message);
-
     } catch (err) {
       dispatch(loginFailure());
+      setLoading(false);
       console.log(err);
       setError(err.response.data.message);
     }
@@ -63,6 +67,17 @@ const Login = () => {
         console.log(err);
       });
   };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader
+          width={100}
+          height={25}
+          color="#38a169"
+        />
+      </div>
+    );
 
   return (
     <div className="main border ">

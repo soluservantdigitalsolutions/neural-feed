@@ -23,6 +23,7 @@ const SignUp = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [profileImgPreview, setProfileImgPreview] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Revoke the old feed preview Blob URL
@@ -30,6 +31,7 @@ const SignUp = () => {
   }, [profileImgPreview]);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     const url = await UploadVideo(profileImg);
     setProfileImg(url);
@@ -50,16 +52,26 @@ const SignUp = () => {
           withCredentials: true,
         }
       );
+      setLoading(false);
 
       setSuccessMessage("User has been registered successfully");
-      console.log(res);
-      setTimeout(() => {
-        navigate("/login");
-      }, 1000);
+      navigate("/login");
     } catch (err) {
+      setLoading(false);
       console.log(err);
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader
+          width={100}
+          height={25}
+          color="#38a169"
+        />
+      </div>
+    );
 
   return (
     <div className="main ">
