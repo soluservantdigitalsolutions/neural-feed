@@ -14,6 +14,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loginFailure, loginStart, loginSuccess } from "../../redux/userSlice";
+import { BarLoader } from "react-spinners";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,7 +69,16 @@ const Login = () => {
       });
   };
 
-
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader
+          width={100}
+          height={25}
+          color="#38a169"
+        />
+      </div>
+    );
 
   return (
     <div className="main border ">
@@ -81,65 +91,54 @@ const Login = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-        {loading ? (
-          <div className="flex justify-center items-center h-[100vh]">
-            <BarLoader
-              width={100}
-              height={25}
-              color="#38a169"
+        
+        <div className="LogoDiv w-92 ">
+          <Logo />
+        </div>
+        <div className="FormDiv flex flex-col gap-2">
+          <form
+            action=""
+            className="flex flex-col gap-2.5 "
+            onSubmit={handleSubmit}
+          >
+            <FormInput
+              inputType="name"
+              inputPlaceholder="Username"
+              Label="username"
+              value={username}
+              LabelForName="username"
+              inputName="username"
+              onChange={(e) => {
+                setUsername(e.target.value);
+                console.log({ username: username });
+              }}
             />
-          </div>
-        ) : (
-          <>
-            <div className="LogoDiv w-92 ">
-              <Logo />
-            </div>
-            <div className="FormDiv flex flex-col gap-2">
-              <form
-                action=""
-                className="flex flex-col gap-2.5 "
-                onSubmit={handleSubmit}
-              >
-                <FormInput
-                  inputType="name"
-                  inputPlaceholder="Username"
-                  Label="username"
-                  value={username}
-                  LabelForName="username"
-                  inputName="username"
-                  onChange={(e) => {
-                    setUsername(e.target.value);
-                    console.log({ username: username });
-                  }}
-                />
-                <FormInput
-                  inputType="password"
-                  inputPlaceholder="Enter your password"
-                  Label="Password"
-                  value={password}
-                  LabelForName="password"
-                  inputName="password"
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    console.log({ password: password });
-                  }}
-                />
-                <SubmitBtn ButtonText="Login" />
-              </form>
-              {/* <div className="googleButtonDiv">
+            <FormInput
+              inputType="password"
+              inputPlaceholder="Enter your password"
+              Label="Password"
+              value={password}
+              LabelForName="password"
+              inputName="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+                console.log({ password: password });
+              }}
+            />
+            <SubmitBtn ButtonText="Login" />
+          </form>
+          {/* <div className="googleButtonDiv">
             <GoogleButton onClick={signInWithGoogle} />
           </div> */}
-              <div className="SigUpQuestionDiv">
-                <p>
-                  Don't have an account?{" "}
-                  <a href="/register">
-                    <u>Register</u>
-                  </a>
-                </p>
-              </div>
-            </div>
-          </>
-        )}
+          <div className="SigUpQuestionDiv">
+            <p>
+              Don't have an account?{" "}
+              <a href="/register">
+                <u>Register</u>
+              </a>
+            </p>
+          </div>
+        </div>
 
         {error ? (
           <div className=" p-2.5 bg-red-300 border-2 border-red-500 ">
