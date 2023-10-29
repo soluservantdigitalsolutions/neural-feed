@@ -62,16 +62,6 @@ const SignUp = () => {
     }
   };
 
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
-      </div>
-    );
 
   return (
     <div className="main ">
@@ -87,99 +77,115 @@ const SignUp = () => {
         <div className="LogoDiv ">
           <Logo />
         </div>
-        <div className="FormDiv flex flex-col gap-2">
-          <form
-            onSubmit={handleSubmit}
-            action=""
-            className="flex flex-col gap-2.5 "
-          >
-            <label
-              htmlFor="ProfileImg"
-              className="flex self-center border border-black  rounded-full cursor-pointer"
-            >
-              <img
-                src={profileImgPreview ? profileImgPreview : addProfilePhoto}
-                alt=""
-                className=" rounded-full w-24 h-24 object-cover"
-              />
-              <input
-                type="file"
-                id="ProfileImg"
-                className="hidden rounded-full"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files[0];
-                  setProfileImgPreview(URL.createObjectURL(file));
-                  setProfileImg(file);
-                }}
-              />
-            </label>
 
-            <FormInput
-              inputType="username"
-              inputPlaceholder="Username"
-              LabelForName="username"
-              inputName="username"
-              value={username}
-              onChange={(e) => {
-                setUsername(e.target.value);
-                console.log({ username: username });
-              }}
-            />
-            <FormInput
-              inputType="email"
-              inputPlaceholder="Email"
-              Label="Email"
-              LabelForName="email"
-              inputName="email"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                console.log({ email: email });
-              }}
-              autoComplete="false"
-            />
-            <FormInput
-              inputType="password"
-              inputPlaceholder="Password"
-              Label="Password"
-              LabelForName="password"
-              inputName="password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                console.log({ password: password });
-              }}
-              autoComplete="false"
-            />
-            <FormInput
-              inputType="password"
-              inputPlaceholder="Confirm Password"
-              Label="Password"
-              LabelForName="password"
-              inputName="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-                console.log({ confirmPassword: confirmPassword });
-              }}
-            />
-            <SubmitBtn
-              disabled=""
-              ButtonText="Join"
-            />
-          </form>
-          {/* <div className="googleButtonDiv flex justify-center items-center">
+        <div className="FormDiv flex flex-col gap-2">
+          {loading ? (
+            <div className="flex justify-center items-center h-[100vh]">
+              <BarLoader
+                width={100}
+                height={25}
+                color="#38a169"
+              />
+            </div>
+          ) : (
+            <>
+              <form
+                onSubmit={handleSubmit}
+                action=""
+                className="flex flex-col gap-2.5 "
+              >
+                <label
+                  htmlFor="ProfileImg"
+                  className="flex self-center border border-black  rounded-full cursor-pointer"
+                >
+                  <img
+                    src={
+                      profileImgPreview ? profileImgPreview : addProfilePhoto
+                    }
+                    alt=""
+                    className=" rounded-full w-24 h-24 object-cover"
+                  />
+                  <input
+                    type="file"
+                    id="ProfileImg"
+                    className="hidden rounded-full"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      setProfileImgPreview(URL.createObjectURL(file));
+                      setProfileImg(file);
+                    }}
+                  />
+                </label>
+
+                <FormInput
+                  inputType="username"
+                  inputPlaceholder="Username"
+                  LabelForName="username"
+                  inputName="username"
+                  value={username}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                    console.log({ username: username });
+                  }}
+                />
+                <FormInput
+                  inputType="email"
+                  inputPlaceholder="Email"
+                  Label="Email"
+                  LabelForName="email"
+                  inputName="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    console.log({ email: email });
+                  }}
+                  autoComplete="false"
+                />
+                <FormInput
+                  inputType="password"
+                  inputPlaceholder="Password"
+                  Label="Password"
+                  LabelForName="password"
+                  inputName="password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    console.log({ password: password });
+                  }}
+                  autoComplete="false"
+                />
+                <FormInput
+                  inputType="password"
+                  inputPlaceholder="Confirm Password"
+                  Label="Password"
+                  LabelForName="password"
+                  inputName="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    console.log({ confirmPassword: confirmPassword });
+                  }}
+                />
+                <SubmitBtn
+                  disabled=""
+                  ButtonText="Join"
+                />
+              </form>
+              {/* <div className="googleButtonDiv flex justify-center items-center">
             <GoogleButton />
           </div> */}
-          <div className="LoginQuestionDiv">
-            <p>
-              Already Have an Account?{" "}
-              <a href="/login">
-                <u>login</u>
-              </a>
-            </p>
-          </div>
+              <div className="LoginQuestionDiv">
+                <p>
+                  Already Have an Account?{" "}
+                  <a href="/login">
+                    <u>login</u>
+                  </a>
+                </p>
+              </div>
+            </>
+          )}
+
           {error ? (
             <div className=" p-2.5 bg-red-300 border-2 border-red-500 ">
               {error}
