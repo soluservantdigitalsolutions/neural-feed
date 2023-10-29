@@ -30,6 +30,7 @@ const Dropzone = ({onChange}) => {
                 alignItems: "center",
               }}
               onChange={onChange}
+              accept="video/*"
             />
           </div>
         </div>

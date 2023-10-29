@@ -78,7 +78,7 @@ const Upload = () => {
       <div className="flex justify-center items-center h-[100vh]">
         <BarLoader
           width={100}
-          height={50}
+          height={25}
           color="#38a169"
         />
       </div>
