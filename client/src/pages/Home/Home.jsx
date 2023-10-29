@@ -232,7 +232,7 @@ const Home = ({ type }) => {
             }
             className="VideoFileDiv flex justify-center items-center rounded flex-col"
           >
-            <div className="flex items-end gap-2">
+            <div className=" md:flex items-end gap-2">
               <div>
                 <video
                   src={feed.video}
@@ -274,7 +274,7 @@ const Home = ({ type }) => {
                   />
                 </Test>
               </div>
-              <div className="flex flex-col justify-center items-center mb-10 ">
+              <div className="flex flex-row justify-center items-center mb-10 ">
                 <FcIdea className="text-5xl " />
                 <h1 className=" font-bold text-green-600">
                   {feed.comprehensions.length}
