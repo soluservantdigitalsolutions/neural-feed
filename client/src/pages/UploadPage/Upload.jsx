@@ -21,9 +21,9 @@ const Upload = () => {
     optionD: "",
   });
   const [feedPreview, setFeedPreview] = useState(null);
-const { currentUser } = useSelector((state) => state.user);
-const userData = currentUser.user;
-console.log("Upload.CurrentUser", userData);
+  const { currentUser } = useSelector((state) => state.user);
+  const userData = currentUser.user;
+  console.log("Upload.CurrentUser", userData);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -52,6 +52,8 @@ console.log("Upload.CurrentUser", userData);
       await axios.post(
         "https://neural-feed-backend.onrender.com/api/upload/feeds",
         {
+          userId: userData._id,
+          username: userData.username,
           video: url,
           caption: caption,
           test: test,
