@@ -1,5 +1,5 @@
 import "./App.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Login from "./pages/LoginPage/Login";
 import SignUp from "./pages/SignUpPage/SignUp";
 import Home from "./pages/Home/Home";
@@ -12,11 +12,15 @@ import { useSelector } from "react-redux/es";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
+  const location = useLocation();
 
   return (
     <>
+      {location.pathname !== "/login" && location.pathname !== "/register" && (
+        <NavBar />
+      )}
+
       <Routes>
-      <NavBar />
         <Route
           exact
           path="/register"
