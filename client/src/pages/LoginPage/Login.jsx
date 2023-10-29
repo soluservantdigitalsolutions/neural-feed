@@ -47,9 +47,9 @@ const Login = () => {
 
       setLoading(false);
       dispatch(loginSuccess(res.data));
-      navigate("/");
       console.log(res.data);
       setSucessMessage(res.data.message);
+      navigate("/");
     } catch (err) {
       dispatch(loginFailure());
       console.log(err);
@@ -90,7 +90,6 @@ const Login = () => {
           transform: "translate(-50%, -50%)",
         }}
       >
-        
         <div className="LogoDiv w-92 ">
           <Logo />
         </div>
