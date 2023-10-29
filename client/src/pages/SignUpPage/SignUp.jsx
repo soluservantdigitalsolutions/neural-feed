@@ -58,7 +58,6 @@ const SignUp = () => {
       setSuccessMessage("User has been registered successfully");
       navigate("/login");
     } catch (err) {
-      setLoading(false);
       console.log(err);
     }
   };

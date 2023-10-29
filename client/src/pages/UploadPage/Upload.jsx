@@ -7,6 +7,7 @@ import axios from "axios";
 import UploadVideo from "../../utils/upload";
 import { useNavigate } from "react-router-dom";
 import { BarLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 const Upload = () => {
   const [caption, setCaption] = useState("");
   const [test, setTest] = useState("");
@@ -20,7 +21,9 @@ const Upload = () => {
     optionD: "",
   });
   const [feedPreview, setFeedPreview] = useState(null);
-
+const { currentUser } = useSelector((state) => state.user);
+const userData = currentUser.user;
+console.log("Upload.CurrentUser", userData);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {

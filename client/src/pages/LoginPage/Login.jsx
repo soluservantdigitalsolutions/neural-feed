@@ -45,14 +45,13 @@ const Login = () => {
         }
       );
 
-      dispatch(loginSuccess(res.data));
       setLoading(false);
+      dispatch(loginSuccess(res.data));
       navigate("/");
       console.log(res.data);
       setSucessMessage(res.data.message);
     } catch (err) {
       dispatch(loginFailure());
-      setLoading(false);
       console.log(err);
       setError(err.response.data.message);
     }
