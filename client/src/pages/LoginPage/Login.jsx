@@ -42,7 +42,7 @@ const Login = () => {
       );
 
       dispatch(loginSuccess(res.data));
-      navigate(`/profile/${currentUser.user.username}`);
+      navigate("/profile");
       console.log(res.data);
       setSucessMessage(res.data.message);
 
