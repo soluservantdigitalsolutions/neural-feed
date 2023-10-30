@@ -35,7 +35,7 @@ const Login = () => {
     dispatch(loginStart());
     try {
       const res = await axios.post(
-        "https://neural-feed-backend.onrender.comapi/auth/login",
+        "https://neural-feed-backend.onrender.com/api/auth/login",
         {
           username,
           password,
