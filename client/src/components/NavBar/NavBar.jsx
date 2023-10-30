@@ -25,7 +25,9 @@ const NavBar = () => {
   const { currentUser } = useSelector((state) => state.user);
   const handleLogout = async (req, res) => {
     try {
-      await axios.post("http://localhost:3000/api/auth/logout");
+      await axios.post(
+        "https://neural-feed-backend.onrender.comapi/auth/logout"
+      );
       // localStorage.setItem("currentUser", null);
       dispatch(logout());
       navigate("/login");
@@ -39,7 +41,6 @@ const NavBar = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-  
 
   return (
     <div className="border flex  justify-between items-center p-3">
