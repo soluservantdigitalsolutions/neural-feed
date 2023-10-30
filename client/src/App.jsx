@@ -9,6 +9,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { Auth } from "../firebase.config";
 import Upload from "./pages/UploadPage/Upload";
 import { useSelector } from "react-redux/es";
+import UserProfile from "./pages/profilePage/UserProfile";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -38,7 +39,12 @@ function App() {
         />
         <Route
           exact
-          path="/profile/:id"
+          path="/profile/:username"
+          element={<UserProfile /> }
+        />
+        <Route
+          exact
+          path="/profile/:username"
           element={currentUser ? <Profile /> : <Navigate to="/login" />}
         />
         <Route

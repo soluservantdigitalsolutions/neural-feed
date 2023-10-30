@@ -21,6 +21,8 @@ import Alert from "../../components/Alert/Alert";
 import { FcIdea } from "react-icons/fc";
 import { MdCoPresent } from "react-icons/md";
 import { addAttendance } from "../../redux/feedSlice";
+import { Link } from "react-router-dom";
+import { BarLoader } from "react-spinners";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -31,6 +33,7 @@ const Home = ({ type }) => {
   const [caption, setCaption] = useState("");
   const [enroll, setEnroll] = useState({});
   const [play, setPlay] = useState({});
+  const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const userData = currentUser.user;
@@ -52,46 +55,55 @@ const Home = ({ type }) => {
 
   useEffect(() => {
     const fetchFeeds = async () => {
-      await axios
-        .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
-        .then((response) => {
-          setVideo(response.data.randomFeeds);
-          console.log(response.data.randomFeeds);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      setLoading(true);
+      try {
+        await axios
+          .get(`http://localhost:3000/api/upload/random`)
+          .then((response) => {
+            setVideo(response.data.randomFeeds);
+            console.log(response.data.randomFeeds);
+          });
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+
+        console.log(err);
+      }
     };
     fetchFeeds();
   }, [type]);
 
   const handleEnroll = async (id) => {
+    // Optimistically update state
+    setLoading(true);
     setEnroll((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
     }));
+
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/enroll/${id}`,
-        {
-          // enrollments: id,
-          // admissions: req.user.id,
-        },
+        `http://localhost:3000/api/users/enroll/${id}`,
+        {},
         {
           withCredentials: true,
         }
       );
+      setLoading(false);
       console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
-
-      // update your state here
-
       console.log("Enrollment Successful");
     } catch (err) {
+      setLoading(false);
       console.log(err);
       console.log("Enrollment failed");
-    }
 
+      // Revert state if request failed
+      setEnroll((prevState) => ({
+        ...prevState,
+        [id]: !prevState[id],
+      }));
+    }
     console.log(id);
   };
 
@@ -131,9 +143,10 @@ const Home = ({ type }) => {
   };
 
   const handleAnswerSubmit = async (feed) => {
+    setLoading(true);
     try {
       const response = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/upload/updateComprehensionAndHats",
+        "http://localhost:3000/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -142,6 +155,7 @@ const Home = ({ type }) => {
           withCredentials: true,
         }
       );
+      setLoading(false);
 
       if (response.data.message === "Updated successfully!") {
         // Do something after successful update
@@ -165,27 +179,42 @@ const Home = ({ type }) => {
         });
       }
     } catch (err) {
+      setLoading(false);
       // Handle error
       console.log(err);
     }
   };
 
   const handleAttendance = async (id) => {
+
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/upload/feeds/attendances/${id}`,
+        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
         }
       );
+
       console.log(response.data);
       dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
     } catch (error) {
+
       console.error("Error updating attendances:", error);
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader
+          width={100}
+          height={25}
+          color="#38a169"
+        />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-10 justify-center border p-5  ">
@@ -199,14 +228,17 @@ const Home = ({ type }) => {
               <img
                 src={feed.profileImage ? feed.profileImage : UserProfileImage}
                 alt=""
-                className="w-10 h-10 rounded-full object-cover transition "
+                className="w-10 h-10 rounded-full object-cover transition cursor-pointer "
                 // loading="true"
               />
             </div>
             <div className="UserNameAndDetailsDiv">
-              <div className="UsernameDiv">
-                <h1 className="font-bold">{feed.username}</h1>
-              </div>
+              <Link to={`/profile/${feed.username}`}>
+                <div className="UsernameDiv cursor-pointer">
+                  <h1 className="font-bold">{feed.username}</h1>
+                </div>
+              </Link>
+
               <div className="VideoCaptionDiv">
                 <p>{feed.caption}</p>
               </div>
@@ -234,10 +266,10 @@ const Home = ({ type }) => {
             className="VideoFileDiv flex justify-center items-center rounded flex-col"
           >
             <div className=" md:flex items-end gap-2">
-              <div>
+              <div className=" flex justify-center flex-col">
                 <video
                   src={feed.video}
-                  className="w-80 rounded transition max-w-lg"
+                  className="w-80 rounded transition max-w-lg self-center "
                   ref={(el) => (videoRefs.current[feed._id] = el)}
                   // onClick={onVideoPress}
                   loop
@@ -275,15 +307,19 @@ const Home = ({ type }) => {
                   />
                 </Test>
               </div>
-              <div className="flex flex-row md:flex-col justify-center items-center mb-10 ">
-                <FcIdea className="text-5xl " />
-                <h1 className=" font-bold text-green-600">
-                  {feed.comprehensions.length}
-                </h1>
-                <MdCoPresent className="text-3xl font-bold " />
-                <h1 className=" font-bold text-green-600">
-                  {feed.attendances.length}
-                </h1>
+              <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
+                <div className="flex md:flex-col items-baseline md:items-center gap-1">
+                  <FcIdea className="text-2xl " />
+                  <h1 className=" font-bold text--600">
+                    {feed.comprehensions.length}
+                  </h1>
+                </div>
+                <div className="flex md:flex-col items-baseline md:items-center gap-1">
+                  <MdCoPresent className="text-3xl font-bold text-green-700 " />
+                  <h1 className=" font-bold text--600">
+                    {feed.attendances.length}
+                  </h1>
+                </div>
               </div>
             </div>
 

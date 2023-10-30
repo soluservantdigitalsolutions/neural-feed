@@ -25,7 +25,7 @@ const SignUp = () => {
   const [profileImgPreview, setProfileImgPreview] = useState(null);
   const [profileImg, setProfileImg] = useState(null);
   const [loading, setLoading] = useState(false);
-
+  const [imgUrl, setImgUrl] = useState("");
   useEffect(() => {
     // Revoke the old feed preview Blob URL
     return () => URL.revokeObjectURL(profileImgPreview);
@@ -34,20 +34,19 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     setLoading(true);
     e.preventDefault();
-    const url = await UploadVideo(profileImg);
-    setProfileImg(url);
-    console.log(profileImg);
     try {
+      const url = await UploadVideo(profileImg);
+      setProfileImg(url);
       if (password !== confirmPassword) {
         return setError("Passwords do not match");
       }
       const res = await axios.post(
-        "https://neural-feed-backend.onrender.com/api/auth/register",
+        "http://localhost:3000/api/auth/register",
         {
           username,
           email,
           password,
-          profileImage: profileImg,
+          profileImage: url,
         },
         {
           withCredentials: true,
@@ -97,7 +96,7 @@ const SignUp = () => {
           >
             <label
               htmlFor="ProfileImg"
-              className="flex self-center border border-black  rounded-full cursor-pointer"
+              className="flex self-center border border-slate-400  rounded-full cursor-pointer"
             >
               <img
                 src={profileImgPreview ? profileImgPreview : addProfilePhoto}
@@ -116,6 +115,7 @@ const SignUp = () => {
                 }}
               />
             </label>
+            <p className="text-center font-bold">Add Profile Picture</p>
 
             <FormInput
               inputType="username"
