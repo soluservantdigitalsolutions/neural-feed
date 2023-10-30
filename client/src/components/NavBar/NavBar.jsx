@@ -17,27 +17,19 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux/es";
 import { logout } from "../../redux/userSlice";
-import { BarLoader } from "react-spinners";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(Auth);
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const handleLogout = async (req, res) => {
-    setLoading(true);
     try {
-      await axios.post(
-        "https://neural-feed-backend.onrender.comapi/auth/logout"
-      );
+      await axios.post("http://localhost:3000/api/auth/logout");
       // localStorage.setItem("currentUser", null);
-      setLoading(false);
-
       dispatch(logout());
       navigate("/login");
     } catch (err) {
-      setLoading(false);
       console.log(err);
     }
   };
@@ -47,17 +39,7 @@ const NavBar = () => {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
-
-  if (loading)
-    return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader
-          width={100}
-          height={25}
-          color="#38a169"
-        />
-      </div>
-    );
+  
 
   return (
     <div className="border flex  justify-between items-center p-3">
