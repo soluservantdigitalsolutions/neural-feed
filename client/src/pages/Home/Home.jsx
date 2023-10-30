@@ -22,6 +22,7 @@ import { FcIdea } from "react-icons/fc";
 import { MdCoPresent } from "react-icons/md";
 import { addAttendance } from "../../redux/feedSlice";
 import { Link } from "react-router-dom";
+import { BarLoader } from "react-spinners";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -32,6 +33,7 @@ const Home = ({ type }) => {
   const [caption, setCaption] = useState("");
   const [enroll, setEnroll] = useState({});
   const [play, setPlay] = useState({});
+  const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const userData = currentUser.user;
@@ -53,21 +55,27 @@ const Home = ({ type }) => {
 
   useEffect(() => {
     const fetchFeeds = async () => {
-      await axios
-        .get(`http://localhost:3000/api/upload/random`)
-        .then((response) => {
-          setVideo(response.data.randomFeeds);
-          console.log(response.data.randomFeeds);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      setLoading(true);
+      try {
+        await axios
+          .get(`http://localhost:3000/api/upload/random`)
+          .then((response) => {
+            setVideo(response.data.randomFeeds);
+            console.log(response.data.randomFeeds);
+          });
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+
+        console.log(err);
+      }
     };
     fetchFeeds();
   }, [type]);
 
   const handleEnroll = async (id) => {
     // Optimistically update state
+    setLoading(true);
     setEnroll((prevState) => ({
       ...prevState,
       [id]: !prevState[id],
@@ -81,10 +89,12 @@ const Home = ({ type }) => {
           withCredentials: true,
         }
       );
+      setLoading(false);
       console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
       console.log("Enrollment Successful");
     } catch (err) {
+      setLoading(false);
       console.log(err);
       console.log("Enrollment failed");
 
@@ -133,6 +143,7 @@ const Home = ({ type }) => {
   };
 
   const handleAnswerSubmit = async (feed) => {
+    setLoading(true);
     try {
       const response = await axios.post(
         "http://localhost:3000/api/upload/updateComprehensionAndHats",
@@ -144,6 +155,7 @@ const Home = ({ type }) => {
           withCredentials: true,
         }
       );
+      setLoading(false);
 
       if (response.data.message === "Updated successfully!") {
         // Do something after successful update
@@ -167,12 +179,14 @@ const Home = ({ type }) => {
         });
       }
     } catch (err) {
+      setLoading(false);
       // Handle error
       console.log(err);
     }
   };
 
   const handleAttendance = async (id) => {
+
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
@@ -182,12 +196,25 @@ const Home = ({ type }) => {
           withCredentials: true,
         }
       );
+
       console.log(response.data);
       dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
     } catch (error) {
+
       console.error("Error updating attendances:", error);
     }
   };
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader
+          width={100}
+          height={25}
+          color="#38a169"
+        />
+      </div>
+    );
 
   return (
     <div className="flex flex-col gap-10 justify-center border p-5  ">
