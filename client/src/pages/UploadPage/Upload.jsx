@@ -50,7 +50,7 @@ const Upload = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/api/upload/feeds",
+        "https://neural-feed-backend.onrender.comapi/upload/feeds",
         {
           userId: userData._id,
           username: userData.username,

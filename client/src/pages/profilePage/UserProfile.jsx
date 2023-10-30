@@ -21,7 +21,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/users/profile/${username}`
+          `https://neural-feed-backend.onrender.comapi/users/profile/${username}`
         );
         setLoading(false);
         setUser(res.data.user);
