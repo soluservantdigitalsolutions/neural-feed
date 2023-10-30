@@ -239,10 +239,10 @@ const Home = ({ type }) => {
             className="VideoFileDiv flex justify-center items-center rounded flex-col"
           >
             <div className=" md:flex items-end gap-2">
-              <div>
+              <div className=" flex justify-center flex-col">
                 <video
                   src={feed.video}
-                  className="w-80 rounded transition max-w-lg"
+                  className="w-80 rounded transition max-w-lg self-center "
                   ref={(el) => (videoRefs.current[feed._id] = el)}
                   // onClick={onVideoPress}
                   loop
@@ -280,15 +280,19 @@ const Home = ({ type }) => {
                   />
                 </Test>
               </div>
-              <div className="flex flex-row md:flex-col justify-center items-center mb-10 ">
-                <FcIdea className="text-5xl " />
-                <h1 className=" font-bold text-green-600">
-                  {feed.comprehensions.length}
-                </h1>
-                <MdCoPresent className="text-3xl font-bold " />
-                <h1 className=" font-bold text-green-600">
-                  {feed.attendances.length}
-                </h1>
+              <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
+                <div className="flex md:flex-col items-baseline md:items-center gap-1">
+                  <FcIdea className="text-2xl " />
+                  <h1 className=" font-bold text--600">
+                    {feed.comprehensions.length}
+                  </h1>
+                </div>
+                <div className="flex md:flex-col items-baseline md:items-center gap-1">
+                  <MdCoPresent className="text-3xl font-bold text-green-700 " />
+                  <h1 className=" font-bold text--600">
+                    {feed.attendances.length}
+                  </h1>
+                </div>
               </div>
             </div>
 

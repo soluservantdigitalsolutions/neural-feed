@@ -51,6 +51,21 @@ const getUser = async (req, res, next) => {
   }
 };
 
+const getUserProfile = async (req, res, next) => {
+  try {
+    const user = await UserModel.findOne({ username: req.params.username });
+    if (!user) {
+      return next(createError(404, "User not found"));
+    }
+    res.status(200).json({
+      user: user,
+      message: "User has been found Successfully!",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 const enroll = async (req, res, next) => {
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, {
@@ -125,4 +140,5 @@ module.exports = {
   dropOut,
   comprehensions,
   confusions,
+  getUserProfile,
 };
