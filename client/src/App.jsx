@@ -10,6 +10,7 @@ import { Auth } from "../firebase.config";
 import Upload from "./pages/UploadPage/Upload";
 import { useSelector } from "react-redux/es";
 import UserProfile from "./pages/profilePage/UserProfile";
+import FeedPage from "./pages/FeedPage.jsx/FeedPage";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -39,8 +40,13 @@ function App() {
         />
         <Route
           exact
+          path="/feed/:id"
+          element={<FeedPage />}
+        />
+        <Route
+          exact
           path="/profile/:username"
-          element={<UserProfile /> }
+          element={<UserProfile />}
         />
         <Route
           exact
