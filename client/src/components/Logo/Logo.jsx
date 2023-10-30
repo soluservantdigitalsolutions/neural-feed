@@ -1,4 +1,5 @@
 import React from 'react';
+import Neural from "../../assets/Neural.png"
 
 const Logo = () => {
   return (
