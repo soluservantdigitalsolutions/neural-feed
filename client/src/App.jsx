@@ -40,7 +40,7 @@ function App() {
         />
         <Route
           exact
-          path="/feed/:id"
+          path="/feeds/:id"
           element={<FeedPage />}
         />
         <Route
