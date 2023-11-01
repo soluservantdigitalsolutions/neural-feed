@@ -3,7 +3,6 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Login from "./pages/LoginPage/Login";
 import SignUp from "./pages/SignUpPage/SignUp";
 import Home from "./pages/Home/Home";
-import Profile from "./pages/profilePage/Profile";
 import NavBar from "./components/NavBar/NavBar";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Auth } from "../firebase.config";
@@ -48,11 +47,7 @@ function App() {
           path="/profile/:username"
           element={<UserProfile />}
         />
-        <Route
-          exact
-          path="/profile/:username"
-          element={currentUser ? <Profile /> : <Navigate to="/login" />}
-        />
+
         <Route
           exact
           path="/upload"
