@@ -4,13 +4,13 @@ const feedModel = require("../Models/feed.model.js");
 const createError = require("../error.js");
 
 const postFeed = async (req, res) => {
-  //   const username = UserModel.findOne({ username });
   try {
     const newFeed = await feedModel.create({
       userId: req.userId,
       username: req.username,
       video: req.body.video,
       answer: req.body.answer,
+      description: req.body.desc,
       options: {
         A: req.body.A,
         B: req.body.B,
@@ -18,10 +18,15 @@ const postFeed = async (req, res) => {
         D: req.body.D,
       },
       profileImage: req.profileImage,
+      admissions: req.admissions,
       ...req.body,
     });
 
-    //  await feedModel.bulkSave()
+    // Update the user's admissions field
+    const user = await UserModel.findById(req.userId);
+    user.admissions.push(newFeed._id);
+    await user.save();
+
     res.status(200).json({
       feed: newFeed,
     });
@@ -44,6 +49,8 @@ const getFeeds = async (req, res) => {
     console.log(err.message);
   }
 };
+
+
 
 const updateFeed = async (req, res, next) => {
   try {
@@ -109,12 +116,12 @@ const addAttendances = async (req, res, next) => {
     // Check if user's ID already exists in the attendances array
     if (!feed.attendances.includes(req.user.id)) {
       // If not, push user's ID
-      const attendendedFeed = await feedModel.findByIdAndUpdate(req.params.id, {
+      const attendedFeed = await feedModel.findByIdAndUpdate(req.params.id, {
         $push: { attendances: req.user.id },
       });
       res.status(200).json({
         message: "You have an additional attendance",
-        attendendedFeed: attendendedFeed,
+        attendedFeed: attendedFeed,
       });
     } else {
       // If user's ID already exists, do nothing
@@ -213,7 +220,7 @@ const updateComprehensionAndHats = async (req, res, next) => {
       const updatedFeed = await feedModel.findByIdAndUpdate(
         feedId,
         {
-          $push: { comprehensions: req.user.id },
+          $addToSet: { comprehensions: req.user.id },
         },
         { new: true }
       );
@@ -228,7 +235,7 @@ const updateComprehensionAndHats = async (req, res, next) => {
       const updatedUser = await UserModel.findByIdAndUpdate(
         req.user.id,
         {
-          $push: { hats: feedId },
+          $addToSet: { hats: feedId },
         },
         { new: true }
       );
@@ -250,6 +257,24 @@ const updateComprehensionAndHats = async (req, res, next) => {
   }
 };
 
+const getUserFeeds = async (req, res, next) => {
+  try {
+    // Get the username from the request parameters
+    const { username } = req.params;
+
+    // Query the database for the user's feeds
+    const userFeeds = await feedModel.find({ username: username });
+
+    // Send the user's feeds as a response
+    res.status(200).json({
+      feeds: userFeeds,
+    });
+  } catch (err) {
+    console.log(err.message);
+    next(err);
+  }
+};
+
 module.exports = {
   postFeed,
   getFeeds,
@@ -263,4 +288,5 @@ module.exports = {
   getByTags,
   search,
   updateComprehensionAndHats,
+  getUserFeeds,
 };

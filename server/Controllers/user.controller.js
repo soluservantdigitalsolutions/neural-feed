@@ -68,12 +68,43 @@ const getUserProfile = async (req, res, next) => {
 
 const enroll = async (req, res, next) => {
   try {
-    const updatedUser = await UserModel.findByIdAndUpdate(req.user.id, {
-      $push: { enrollments: req.params.id },
-    });
-    const updatedFeedOwner = await UserModel.findByIdAndUpdate(req.params.id, {
-      $push: { admissions: req.user.id },
-    });
+    if (req.user.id === req.params.id) {
+      return res.status(400).json({
+        message: "Feed owner cannot enroll or admit themselves.",
+      });
+    }
+
+    const user = await UserModel.findById(req.user.id);
+    const feedOwner = await UserModel.findById(req.params.id);
+
+    if (
+      user.enrollments.includes(req.params.id) ||
+      feedOwner.admissions.includes(req.user.id)
+    ) {
+      return res.status(400).json({
+        message:
+          "User is already enrolled. Please use the dropOut controller to unenroll before enrolling again.",
+      });
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id,
+      {
+        $push: { enrollments: req.params.id },
+      },
+      {
+        new: true,
+      }
+    );
+    const updatedFeedOwner = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { admissions: req.user.id },
+      },
+      {
+        new: true,
+      }
+    );
     res.status(200).json({
       message: "User has been Enrolled Successfully",
       updatedUser,
@@ -86,14 +117,41 @@ const enroll = async (req, res, next) => {
 
 const dropOut = async (req, res, next) => {
   try {
-    await UserModel.findByIdAndUpdate(req.user.id, {
-      $pull: { admissions: req.params.id },
-    });
-    await UserModel.findByIdAndUpdate(req.params.id, {
-      $pull: { enrollments: req.user.id },
-    });
+    const user = await UserModel.findById(req.user.id);
+    const feedOwner = await UserModel.findById(req.params.id);
+
+    if (
+      !user.enrollments.includes(req.params.id) ||
+      !feedOwner.admissions.includes(req.user.id)
+    ) {
+      return res.status(400).json({
+        message:
+          "User is not enrolled. Please use the enroll controller to enroll before dropping out.",
+      });
+    }
+
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id,
+      {
+        $pull: { enrollments: req.params.id },
+      },
+      {
+        new: true,
+      }
+    );
+    const updatedFeedOwner = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $pull: { admissions: req.user.id },
+      },
+      {
+        new: true,
+      }
+    );
     res.status(200).json({
-      message: "User has dropped out unfortunately!",
+      message: "User has been dropped out Successfully",
+      updatedUser,
+      updatedFeedOwner,
     });
   } catch (err) {
     next(err);
@@ -104,12 +162,19 @@ const comprehensions = async (req, res, next) => {
   const id = req.user.id;
   const feedId = req.params.feedId;
   try {
-    await feedModel.findByIdAndUpdate(feedId, {
-      $addToSet: { comprehensions: id },
-      $pull: { confusions: id },
-    });
+    const comprehendedFeed = await feedModel.findByIdAndUpdate(
+      feedId,
+      {
+        $addToSet: { comprehensions: id },
+        $pull: { confusions: id },
+      },
+      {
+        new: true,
+      }
+    );
     res.status(200).json({
       message: "This feed has been Comprehended",
+      comprehendedFeed,
     });
   } catch (err) {
     next(err);
@@ -120,10 +185,16 @@ const confusions = async (req, res, next) => {
   const id = req.user.id;
   const feedId = req.params.feedId;
   try {
-    await feedModel.findByIdAndUpdate(feedId, {
-      $addToSet: { confusions: id },
-      $pull: { comprehensions: id },
-    });
+    await feedModel.findByIdAndUpdate(
+      feedId,
+      {
+        $addToSet: { confusions: id },
+        $pull: { comprehensions: id },
+      },
+      {
+        new: true,
+      }
+    );
     res.status(200).json({
       message: "This feed confused a user",
     });

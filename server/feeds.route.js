@@ -10,8 +10,8 @@ const {
   updateFeed,
   getByTags,
   search,
-  awardPoints,
   updateComprehensionAndHats,
+  getUserFeeds,
 } = require("./Controllers/Feed.controller.js");
 const verifyToken = require("./middleware/verifyToken.js");
 
@@ -36,6 +36,8 @@ router.get("/enrolled", verifyToken, enrolledFeeds);
 router.get("/feeds/tags", getByTags);
 
 router.get("/feeds/search", search);
+
+router.get("/profile/feeds/:username", getUserFeeds);
 
 router.post(
   "/updateComprehensionAndHats",

@@ -61,14 +61,14 @@ const Login = async (req, res, next) => {
         id: user._id,
         username: user.username,
         profileImage: user.profileImage,
+        admissions: user.admissions,
       },
       process.env.SECRET_TOKEN
     );
 
     res.cookie("accessToken", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+  
     });
     res.status(200).json({
       user: userInfo,

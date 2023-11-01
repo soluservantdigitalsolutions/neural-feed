@@ -8,9 +8,15 @@ import UploadVideo from "../../utils/upload";
 import { useNavigate } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import { useSelector } from "react-redux";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import DOMPurify from "dompurify";
+
 const Upload = () => {
   const [caption, setCaption] = useState("");
   const [test, setTest] = useState("");
+  const [desc, setDesc] = useState("");
+
   const [videoFile, setVideoFile] = useState("");
   const [answer, setAnswer] = useState("");
   const [success, setSuccess] = useState("");
@@ -55,8 +61,10 @@ const Upload = () => {
           userId: userData._id,
           username: userData.username,
           profileImage: userData.profileImage,
+          admissions: userData.admissions,
           video: url,
           caption: caption,
+          description: desc,
           test: test,
           answer: answer,
           options: {
@@ -137,6 +145,20 @@ const Upload = () => {
                 id=""
                 onChange={(e) => setCaption(e.target.value)}
                 className="  outline-none border rounded p-3 w-full"
+              />
+            </div>
+            <div className="captionDiv">
+              <h1 className="Caption font-semibold">Description</h1>
+              {/* <textarea
+                name="Desc"
+                id=""
+                onChange={(e) => setDesc(e.target.value)}
+                className=" resize-none  outline-none border rounded p-3 w-full h-48"
+              /> */}
+              <ReactQuill
+                value={desc}
+                onChange={setDesc}
+                className="resize-none outline-none  rounded  w-full "
               />
             </div>
             <div className="captionDiv">

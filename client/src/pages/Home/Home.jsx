@@ -43,8 +43,6 @@ const Home = ({ type }) => {
   const updatedFeeds = useSelector((state) => state.feed.feeds);
   const dispatch = useDispatch();
 
-  console.log(selectedOption);
-
   const openModal = () => {
     setIsOpen(true);
   };
@@ -71,15 +69,11 @@ const Home = ({ type }) => {
       }
     };
     fetchFeeds();
-  }, [type]);
+  }, []);
 
   const handleEnroll = async (id) => {
     // Optimistically update state
     setLoading(true);
-    setEnroll((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
 
     try {
       const response = await axios.put(
@@ -90,8 +84,13 @@ const Home = ({ type }) => {
         }
       );
       setLoading(false);
+      setEnroll((prevState) => ({
+        ...prevState,
+        [id]: !prevState[id],
+      }));
       console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+      currentUser.user.enrollments = response.data.updatedUser.enrollments;
       console.log("Enrollment Successful");
     } catch (err) {
       setLoading(false);
@@ -105,6 +104,38 @@ const Home = ({ type }) => {
       }));
     }
     console.log(id);
+  };
+
+  const handleDropOut = async (id) => {
+    // Prevent feed owner from dropping out themselves
+    if (currentUser.user._id === id) {
+      console.log("Feed owner cannot drop out themselves.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.put(
+        `https://neural-feed-backend.onrender.com/api/users/dropOut/${id}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+      setEnroll((prevState) => ({
+        ...prevState,
+        [id]: !prevState[id],
+      }));
+      console.log(response);
+      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+      currentUser.user.enrollments = response.data.updatedUser.enrollments;
+      console.log("Dropout Successful");
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      console.log("Dropout failed");
+    }
   };
 
   //   const feedTitle =
@@ -236,22 +267,32 @@ const Home = ({ type }) => {
                   <h1 className="font-bold">{feed.username}</h1>
                 </div>
               </Link>
-
-              <div className="VideoCaptionDiv">
-                <p>{feed.caption}</p>
-              </div>
+              <Link to={`/feeds/${feed._id}`}>
+                <div className="VideoCaptionDiv cursor-pointer underline font-bold">
+                  <p>{feed.caption}</p>
+                </div>
+              </Link>
             </div>
             <div className="EnrollButtonDiv flex items-center justify-center">
-              <SecondaryButton
-                onClick={() => {
-                  handleEnroll(feed.userId);
-                }}
-                SecondaryButtonText={
-                  !currentUser.user.enrollments.includes(feed.userId)
-                    ? "Enroll"
-                    : "Enrolled"
-                }
-              />
+              {/* {currentUser.user.enrollments.includes(feed.userId) ? (
+                <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
+                  <button
+                    onClick={() => {
+                      handleDropOut(feed.userId);
+                    }}
+                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
+                  >
+                    Enrolled
+                  </button>
+                </div>
+              ) : (
+                <SecondaryButton
+                  onClick={() => {
+                    handleEnroll(feed.userId);
+                  }}
+                  SecondaryButtonText="Enroll"
+                />
+              )} */}
             </div>
           </div>
           <div
