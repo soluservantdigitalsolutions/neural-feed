@@ -17,6 +17,8 @@ const verifyToken = async (req, res, next) => {
       req.userId = payload.id;
       req.username = payload.username;
       req.profileImage = payload.profileImage;
+      req.admissions = payload.admissions;
+
       next();
     });
   } catch (err) {
