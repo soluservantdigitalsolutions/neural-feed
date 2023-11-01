@@ -2,15 +2,17 @@ import React, { useEffect, useState } from "react";
 import testProfilePic from "../../assets/user (1).png";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
 import { useSelector } from "react-redux/es";
-import { useParams } from "react-router-dom";
+import { Link, NavLink, useParams } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import axios from "axios";
+import ProfileFeed from "../../components/ProfileFeeds/ProfileFeed";
 
 const UserProfile = () => {
   // const [user] = useAuthState(Auth);
   const { username } = useParams();
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState(null);
+  const [userFeeds, setUserFeeds] = useState([]);
   const [error, setError] = useState(null);
   console.log("params", username);
 
@@ -33,6 +35,24 @@ const UserProfile = () => {
       }
     };
     getUserProfile();
+  }, [username]);
+
+  useEffect(() => {
+    const getUserFeeds = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(
+          `http://localhost:3000/api/upload/profile/feeds/${username}`
+        );
+        setLoading(false);
+        setUserFeeds(response.data.feeds);
+        console.log(response.data.feeds);
+      } catch (err) {
+        setLoading(false);
+        console.log(err);
+      }
+    };
+    getUserFeeds();
   }, [username]);
 
   if (loading)
@@ -84,6 +104,22 @@ const UserProfile = () => {
         <div className="BioDIV">
           <p>{user && user.bio ? user.bio : ""}</p>
         </div>
+        <NavLink className="border-b-2 border-green-600 font-bold text-xl text-left">
+          Feeds
+        </NavLink>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-5 ">
+        {userFeeds.map((feed) => (
+          <Link
+            key={feed._id}
+            to={`/feeds/${feed._id}`}
+          >
+            <ProfileFeed
+              video={feed.video}
+              caption={feed.caption}
+            />
+          </Link>
+        ))}
       </div>
     </div>
   );
