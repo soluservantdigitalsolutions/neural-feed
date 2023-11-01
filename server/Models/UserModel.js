@@ -35,7 +35,7 @@ const UserSchema = new Schema(
       default: [],
     },
     admissions: {
-      type: Array,
+      type: [String],
       default: [],
     },
     hats: {
