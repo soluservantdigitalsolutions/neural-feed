@@ -27,6 +27,9 @@ const feedSchema = new Schema(
       type: String,
       required: [true, "Caption is required"],
     },
+    description: {
+      type: String,
+    },
     video: {
       type: String,
       required: [true, "Video is required"],
@@ -52,8 +55,8 @@ const feedSchema = new Schema(
       default: [],
     },
     comments: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
     },
     test: {
       type: String,
