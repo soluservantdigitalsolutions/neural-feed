@@ -28,7 +28,7 @@ const FeedPage = () => {
   const [alert, setAlert] = useState({ show: false, message: "" });
   const [attendance, setAttendance] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
-  const [feedOwner, setFeedOwner] = useState(null)
+  const [feedOwner, setFeedOwner] = useState(null);
   const dispatch = useDispatch();
   const toggleExpanded = () => {
     setIsExpanded((prevIsExpanded) => !prevIsExpanded);
@@ -49,7 +49,7 @@ const FeedPage = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/upload/feeds/${id}`
+          `https://neural-feed-backend.onrender.com/api/upload/feeds/${id}`
         );
         setLoading(false);
         setFeed(res.data.singleFeed);
@@ -63,14 +63,12 @@ const FeedPage = () => {
     getFeed();
   }, [id]);
 
-
-
   useEffect(() => {
     const fetchFeeds = async () => {
       setLoading(true);
       try {
         await axios
-          .get(`http://localhost:3000/api/upload/random`)
+          .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
             console.log(response.data.randomFeeds);
@@ -84,27 +82,27 @@ const FeedPage = () => {
     };
     fetchFeeds();
   }, []);
-    useEffect(() => {
-      const getFeedOwnerData = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:3000/api/users/${id}`
-          );
-          setFeedOwner(res.data.user);
-        } catch (err) {
-          console.log(err);
-        }
-      };
-      if (feed) {
-        getFeedOwnerData();
+  useEffect(() => {
+    const getFeedOwnerData = async () => {
+      try {
+        const res = await axios.get(
+          `https://neural-feed-backend.onrender.com/api/users/${id}`
+        );
+        setFeedOwner(res.data.user);
+      } catch (err) {
+        console.log(err);
       }
-    }, [feed]);
+    };
+    if (feed) {
+      getFeedOwnerData();
+    }
+  }, [feed]);
 
   const handleAttendance = async () => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
+        `https://neural-feed-backend.onrender.com/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -129,7 +127,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/enroll/${id}`,
+        `https://neural-feed-backend.onrender.com/api/users/enroll/${id}`,
         {},
         {
           withCredentials: true,
@@ -156,7 +154,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/dropout/${id}`,
+        `https://neural-feed-backend.onrender.com/api/users/dropout/${id}`,
         {},
         {
           withCredentials: true,
@@ -180,7 +178,7 @@ const FeedPage = () => {
   const handleAnswerSubmit = async (feed) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upload/updateComprehensionAndHats",
+        "https://neural-feed-backend.onrender.com/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,

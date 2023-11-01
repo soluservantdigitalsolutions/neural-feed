@@ -56,7 +56,7 @@ const Home = ({ type }) => {
       setLoading(true);
       try {
         await axios
-          .get(`http://localhost:3000/api/upload/random`)
+          .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
             console.log(response.data.randomFeeds);
@@ -77,7 +77,7 @@ const Home = ({ type }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/enroll/${id}`,
+        `https://neural-feed-backend.onrender.com/api/users/enroll/${id}`,
         {},
         {
           withCredentials: true,
@@ -116,7 +116,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/dropOut/${id}`,
+        `https://neural-feed-backend.onrender.com/api/users/dropOut/${id}`,
         {},
         {
           withCredentials: true,
@@ -177,7 +177,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upload/updateComprehensionAndHats",
+        "https://neural-feed-backend.onrender.com/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -220,7 +220,7 @@ const Home = ({ type }) => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
+        `https://neural-feed-backend.onrender.com/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -230,7 +230,6 @@ const Home = ({ type }) => {
       console.log(response.data);
       dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
     } catch (error) {
-
       console.error("Error updating attendances:", error);
     }
   };

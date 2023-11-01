@@ -23,7 +23,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/users/profile/${username}`
+          `https://neural-feed-backend.onrender.com/api/users/profile/${username}`
         );
         setLoading(false);
         setUser(res.data.user);
@@ -42,7 +42,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/upload/profile/feeds/${username}`
+          `https://neural-feed-backend.onrender.com/api/upload/profile/feeds/${username}`
         );
         setLoading(false);
         setUserFeeds(response.data.feeds);
