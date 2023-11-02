@@ -50,8 +50,6 @@ const getFeeds = async (req, res) => {
   }
 };
 
-
-
 const updateFeed = async (req, res, next) => {
   try {
     const feed = await feedModel.findById(req.params.id);
@@ -97,8 +95,20 @@ const deleteFeed = async (req, res, next) => {
 const getFeed = async (req, res, next) => {
   try {
     const feed = await feedModel.findById(req.params.id);
+    const feedOwner = await UserModel.findById(req.params.id);
     res.status(200).json({
       singleFeed: feed,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+const getFeedOwner = async (req, res, next) => {
+  try {
+    const feedOwner = await UserModel.findById(req.params.id);
+    res.status(200).json({
+      feedOwner: feedOwner,
     });
   } catch (err) {
     next(err);
@@ -275,6 +285,13 @@ const getUserFeeds = async (req, res, next) => {
   }
 };
 
+const getFeedEnrollments = async (req, res, next) => {
+  try {
+    const currentFeed = feedModel.findById(req.params.id);
+    
+  } catch (err) {}
+};
+
 module.exports = {
   postFeed,
   getFeeds,
@@ -289,4 +306,5 @@ module.exports = {
   search,
   updateComprehensionAndHats,
   getUserFeeds,
+  getFeedOwner,
 };
