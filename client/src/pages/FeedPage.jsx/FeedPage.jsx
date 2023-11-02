@@ -21,6 +21,7 @@ const FeedPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [enrollmentStatus, setEnrollmentStatus] = useState(false);
   const [feed, setFeed] = useState(null);
+  const [feeder, setFeeder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [video, setVideo] = useState([]);
@@ -89,6 +90,7 @@ const FeedPage = () => {
           `https://neural-feed-backend.onrender.com/api/users/${id}`
         );
         setFeedOwner(res.data.user);
+        console.log(feed);
       } catch (err) {
         console.log(err);
       }
@@ -96,6 +98,26 @@ const FeedPage = () => {
     if (feed) {
       getFeedOwnerData();
     }
+  }, [feed]);
+
+  useEffect(() => {
+    const getFeedOwner = async () => {
+      setLoading(true);
+
+      try {
+        const res = await axios.get(
+          `https://neural-feed-backend.onrender.com/api/upload/feeder/${feed?.userId}`
+        );
+
+        setLoading(false);
+        setFeeder(res.data.feedOwner.admissions);
+        console.log(res);
+        console.log(feeder);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getFeedOwner();
   }, [feed]);
 
   const handleAttendance = async () => {
@@ -127,7 +149,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/enroll/${id}`,
+        `https://neural-feed-backend.onrender.com/api/users/enroll/${feed?.userId}`,
         {},
         {
           withCredentials: true,
@@ -135,7 +157,9 @@ const FeedPage = () => {
       );
       setLoading(false);
       console.log(response);
-      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+      // Create a new copy of the enrollments with the changes
+      const updatedEnrollments = [...currentUser.user.enrollments, id];
+      dispatch(updateEnrollments(updatedEnrollments));
       console.log("Enrollment Successful");
     } catch (err) {
       setLoading(false);
@@ -154,7 +178,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend.onrender.com/api/users/dropout/${id}`,
+        `https://neural-feed-backend.onrender.com/api/users/dropout/${feed?.userId}`,
         {},
         {
           withCredentials: true,
@@ -253,18 +277,18 @@ const FeedPage = () => {
                     {feed?.username || ""}
                   </p>
                   <p className="text-sm">
-                    {feed?.admissions.length}
+                    {feeder?.length}
                     <span className="font-extrabold"> Admissions</span>
                   </p>
                 </div>
               </Link>
             </div>
             <div className="enrollAndShareDiv flex">
-              {/* {currentUser.user.enrollments.includes(feed?._id) ? (
+              {currentUser?.user.enrollments.includes(feed?.userId) ? (
                 <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                   <button
                     onClick={() => {
-                      handleDropout(feed?._id);
+                      handleDropout();
                     }}
                     className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
                   >
@@ -274,11 +298,11 @@ const FeedPage = () => {
               ) : (
                 <SecondaryButton
                   onClick={() => {
-                    handleEnroll(feed?._id);
+                    handleEnroll();
                   }}
                   SecondaryButtonText="Enroll"
                 />
-              )} */}
+              )}
               <div className="shareFeedDiv flex gap-3 items-center">
                 <ShareButton feed={feed} />
               </div>
@@ -327,7 +351,7 @@ const FeedPage = () => {
         <div className="bg-gray-200 w-full border rounded-lg">
           <div className="attendances">
             <div className="text-sm font-bold text-gray-600 px-4 py-2">
-              <span>{feed?.attendances.length} </span>
+              <span>{feed?.attendances.length}</span>
               <span className="text-sm font-normal text-gray-600 ">
                 attendances
               </span>{" "}
