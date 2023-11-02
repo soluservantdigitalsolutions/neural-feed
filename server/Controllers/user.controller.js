@@ -105,6 +105,7 @@ const enroll = async (req, res, next) => {
         new: true,
       }
     );
+    
     res.status(200).json({
       message: "User has been Enrolled Successfully",
       updatedUser,
@@ -114,6 +115,8 @@ const enroll = async (req, res, next) => {
     next(err);
   }
 };
+
+
 
 const dropOut = async (req, res, next) => {
   try {
