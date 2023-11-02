@@ -274,7 +274,7 @@ const Home = ({ type }) => {
               </Link>
             </div>
             <div className="EnrollButtonDiv flex items-center justify-center">
-              {/* {currentUser.user.enrollments.includes(feed.userId) ? (
+              {currentUser.user.enrollments.includes(feed.userId) ? (
                 <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                   <button
                     onClick={() => {
@@ -292,7 +292,7 @@ const Home = ({ type }) => {
                   }}
                   SecondaryButtonText="Enroll"
                 />
-              )} */}
+              )}
             </div>
           </div>
           <div
