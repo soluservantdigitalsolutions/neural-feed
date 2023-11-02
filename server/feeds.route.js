@@ -12,6 +12,7 @@ const {
   search,
   updateComprehensionAndHats,
   getUserFeeds,
+  getFeedOwner,
 } = require("./Controllers/Feed.controller.js");
 const verifyToken = require("./middleware/verifyToken.js");
 
@@ -24,6 +25,9 @@ router.delete("/feeds/:id", verifyToken, updateFeed);
 router.get("/feeds", getFeeds);
 
 router.get("/feeds/:id", getFeed);
+
+router.get("/feeder/:id", getFeedOwner);
+
 
 router.put("/feeds/attendances/:id", verifyToken, addAttendances);
 
