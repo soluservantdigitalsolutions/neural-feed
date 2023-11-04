@@ -285,13 +285,6 @@ const getUserFeeds = async (req, res, next) => {
   }
 };
 
-const getFeedEnrollments = async (req, res, next) => {
-  try {
-    const currentFeed = feedModel.findById(req.params.id);
-    
-  } catch (err) {}
-};
-
 module.exports = {
   postFeed,
   getFeeds,
