@@ -14,7 +14,6 @@ const UserProfile = () => {
   const [user, setUser] = useState(null);
   const [userFeeds, setUserFeeds] = useState([]);
   const [error, setError] = useState(null);
-  console.log("params", username);
 
   const { currentUser } = useSelector((state) => state.user);
 
@@ -27,8 +26,6 @@ const UserProfile = () => {
         );
         setLoading(false);
         setUser(res.data.user);
-        console.log(res);
-        console.log("profileUser", user);
       } catch (err) {
         setLoading(false);
         console.log(err);
@@ -46,7 +43,6 @@ const UserProfile = () => {
         );
         setLoading(false);
         setUserFeeds(response.data.feeds);
-        console.log(response.data.feeds);
       } catch (err) {
         setLoading(false);
         console.log(err);
