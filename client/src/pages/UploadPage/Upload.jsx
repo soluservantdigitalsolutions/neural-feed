@@ -29,12 +29,7 @@ const Upload = () => {
   const [feedPreview, setFeedPreview] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const userData = currentUser.user;
-  console.log("Upload.CurrentUser", userData);
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    console.log(options);
-  }, [options]);
 
   useEffect(() => {
     // Revoke the old feed preview Blob URL
@@ -42,10 +37,6 @@ const Upload = () => {
   }, [feedPreview]);
 
   const navigate = useNavigate();
-
-  console.log(videoFile);
-  console.log(caption);
-  console.log(test);
 
   const handleSubmit = async (e) => {
     setLoading(true);
@@ -129,7 +120,7 @@ const Upload = () => {
                 <Dropzone
                   onChange={(e) => {
                     const file = e.target.files[0];
-                    console.log(setVideoFile(file));
+                    setVideoFile(file);
                     setFeedPreview(URL.createObjectURL(file));
                   }}
                 />

@@ -26,7 +26,6 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const { currentUser } = useSelector((state) => state.user);
-  console.log("login", currentUser);
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
@@ -47,7 +46,6 @@ const Login = () => {
 
       setLoading(false);
       dispatch(loginSuccess(res.data));
-      console.log(res.data);
       setSucessMessage(res.data.message);
       navigate("/");
     } catch (err) {
@@ -109,7 +107,6 @@ const Login = () => {
               inputName="username"
               onChange={(e) => {
                 setUsername(e.target.value);
-                console.log({ username: username });
               }}
             />
             <FormInput
@@ -121,7 +118,6 @@ const Login = () => {
               inputName="password"
               onChange={(e) => {
                 setPassword(e.target.value);
-                console.log({ password: password });
               }}
             />
             <SubmitBtn ButtonText="Login" />

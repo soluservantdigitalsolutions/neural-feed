@@ -36,7 +36,6 @@ const FeedPage = () => {
   };
 
   const { id } = useParams();
-  console.log("get feed param", id);
 
   const openModal = () => {
     setIsOpen(true);
@@ -54,7 +53,6 @@ const FeedPage = () => {
         );
         setLoading(false);
         setFeed(res.data.singleFeed);
-        console.log(feed);
       } catch (err) {
         setLoading(false);
 
@@ -72,7 +70,6 @@ const FeedPage = () => {
           .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
-            console.log(response.data.randomFeeds);
           });
         setLoading(false);
       } catch (err) {
@@ -90,7 +87,6 @@ const FeedPage = () => {
           `https://neural-feed-backend.onrender.com/api/users/${id}`
         );
         setFeedOwner(res.data.user);
-        console.log(feed);
       } catch (err) {
         console.log(err);
       }
@@ -112,7 +108,6 @@ const FeedPage = () => {
         setLoading(false);
         setFeeder(res.data.feedOwner.admissions);
         console.log(res);
-        console.log(feeder);
       } catch (err) {
         console.log(err);
       }
@@ -131,8 +126,6 @@ const FeedPage = () => {
         }
       );
       setAttendance(response.data);
-      console.log(attendance);
-      console.log(response.data);
 
       dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
     } catch (error) {
@@ -156,7 +149,6 @@ const FeedPage = () => {
         }
       );
       setLoading(false);
-      console.log(response);
       // Create a new copy of the enrollments with the changes
       const updatedEnrollments = [...currentUser.user.enrollments, id];
       dispatch(updateEnrollments(updatedEnrollments));
@@ -169,7 +161,6 @@ const FeedPage = () => {
       // Revert state if request failed
       setEnrollmentStatus(false);
     }
-    console.log(id);
   };
   const handleDropout = async (id) => {
     // Optimistically update state
@@ -185,7 +176,6 @@ const FeedPage = () => {
         }
       );
       setLoading(false);
-      console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
       console.log("User Dropped out Unfortunately");
     } catch (err) {
@@ -196,7 +186,6 @@ const FeedPage = () => {
       // Revert state if request failed
       setEnrollmentStatus(true);
     }
-    console.log(id);
   };
 
   const handleAnswerSubmit = async (feed) => {
@@ -217,11 +206,6 @@ const FeedPage = () => {
         openModal();
         dispatch(updateHats(response.data.updatedUser.hats));
         setAlert({ show: true, message: "Your answer is correct!" });
-
-        console.log(
-          "Question answered Correctly",
-          response.data.updatedUser.hats
-        );
       } else {
         // Handle case when selected option does not match the feed answer
 
@@ -317,19 +301,15 @@ const FeedPage = () => {
               optionD={feed?.options.D}
               onClickA={() => {
                 setSelectedOption(feed?.options.A);
-                console.log("clickedA");
               }}
               onClickB={() => {
                 setSelectedOption(feed?.options.B);
-                console.log("clickedB");
               }}
               onClickC={() => {
                 setSelectedOption(feed?.options.C);
-                console.log("clickedC");
               }}
               onClickD={() => {
                 setSelectedOption(feed?.options.D);
-                console.log("clickedD");
               }}
             >
               <SubmitBtn

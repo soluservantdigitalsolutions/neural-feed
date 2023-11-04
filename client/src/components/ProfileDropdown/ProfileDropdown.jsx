@@ -7,7 +7,6 @@ import { useSelector } from "react-redux/es";
 
 const ProfileDropdown = ({ isOpen, toggleOpen, children }) => {
   const {currentUser} = useSelector(state=>state.user)
-  console.log(currentUser);
   const userData = currentUser.user
   return (
     <div className="relative">

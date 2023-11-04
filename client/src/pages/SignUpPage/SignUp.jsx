@@ -125,7 +125,6 @@ const SignUp = () => {
               value={username}
               onChange={(e) => {
                 setUsername(e.target.value);
-                console.log({ username: username });
               }}
             />
             <FormInput
@@ -137,7 +136,6 @@ const SignUp = () => {
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
-                console.log({ email: email });
               }}
               autoComplete="false"
             />
@@ -150,7 +148,6 @@ const SignUp = () => {
               value={password}
               onChange={(e) => {
                 setPassword(e.target.value);
-                console.log({ password: password });
               }}
               autoComplete="false"
             />
@@ -163,7 +160,6 @@ const SignUp = () => {
               value={confirmPassword}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
-                console.log({ confirmPassword: confirmPassword });
               }}
             />
             <SubmitBtn

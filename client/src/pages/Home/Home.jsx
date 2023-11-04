@@ -37,7 +37,6 @@ const Home = ({ type }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const userData = currentUser.user;
-  console.log("CurrentUser", userData);
   const [isOpen, setIsOpen] = useState(false);
   const [alert, setAlert] = useState({ show: false, message: "" });
   const updatedFeeds = useSelector((state) => state.feed.feeds);
@@ -59,7 +58,6 @@ const Home = ({ type }) => {
           .get(`https://neural-feed-backend.onrender.com/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
-            console.log(response.data.randomFeeds);
           });
         setLoading(false);
       } catch (err) {
@@ -88,7 +86,6 @@ const Home = ({ type }) => {
         ...prevState,
         [id]: !prevState[id],
       }));
-      console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
       currentUser.user.enrollments = response.data.updatedUser.enrollments;
       console.log("Enrollment Successful");
@@ -103,7 +100,6 @@ const Home = ({ type }) => {
         [id]: !prevState[id],
       }));
     }
-    console.log(id);
   };
 
   const handleDropOut = async (id) => {
@@ -127,7 +123,6 @@ const Home = ({ type }) => {
         ...prevState,
         [id]: !prevState[id],
       }));
-      console.log(response);
       dispatch(updateEnrollments(response.data.updatedUser.enrollments));
       currentUser.user.enrollments = response.data.updatedUser.enrollments;
       console.log("Dropout Successful");
@@ -227,7 +222,6 @@ const Home = ({ type }) => {
         }
       );
 
-      console.log(response.data);
       dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
     } catch (error) {
       console.error("Error updating attendances:", error);
@@ -324,19 +318,15 @@ const Home = ({ type }) => {
                   optionD={feed.options.D}
                   onClickA={() => {
                     setSelectedOption(feed.options.A);
-                    console.log("clickedA");
                   }}
                   onClickB={() => {
                     setSelectedOption(feed.options.B);
-                    console.log("clickedB");
                   }}
                   onClickC={() => {
                     setSelectedOption(feed.options.C);
-                    console.log("clickedC");
                   }}
                   onClickD={() => {
                     setSelectedOption(feed.options.D);
-                    console.log("clickedD");
                   }}
                 >
                   <SubmitBtn
