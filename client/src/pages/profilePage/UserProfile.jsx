@@ -108,8 +108,7 @@ const UserProfile = () => {
         {userFeeds.map((feed) => (
           <Link
             key={feed._id}
-            to={`/feeds/${feed._id}`}
-          >
+            to={`/feeds/${feed._id}`}>
             <ProfileFeed
               video={feed.video}
               caption={feed.caption}

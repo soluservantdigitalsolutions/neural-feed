@@ -13,3 +13,41 @@
   transition: opacity 200ms;
 }
 
+/* ChatBox.css */
+
+/* ChatBox.css */
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 10px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: #047857;
+  border-radius: 5px;
+}
+
+/* ChatBox.css */
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #047857;
+  border-radius: 5px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: #03543f;
+}
+
+/* ChatPage.css */
+

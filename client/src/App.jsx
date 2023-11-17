@@ -10,6 +10,7 @@ import Upload from "./pages/UploadPage/Upload";
 import { useSelector } from "react-redux/es";
 import UserProfile from "./pages/profilePage/UserProfile";
 import FeedPage from "./pages/FeedPage.jsx/FeedPage";
+import ChatPage from "./pages/ChatPage.jsx/ChatPage";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -52,6 +53,11 @@ function App() {
           exact
           path="/upload"
           element={currentUser ? <Upload /> : <Navigate to="/login" />}
+        />
+        <Route
+          exact
+          path="/chat"
+          element={currentUser ? <ChatPage /> : <Navigate to="/login" />}
         />
       </Routes>
     </>

@@ -244,8 +244,7 @@ const Home = ({ type }) => {
       {video.map((feed) => (
         <div
           key={feed._id}
-          className="VideoDiv flex flex-col gap-3 w-full justify-between items-center "
-        >
+          className="VideoDiv flex flex-col gap-3 w-full justify-between items-center ">
           <div className="VideoMetaDataDiv flex gap-5 justify-start ">
             <div className="ProfileImageDiv ">
               <img
@@ -274,8 +273,7 @@ const Home = ({ type }) => {
                     onClick={() => {
                       handleDropOut(feed.userId);
                     }}
-                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
-                  >
+                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer">
                     Enrolled
                   </button>
                 </div>
@@ -296,8 +294,7 @@ const Home = ({ type }) => {
             onMouseLeave={() =>
               setIsHover((prevState) => ({ ...prevState, [feed._id]: false }))
             }
-            className="VideoFileDiv flex justify-center items-center rounded flex-col"
-          >
+            className="VideoFileDiv flex justify-center items-center rounded flex-col">
             <div className=" md:flex items-end gap-2">
               <div className=" flex justify-center flex-col">
                 <video
@@ -327,8 +324,7 @@ const Home = ({ type }) => {
                   }}
                   onClickD={() => {
                     setSelectedOption(feed.options.D);
-                  }}
-                >
+                  }}>
                   <SubmitBtn
                     onClick={() => handleAnswerSubmit(feed)}
                     ButtonText="Submit"
