@@ -99,8 +99,7 @@ const Upload = () => {
           // left: '50%',
           // transform: 'translate(-50%, -50%)',
         }
-      }
-    >
+      }>
       <form onSubmit={handleSubmit}>
         <div className="UploadTitle ">
           <h1 className="text-xl font-bold">Upload Your Neural Feed</h1>
@@ -112,8 +111,7 @@ const Upload = () => {
                 <video
                   src={feedPreview}
                   className=" rounded transition  h-full flex self-center justify-center items-center"
-                  controls
-                ></video>
+                  controls></video>
               </>
             ) : (
               <>

@@ -83,8 +83,7 @@ const SignUp = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-        }}
-      >
+        }}>
         <div className="LogoDiv ">
           <Logo />
         </div>
@@ -92,12 +91,10 @@ const SignUp = () => {
           <form
             onSubmit={handleSubmit}
             action=""
-            className="flex flex-col gap-2.5 "
-          >
+            className="flex flex-col gap-2.5 ">
             <label
               htmlFor="ProfileImg"
-              className="flex self-center border border-slate-400  rounded-full cursor-pointer"
-            >
+              className="flex self-center border border-slate-400  rounded-full cursor-pointer">
               <img
                 src={profileImgPreview ? profileImgPreview : addProfilePhoto}
                 alt=""
