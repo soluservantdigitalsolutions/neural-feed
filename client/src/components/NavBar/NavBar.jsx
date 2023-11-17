@@ -67,6 +67,16 @@ const NavBar = () => {
                 />
               </Link>
             </div>
+
+            <div className="UploadDiv lg:block md:block  ">
+              <Link to="/chat">
+                <SubmitBtn
+                  ButtonText=" CHAT"
+                  className=""
+                />
+              </Link>
+            </div>
+
             {/* <div className="MessagesDiv">
               <FaRegHandPaper className="text-2xl cursor-pointer" />
             </div>
@@ -76,8 +86,7 @@ const NavBar = () => {
             <div className="flex gap-1 items-center">
               <ProfileDropdown
                 isOpen={isDropdownOpen}
-                toggleOpen={toggleDropdown}
-              >
+                toggleOpen={toggleDropdown}>
                 <div className="py-2">
                   <div className="block px-4 py-2 text-gray-800 transition ">
                     Welcome Back <b>{currentUser.user.username}</b>!
@@ -90,10 +99,10 @@ const NavBar = () => {
                       />
                     </Link>
                   </div>
+
                   <Link
                     to={`/profile/${currentUser.user.username}`}
-                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white"
-                  >
+                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white">
                     Your Profile
                   </Link>
                   {/* <Link
@@ -106,8 +115,7 @@ const NavBar = () => {
                   <Link
                     to="/"
                     className="block px-4 py-2 text-gray-800 hover:bg-red-600 transition hover:text-white"
-                    onClick={handleLogout}
-                  >
+                    onClick={handleLogout}>
                     Log Out
                   </Link>
                 </div>
