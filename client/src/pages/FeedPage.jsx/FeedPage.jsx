@@ -274,8 +274,7 @@ const FeedPage = () => {
                     onClick={() => {
                       handleDropout();
                     }}
-                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
-                  >
+                    className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer">
                     Enrolled
                   </button>
                 </div>
@@ -310,8 +309,7 @@ const FeedPage = () => {
               }}
               onClickD={() => {
                 setSelectedOption(feed?.options.D);
-              }}
-            >
+              }}>
               <SubmitBtn
                 onClick={() => handleAnswerSubmit(feed)}
                 ButtonText="Submit"
@@ -361,8 +359,7 @@ const FeedPage = () => {
                 />
                 <button
                   onClick={toggleExpanded}
-                  className="text-green-600 font-bold text-lg"
-                >
+                  className="text-green-600 font-bold text-lg">
                   {isExpanded ? "Show less" : "Show more..."}
                 </button>
               </p>
@@ -376,8 +373,7 @@ const FeedPage = () => {
           {video.map((post) => (
             <Link
               key={post._id}
-              to={`/feeds/${post._id}`}
-            >
+              to={`/feeds/${post._id}`}>
               <FeedPosts
                 video={post?.video}
                 title={post?.caption}
