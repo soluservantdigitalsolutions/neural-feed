@@ -14,8 +14,7 @@ const ShareButton = ({ feed }) => {
   return (
     <button
       className="border flex p-2  rounded bg-green-500 gap-2.5 text-white"
-      onClick={handleShare}
-    >
+      onClick={handleShare}>
       <BsShareFill className="text-2xl" /> Share
     </button>
   );
