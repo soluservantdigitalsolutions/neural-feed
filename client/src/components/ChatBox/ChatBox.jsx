@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { generateResponse } from "../../utils/OpenAiService";
+import { generateResponse } from "../../utils/AiService";
 import ReactMarkdown from "react-markdown";
 
 const ChatBox = () => {
