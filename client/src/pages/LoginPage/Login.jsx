@@ -87,8 +87,7 @@ const Login = () => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-        }}
-      >
+        }}>
         <div className="LogoDiv w-92 ">
           <Logo />
         </div>
@@ -96,8 +95,7 @@ const Login = () => {
           <form
             action=""
             className="flex flex-col gap-2.5 "
-            onSubmit={handleSubmit}
-          >
+            onSubmit={handleSubmit}>
             <FormInput
               inputType="name"
               inputPlaceholder="Username"
