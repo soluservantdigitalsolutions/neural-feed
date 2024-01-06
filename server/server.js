@@ -9,7 +9,7 @@ const helmet = require("helmet");
 const feedsRoute = require("./feeds.route.js");
 const userRoute = require("./user.route.js");
 const commentRoute = require("./comments.route.js");
-const articleRoutes = require("./article.route.js");
+const noteRoutes = require("./note.route.js");
 
 const requestAndRequestPathLogger = require("./middleware/requestLog.js");
 dotenv.config();
@@ -33,7 +33,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/upload", feedsRoute);
 app.use("/api/users", userRoute);
 app.use("/api/comments", commentRoute);
-app.use("/api/articles", articleRoutes);
+app.use("/api/notes", noteRoutes);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

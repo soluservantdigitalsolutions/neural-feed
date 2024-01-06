@@ -55,7 +55,7 @@ const Sidebar = () => {
           className="block px-8 py-4 m-0 md:text-left text-green-600 hover:text-white hover:bg-green-600 transition"
           onClick={() => {}}
         >
-          Articles
+          Notes
         </Link>
       </motion.div>
     </div>
