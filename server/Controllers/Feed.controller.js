@@ -122,6 +122,16 @@ const addAttendances = async (req, res, next) => {
 
     // Check if user's ID already exists in the attendances array
     if (!feed.attendances.includes(req.user.id)) {
+      // If not, check if the user has already attended 5 times
+      if (
+        feed.attendances.filter((attendance) => attendance === req.user.id)
+          .length >= 5
+      ) {
+        return res.status(400).json({
+          message: "You have already attended this feed 5 times",
+        });
+      }
+
       // If not, push user's ID
       const attendedFeed = await feedModel.findByIdAndUpdate(req.params.id, {
         $push: { attendances: req.user.id },
