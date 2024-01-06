@@ -46,12 +46,26 @@ const TestPage = () => {
         }
       );
 
-      // Handle the response here
-      console.log(response);
+      // Calculate the number of correct answers
+      let correctAnswers = 0;
+      let totalQuestions = 0;
+
+      for (let i = 0; i < feed.tests.length; i++) {
+        const test = feed.tests[i];
+        const selectedOption = selectedOptions[test.question];
+        if (selectedOption && selectedOption === test.answer) {
+          correctAnswers++;
+        }
+        totalQuestions++;
+      }
+
+      // Update the result state
       setResult({
-        correctAnswers: response.data.correctAnswers,
-        totalQuestions: response.data.totalQuestions,
+        correctAnswers,
+        totalQuestions,
       });
+
+      // Open the dialog
       setOpen(true);
     } catch (err) {
       // Handle the error here
@@ -62,6 +76,10 @@ const TestPage = () => {
   // Add this function to handle the "Go Home" button click
   const handleGoHome = () => {
     navigate("/");
+  };
+
+  const handleReFeed = () => {
+    navigate(`/feeds/${feedId}`);
   };
 
   if (!feed) {
@@ -137,24 +155,63 @@ const TestPage = () => {
                 Test Result
               </Dialog.Title>
 
-              <div className="mt-2">
-                <p className="text-sm text-gray-500">
-                  You got {result.correctAnswers} out of {result.totalQuestions}{" "}
-                  questions right. Hence, you get {result.correctAnswers} hats.
-                  If you want to earn the rest of your hats, go and watch the
-                  video and try again.
-                </p>
-              </div>
-
-              <div className="mt-4">
-                <button
-                  type="button"
-                  className="px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                  onClick={handleGoHome}
-                >
-                  Go Home
-                </button>
-              </div>
+              {result.correctAnswers === result.totalQuestions ? (
+                <>
+                  <p className=" text-gray-500">
+                    <b className="text-green-600 text-xl">You're on fire!</b>{" "}
+                    You'd be unstoppable if you keep going like this. You got{" "}
+                    <b className="text-green-600 text-xl">
+                      {" "}
+                      {result.correctAnswers}
+                    </b>{" "}
+                    out of{" "}
+                    <b className="text-green-600 text-xl">
+                      {" "}
+                      {result.totalQuestions}
+                    </b>{" "}
+                    questions right. Hence, you get{" "}
+                    <b className="text-green-600 text-lg">
+                      {" "}
+                      {result.correctAnswers}
+                    </b>{" "}
+                    hats. Let's do some more shall we?
+                  </p>
+                  <button
+                    type="button"
+                    className="px-4 py-2 mt-2.5  font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    onClick={handleGoHome}
+                  >
+                    Continue
+                  </button>
+                </>
+              ) : (
+                <>
+                  <p className=" text-gray-500">
+                    You got{" "}
+                    <b className="text-red-600 text-lg">
+                      {" "}
+                      {result.correctAnswers}
+                    </b>{" "}
+                    out of{" "}
+                    <b className="text-green-600 text-lg">
+                      {" "}
+                      {result.totalQuestions}
+                    </b>{" "}
+                    questions right.{" "}
+                    <b className="text-green-600 text-lg">
+                      With Persistence, You can do it!.
+                    </b>
+                   {" "} Go back to feed your neurons and try again
+                  </p>
+                  <button
+                    type="button"
+                    className="px-4 py-2 mt-2.5 font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                    onClick={handleReFeed}
+                  >
+                    Re-Feed
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </Dialog>

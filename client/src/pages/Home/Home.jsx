@@ -59,6 +59,7 @@ const Home = ({ type }) => {
           .get(`http://localhost:3000/api/upload/random`)
           .then((response) => {
             setVideo(response.data.randomFeeds);
+            console.log(video);
           });
         setLoading(false);
       } catch (err) {
@@ -264,7 +265,7 @@ const Home = ({ type }) => {
                 </div>
               </Link>
             </div>
-            <div className="EnrollButtonDiv flex items-center justify-center">
+            {/* <div className="EnrollButtonDiv flex items-center justify-center">
               {currentUser.user.enrollments.includes(feed.userId) ? (
                 <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                   <button
@@ -284,7 +285,7 @@ const Home = ({ type }) => {
                   SecondaryButtonText="Enroll"
                 />
               )}
-            </div>
+            </div> */}
           </div>
           <div
             onMouseEnter={() =>
