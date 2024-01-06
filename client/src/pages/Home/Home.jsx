@@ -24,6 +24,7 @@ import { addAttendance } from "../../redux/feedSlice";
 import { Link } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
+import Sidebar from "../../components/Sidebar/Sidebar";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -239,6 +240,7 @@ const Home = ({ type }) => {
 
   return (
     <div className="flex flex-col gap-10 justify-center border p-5  ">
+
       {video.map((feed) => (
         <div
           key={feed._id}
@@ -253,7 +255,7 @@ const Home = ({ type }) => {
                 // loading="true"
               />
             </div>
-            <div className="UserNameAndDetailsDiv">
+            <div className="UserNameAndDetailsDiv ">
               <Link to={`/profile/${feed.username}`}>
                 <div className="UsernameDiv cursor-pointer">
                   <h1 className="font-bold">{feed.username}</h1>
@@ -307,8 +309,6 @@ const Home = ({ type }) => {
                   controls
                   onPlay={() => handleAttendance(feed._id)} // Add this line
                 ></video>
-
-                
               </div>
               <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
                 <div className="flex md:flex-col items-baseline md:items-center gap-1">
@@ -325,8 +325,6 @@ const Home = ({ type }) => {
                 </div>
               </div>
             </div>
-            
-
           </div>
           {alert.show && (
             <Alert
@@ -336,7 +334,7 @@ const Home = ({ type }) => {
               message={alert.message}
             />
           )}
-     
+
           <hr className="text-black border w-48 border-black m-5" />
         </div>
       ))}
