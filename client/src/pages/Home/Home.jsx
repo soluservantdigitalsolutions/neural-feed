@@ -302,7 +302,6 @@ const Home = ({ type }) => {
                   className="w-80 rounded transition max-w-lg self-center "
                   ref={(el) => (videoRefs.current[feed._id] = el)}
                   // onClick={onVideoPress}
-                  loop
                   // autoPlay
                   controls
                   onPlay={() => handleAttendance(feed._id)} // Add this line

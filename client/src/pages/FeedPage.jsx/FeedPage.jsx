@@ -135,59 +135,63 @@ const FeedPage = () => {
     }
   };
 
-  const handleEnroll = async (id) => {
-    // Optimistically update state
-    setLoading(true);
-    setEnrollmentStatus(true);
+const handleEnroll = async (id) => {
+  // Optimistically update state
+  setLoading(true);
+  setEnrollmentStatus(true);
 
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/api/users/enroll/${feed?.userId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setLoading(false);
-      // Append the new enrollment to the existing enrollments
-      dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
-      console.log("Enrollment Successful");
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-      console.log("Enrollment failed");
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/users/enroll/${feed?.userId}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    setLoading(false);
+    // Append the new enrollment to the existing enrollments
+    dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
+    console.log("Enrollment Successful");
 
-      // Revert state if request failed
-      setEnrollmentStatus(false);
-    }
-  };
-  
-  const handleDropout = async (id) => {
-    // Optimistically update state
-    setLoading(true);
+    // Update feeder state
+    setFeeder([...feeder, currentUser?.user._id]);
+  } catch (err) {
+    setLoading(false);
+    console.log(err);
+    console.log("Enrollment failed");
+
+    // Revert state if request failed
     setEnrollmentStatus(false);
+  }
+};
+const handleDropout = async (id) => {
+  // Optimistically update state
+  setLoading(true);
+  setEnrollmentStatus(false);
 
-    try {
-      const response = await axios.put(
-        `http://localhost:3000/api/users/dropout/${feed?.userId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setLoading(false);
-      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
-      console.log("User Dropped out Unfortunately");
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-      console.log("Dropout failed");
+  try {
+    const response = await axios.put(
+      `http://localhost:3000/api/users/dropout/${feed?.userId}`,
+      {},
+      {
+        withCredentials: true,
+      }
+    );
+    setLoading(false);
+    dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+    console.log("User Dropped out Unfortunately");
 
-      // Revert state if request failed
-      setEnrollmentStatus(true);
-    }
-  };
+    // Update feeder state
+    setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
+  } catch (err) {
+    setLoading(false);
+    console.log(err);
+    console.log("Dropout failed");
 
+    // Revert state if request failed
+    setEnrollmentStatus(true);
+  }
+};
   const handleAnswerSubmit = async (feed) => {
     try {
       const response = await axios.post(
@@ -264,7 +268,7 @@ const FeedPage = () => {
               </Link>
             </div>
             <div className="enrollAndShareDiv flex">
-              {currentUser?.user.enrollments.includes(feed?._id) ? (
+              {feeder?.includes(currentUser?.user._id) ? (
                 <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                   <button
                     onClick={() => {
