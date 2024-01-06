@@ -49,7 +49,13 @@ const ProfileDropdown = ({ isOpen, toggleOpen, children }) => {
         classNames="my-node"
         unmountOnExit
       >
-        <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10">
+        <div
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+          }}
+          className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg z-10"
+        >
           {children}
         </div>
       </CSSTransition>
