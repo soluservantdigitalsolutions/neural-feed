@@ -133,6 +133,10 @@ const TestPage = () => {
       </form>
       <Transition appear show={open} as={Fragment}>
         <Dialog
+          style={{
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+          }}
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
           onClose={() => setOpen(false)}
@@ -200,8 +204,8 @@ const TestPage = () => {
                     questions right.{" "}
                     <b className="text-green-600 text-lg">
                       With Persistence, You can do it!.
-                    </b>
-                   {" "} Go back to feed your neurons and try again
+                    </b>{" "}
+                    Go back to feed your neurons and try again
                   </p>
                   <button
                     type="button"
