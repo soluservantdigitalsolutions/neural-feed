@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
-const articleSchema = new Schema(
+const noteSchema = new Schema(
   {
     authorId: {
       type: String,
@@ -17,7 +17,7 @@ const articleSchema = new Schema(
     },
     imageUrl: {
       type: String,
-      default: null, 
+      default: null,
     },
     content: {
       type: String,
@@ -25,6 +25,18 @@ const articleSchema = new Schema(
     },
     tags: {
       type: [String],
+      default: [],
+    },
+    comprehensions: {
+      type: Array,
+      default: [],
+    },
+    hats: {
+      type: Array,
+      default: [],
+    },
+    attendances: {
+      type: Array,
       default: [],
     },
     comments: [
@@ -58,4 +70,4 @@ const articleSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model("Article", articleSchema);
+module.exports = mongoose.model("Note", noteSchema);
