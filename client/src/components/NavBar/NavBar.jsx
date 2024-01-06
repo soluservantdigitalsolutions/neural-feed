@@ -103,7 +103,18 @@ const NavBar = () => {
                 >
                   Settings
                 </Link> */}
-
+                
+                  <div
+                    onClick={() =>
+                      window.open(
+                        "https://mail.google.com/mail/?view=cm&fs=1&to=soluservant@gmail.com",
+                        "_blank"
+                      )
+                    }
+                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white cursor-pointer"
+                  >
+                    Send Feedback
+                  </div>
                   <Link
                     to="/"
                     className="block px-4 py-2 text-gray-800 hover:bg-red-600 transition hover:text-white"
