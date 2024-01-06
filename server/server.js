@@ -33,7 +33,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/upload", feedsRoute);
 app.use("/api/users", userRoute);
 app.use("/api/comments", commentRoute);
-app.use("/api", articleRoutes);
+app.use("/api/articles", articleRoutes);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
