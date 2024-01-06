@@ -12,6 +12,7 @@ import UserProfile from "./pages/profilePage/UserProfile";
 import FeedPage from "./pages/FeedPage.jsx/FeedPage";
 import ChatPage from "./pages/ChatPage.jsx/ChatPage";
 import TestPage from "./pages/TestPage/TestPage";
+import Sidebar from "./components/Sidebar/Sidebar";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -20,7 +21,10 @@ function App() {
   return (
     <>
       {location.pathname !== "/login" && location.pathname !== "/register" && (
-        <NavBar />
+        <>
+          <NavBar />
+          <Sidebar />
+        </>
       )}
 
       <Routes>
