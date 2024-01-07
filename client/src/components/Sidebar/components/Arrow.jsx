@@ -12,7 +12,7 @@ const Arrow = () => {
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
-      className="h-6 w-6 md:h-10 md:w-10 cursor-pointer  "
+      className="h-20 w-20 md:h-10 md:w-10 cursor-pointer  "
       variants={variants}
       initial="closed"
       whileHover={{ scale: 1.1 }}
@@ -23,7 +23,7 @@ const Arrow = () => {
         strokeLinejoin="round"
         strokeWidth={2}
         d="M4 6h16M4 12h16M4 18h16"
-        className="text-xl text-green-700"
+        className="text-2xl text-green-700"
       />
     </motion.svg>
   );
