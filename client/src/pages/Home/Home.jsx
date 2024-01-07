@@ -25,6 +25,9 @@ import { Link } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import Skeleton from 'react-loading-skeleton';
+
+
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -231,10 +234,16 @@ const Home = ({ type }) => {
     }
   };
 
+  // if (loading)
+  //   return (
+  //     <div className="flex justify-center items-center h-[100vh]">
+  //       <BarLoader width={100} height={25} color="#38a169" />
+  //     </div>
+  //   );
   if (loading)
     return (
-      <div className="flex justify-center items-center h-[100vh]">
-        <BarLoader width={100} height={25} color="#38a169" />
+      <div className="flex justify-center transition items-center h-[100vh]">
+        <Skeleton  count={10} />
       </div>
     );
 
