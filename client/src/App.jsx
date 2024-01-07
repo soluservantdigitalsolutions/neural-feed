@@ -13,6 +13,7 @@ import FeedPage from "./pages/FeedPage.jsx/FeedPage";
 import ChatPage from "./pages/ChatPage.jsx/ChatPage";
 import TestPage from "./pages/TestPage/TestPage";
 import Sidebar from "./components/Sidebar/Sidebar";
+import NotesPage from "./pages/NotePage/NotesPage";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -47,6 +48,11 @@ function App() {
           exact
           path="/chat"
           element={currentUser ? <ChatPage /> : <Navigate to="/login" />}
+        />
+        <Route
+          exact
+          path="/notes"
+          element={currentUser ? <NotesPage /> : <Navigate to="/login" />}
         />
         <Route exact path="/test/:feedId" element={<TestPage />} />
       </Routes>
