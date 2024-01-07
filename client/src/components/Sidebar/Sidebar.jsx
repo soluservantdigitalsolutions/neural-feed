@@ -29,7 +29,7 @@ const Sidebar = () => {
     <div className="fixed left-0  h-[2%]" ref={sidebarRef}>
       <div className="w-[5%] md:w-[30%]">
         <motion.div
-          className="flex items-center justify-between"
+          className="flex items-center justify-between bg-green-300"
           onClick={() => setIsOpen(!isOpen)}
         >
           <Arrow />
