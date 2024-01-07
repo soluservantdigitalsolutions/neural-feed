@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const SubmitBtn = React.forwardRef((props, ref) => {
   return (
-    <div className="border rounded transition  bg-green-600 flex justify-center items-center font-bold hover:shadow-2xl hover:bg-green-700">
+    <div className="border rounded transition  bg-green-600 flex justify-center items-center font-bold hover:bg-green-700">
       <button
         ref={ref}
         disabled={props.disabled}
