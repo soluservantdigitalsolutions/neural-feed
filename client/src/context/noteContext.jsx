@@ -5,6 +5,7 @@ export const NoteContext = createContext();
 
 export const NoteProvider = ({ children }) => {
   const [notes, setNotes] = useState([]);
+  console.log(notes);
 
   useEffect(() => {
     const fetchNotes = async () => {
