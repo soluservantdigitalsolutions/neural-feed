@@ -12,7 +12,7 @@ const { parser } = require("./config/cloudinary.js");
 const verifyToken = require("./middleware/verifyToken.js");
 
 router.post("/notes", verifyToken, parser.single("image"), postNote);
-router.get("/notes", getNotes);
+router.get("/", getNotes);
 router.get("/notes/:id", getNote);
 router.put("/notes/:id", verifyToken, updateNote);
 router.delete("/notes/:id", verifyToken, deleteNote);
