@@ -17,6 +17,7 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux/es";
 import { logout } from "../../redux/userSlice";
+import Sidebar from "../Sidebar/Sidebar";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -42,7 +43,8 @@ const NavBar = () => {
 
   return (
     <div className="border flex  justify-between items-center p-3">
-      <div className="LogoDiv">
+      <div className="LogoDiv   ">
+
         <Logo />
       </div>
       {/* <div className="SearchBarDiv">
@@ -75,13 +77,13 @@ const NavBar = () => {
             <div className="Notifications">
               <AiFillNotification className="text-2xl" />
             </div> */}
-            <div className="flex gap-1 items-center">
+            <div className="flex gap-1 text-green-600 items-center">
               <ProfileDropdown
                 isOpen={isDropdownOpen}
                 toggleOpen={toggleDropdown}
               >
                 <div className="py-2">
-                  <div className="block px-4 py-2 text-gray-800 transition ">
+                  <div className="block px-4 py-2 text--800 transition ">
                     Welcome Back <b>{currentUser.user.username}</b>!
                   </div>
                   <div className="UploadDiv lg:hidden md:hidden  ">
@@ -92,7 +94,7 @@ const NavBar = () => {
 
                   <Link
                     to={`/profile/${currentUser.user.username}`}
-                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white"
+                    className="block px-4 py-2 text--800 hover:bg-green-600 transition hover:text-white"
                     onClick={toggleDropdown}
                   >
                     Your Profile
@@ -103,7 +105,7 @@ const NavBar = () => {
                 >
                   Settings
                 </Link> */}
-                
+
                   <div
                     onClick={() =>
                       window.open(
@@ -111,13 +113,13 @@ const NavBar = () => {
                         "_blank"
                       )
                     }
-                    className="block px-4 py-2 text-gray-800 hover:bg-green-600 transition hover:text-white cursor-pointer"
+                    className="block px-4 py-2 text--800 hover:bg-green-600 transition hover:text-white cursor-pointer"
                   >
                     Send Feedback
                   </div>
                   <Link
                     to="/"
-                    className="block px-4 py-2 text-gray-800 hover:bg-red-600 transition hover:text-white"
+                    className="block px-4 py-2 text-red-800 hover:bg-red-600 transition hover:text-white"
                     onClick={handleLogout}
                   >
                     Log Out
