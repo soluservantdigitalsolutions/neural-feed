@@ -26,7 +26,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed left-0 border h-[2%]" ref={sidebarRef}>
+    <div className="fixed left-0  h-[2%]" ref={sidebarRef}>
       <div className="w-[5%] md:w-[30%]">
         <motion.div
           className="flex items-center justify-between"
@@ -48,7 +48,7 @@ const Sidebar = () => {
       >
         {/* Sidebar content goes here */}
         <Link
-          to={"/feeds"}
+          to={"/"}
           className="block px-8 py-4 m-0 md:text-left border-b-2 text-green-600 hover:text-white hover:bg-green-600 transition"
           onClick={() => {}}
         >
