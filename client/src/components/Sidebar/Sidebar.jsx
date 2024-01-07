@@ -26,13 +26,15 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="fixed left-0 " ref={sidebarRef}>
-      <motion.div
-        className="flex items-center justify-between w-[5%] md:w-[30%] "
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Arrow />
-      </motion.div>
+    <div className="fixed left-0 border h-[2%]" ref={sidebarRef}>
+      <div className="w-[5%] md:w-[30%]">
+        <motion.div
+          className="flex items-center justify-between"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <Arrow />
+        </motion.div>
+      </div>
       <motion.div
         style={{
           backgroundColor: "rgba(255, 255, 255, 0.1)",
@@ -46,12 +48,14 @@ const Sidebar = () => {
       >
         {/* Sidebar content goes here */}
         <Link
+          to={"/feeds"}
           className="block px-8 py-4 m-0 md:text-left border-b-2 text-green-600 hover:text-white hover:bg-green-600 transition"
           onClick={() => {}}
         >
           Feeds
         </Link>
         <Link
+          to={"/notes"}
           className="block px-8 py-4 m-0 md:text-left text-green-600 hover:text-white hover:bg-green-600 transition"
           onClick={() => {}}
         >
