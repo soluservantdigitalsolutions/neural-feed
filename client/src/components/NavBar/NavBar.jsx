@@ -44,7 +44,6 @@ const NavBar = () => {
   return (
     <div className="border flex  justify-between items-center p-3">
       <div className="LogoDiv   ">
-
         <Logo />
       </div>
       {/* <div className="SearchBarDiv">
@@ -87,8 +86,13 @@ const NavBar = () => {
                     Welcome Back <b>{currentUser.user.username}</b>!
                   </div>
                   <div className="UploadDiv lg:hidden md:hidden  ">
-                    <Link to="upload">
+                    <Link to="/upload/feed">
                       <SubmitBtn ButtonText="+ FEED" className="" />
+                    </Link>
+                  </div>
+                  <div className="UploadDiv lg:hidden md:hidden  ">
+                    <Link to="/upload/note">
+                      <SubmitBtn ButtonText="+ NOTE" className="" />
                     </Link>
                   </div>
 
