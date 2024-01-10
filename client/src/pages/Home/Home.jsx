@@ -26,6 +26,7 @@ import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import Skeleton from 'react-loading-skeleton';
+import SkeletonLoader from "../../components/SkeletonLoader/SkeletonLoader";
 
 
 
@@ -240,17 +241,14 @@ const Home = ({ type }) => {
   //       <BarLoader width={100} height={25} color="#38a169" />
   //     </div>
   //   );
-  if (loading)
-    return (
-      <div className="flex justify-center transition items-center h-[100vh]">
-        <Skeleton  count={10} />
-      </div>
-    );
+
 
   return (
-    <div className="flex flex-col gap-10 justify-center border p-5  ">
-
-      {video.map((feed) => (
+    <div className="flex flex-col gap-10 justify-center border p-5 ">
+    {loading ? (
+      Array.from({ length: 10 }).map((_, i) => <SkeletonLoader key={i} />)
+    ) : (
+      video.map((feed) => (
         <div
           key={feed._id}
           className="VideoDiv flex flex-col gap-3 w-full justify-between items-center "
@@ -346,7 +344,7 @@ const Home = ({ type }) => {
 
           <hr className="text-black border w-48 border-black m-5" />
         </div>
-      ))}
+      )))}
     </div>
   );
 };
