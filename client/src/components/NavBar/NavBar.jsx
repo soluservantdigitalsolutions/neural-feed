@@ -17,7 +17,6 @@ import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux/es";
 import { logout } from "../../redux/userSlice";
-import Sidebar from "../Sidebar/Sidebar";
 
 const NavBar = () => {
   const navigate = useNavigate();

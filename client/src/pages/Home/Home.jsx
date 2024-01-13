@@ -24,7 +24,6 @@ import { addAttendance } from "../../redux/feedSlice";
 import { Link } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
-import Sidebar from "../../components/Sidebar/Sidebar";
 import Skeleton from 'react-loading-skeleton';
 import SkeletonLoader from "../../components/SkeletonLoader/SkeletonLoader";
 

@@ -12,7 +12,6 @@ import UserProfile from "./pages/profilePage/UserProfile";
 import FeedPage from "./pages/FeedPage.jsx/FeedPage";
 import ChatPage from "./pages/ChatPage.jsx/ChatPage";
 import TestPage from "./pages/TestPage/TestPage";
-import Sidebar from "./components/Sidebar/Sidebar";
 import NotesPage from "./pages/NotePage/NotesPage";
 import FeedUpload from "./pages/UploadPage/FeedUpload";
 import NoteUpload from "./pages/NoteUpload/NoteUpload";
@@ -26,7 +25,6 @@ function App() {
       {location.pathname !== "/login" && location.pathname !== "/register" && (
         <>
           <NavBar />
-          <Sidebar />
         </>
       )}
 

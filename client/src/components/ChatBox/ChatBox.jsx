@@ -40,7 +40,7 @@ const ChatBox = () => {
         if (i === aiResponse.length - 1) {
           setIsAiWriting(false);
         }
-      }, 50 * (i + 1));
+      }, 5 * (i + 1));
     }
   };
 
