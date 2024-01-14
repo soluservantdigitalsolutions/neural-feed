@@ -11,6 +11,9 @@ const noteSchema = new Schema(
       type: String,
       required: true,
     },
+    profileImage: {
+      type: String,
+    },
     title: {
       type: String,
       required: true,
