@@ -1,30 +1,81 @@
+import Quill from "react-quill";
+
+export const addCustomKeyBindings = (quillInstance) => {
+  const Keyboard = Quill.import("modules/keyboard");
+
+  const bindings = {
+    bold: {
+      key: "B",
+      shortKey: true,
+      handler: function (range, context) {
+        this.quill.format("bold", !context.format.bold);
+      },
+    },
+    italic: {
+      key: "I",
+      shortKey: true,
+      handler: function (range, context) {
+        this.quill.format("italic", !context.format.italic);
+      },
+    },
+    underline: {
+      key: "U",
+      shortKey: true,
+      handler: function (range, context) {
+        this.quill.format("underline", !context.format.underline);
+      },
+    },
+    alignLeft: {
+      key: "L",
+      shortKey: true,
+      handler: function (range, context) {
+        this.quill.format("align", "left");
+      },
+    },
+    alignCenter: {
+      key: "C",
+      shortKey: true,
+      handler: function (range, context) {
+        this.quill.format("align", "center");
+      },
+    },
+    alignRight: {
+      key: "R",
+      shortKey: true,
+      handler: function (range, context) {
+        this.quill.format("align", "right");
+      },
+    },
+  };
+
+  const keyboardModule = quillInstance.getModule("Keyboard");
+  Object.keys(bindings).forEach((name) => {
+    keyboardModule.addBinding(bindings[name]);
+  });
+};
+
 export const richTextEditorModules = {
   toolbar: [
-    // Add other toolbar options as needed
-    ["bold", "italic", "underline", "strike"], // toggled buttons
+    ["bold", "italic", "underline", "strike"],
     ["blockquote", "code-block"],
-
-    // Add the alignment options
     [
       { align: "" },
       { align: "center" },
       { align: "right" },
       { align: "justify" },
     ],
-
-    // Add other groups of options as needed
     [{ list: "ordered" }, { list: "bullet" }],
-    [{ script: "sub" }, { script: "super" }], // superscript/subscript
-    [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
-    [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+    [{ script: "sub" }, { script: "super" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ size: ["small", false, "large", "huge"] }],
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    ["link", "image", "video"], // links and media
-
-    ["clean"], // remove formatting button
+    ["link", "image", "video"],
+    ["clean"],
   ],
+  keyboard: {
+    bindings: addCustomKeyBindings,
+  },
 };
-
 
 export const categories = [
   "Science & Technology",
