@@ -4,14 +4,16 @@ const createError = require("../error.js");
 const postNote = async (req, res, next) => {
   try {
     const imageUrl = req.file ? req.file.path : null;
+    const tests = JSON.parse(req.body.tests);
 
     const newNote = await NoteModel.create({
       authorId: req.userId,
       authorName: req.username,
+      profileImage: req.profileImage,
       title: req.body.title,
       content: req.body.content,
       tags: req.body.tags,
-      tests: req.body.tests,
+      tests: tests,
       imageUrl: imageUrl,
     });
 
