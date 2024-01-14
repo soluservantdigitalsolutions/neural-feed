@@ -4,6 +4,7 @@ import axios from "axios";
 import { Transition, Dialog } from "@headlessui/react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { BarLoader } from "react-spinners";
 
 const TestPage = () => {
   const { feedId } = useParams();
@@ -14,6 +15,7 @@ const TestPage = () => {
     totalQuestions: 0,
   });
   const [selectedOptions, setSelectedOptions] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,6 +35,8 @@ const TestPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+     setLoading(true);
+
 
     try {
       const response = await axios.post(
@@ -70,6 +74,8 @@ const TestPage = () => {
     } catch (err) {
       // Handle the error here
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,7 +89,11 @@ const TestPage = () => {
   };
 
   if (!feed) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <BarLoader width={100} height={25} color="#38a169" />
+      </div>
+    );
   }
 
   return (
@@ -124,12 +134,18 @@ const TestPage = () => {
             ))}
           </div>
         ))}
-        <button
-          type="submit"
-          className="px-4 w-full bg-green-600 py-2 text-white rounded text-xl "
-        >
-          Submit
-        </button>
+        {loading ? (
+          <div className="flex justify-center items-center h-[100vh]">
+            <BarLoader width={100} height={25} color="#38a169" />
+          </div>
+        ) : (
+          <button
+            type="submit"
+            className="px-4 w-full bg-green-600 py-2 text-white rounded text-xl "
+          >
+            Submit
+          </button>
+        )}
       </form>
       <Transition appear show={open} as={Fragment}>
         <Dialog
