@@ -1,4 +1,5 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 const {
   postNote,
   getNotes,
@@ -11,11 +12,17 @@ const {
 const { parser } = require("./config/cloudinary.js");
 const verifyToken = require("./middleware/verifyToken.js");
 
-router.post("/create-note", verifyToken, parser.single("image"), postNote);
+router.post(
+  "/create-note",
+  verifyToken,
+  parser.single("image"),
+  express.json(),
+  postNote
+);
 router.get("/", getNotes);
-router.get("/notes/:id", getNote);
-router.put("/notes/:id", verifyToken, updateNote);
-router.delete("/notes/:id", verifyToken, deleteNote);
+router.get("/:id", getNote);
+router.put("/:id", verifyToken, updateNote);
+router.delete("/:id", verifyToken, deleteNote);
 3;
 
 router.post("/:id/attendances", verifyToken, addAttendances);
