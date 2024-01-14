@@ -62,6 +62,11 @@ const NavBar = () => {
                 <SubmitBtn ButtonText="+ FEED" className="p-1" />
               </Link>
             </div>
+            <div className="UploadDiv hidden md:block">
+              <Link to="upload">
+                <SubmitBtn ButtonText="+ NOTE" className="p-1" />
+              </Link>
+            </div>
 
             <div className="UploadDiv lg:block md:block  ">
               <Link to="/chat">
