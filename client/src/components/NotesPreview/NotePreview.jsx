@@ -1,34 +1,44 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import NoteStats from "../NoteStats/NoteStats";
 
 const NotePreview = ({ note }) => {
-  const [showFullContent, setShowFullContent] = useState(false);
-  const maxLength = 900; // Adjust this number to control how much content is shown initially
-
-  let contentToDisplay = note.content;
-  if (!showFullContent && note.content.length > maxLength) {
-    const lastSpaceIndex = note.content.lastIndexOf(" ", maxLength);
-    contentToDisplay = note.content.slice(0, lastSpaceIndex) + "...";
-    console.log(contentToDisplay);
-  }
-
   return (
-    <div className="p-4 border rounded shadow">
-      <img
-        src={note.imageUrl}
-        alt={note.title}
-        className="w-full h-64 object-cover mb-4 rounded"
-      />
-      <h2 className="text-xl font-bold mb-2">{note.title}</h2>
-      {/* <p dangerouslySetInnerHTML={{ __html: contentToDisplay }}></p> */}
-
-      {note.content.length > maxLength && !showFullContent && (
-        <button
-          className="border bg-green-600 p-2 text-white rounded font-bold"
-          onClick={() => setShowFullContent(true)}
+    <div className="border m-5">
+      <div className="feedOwnerInfoDiv p-4 flex justify-between">
+        <div className="feedOwnerInfoDiv flex gap-2.5 items-center">
+          <img
+            src={note.profileImage || ""}
+            alt="profileImage"
+            className="w-10 h-10 rounded-full object-cover transition cursor-pointer "
+          />
+          <Link to={`/profile/${note.authorName}`}>
+            <div className="text-slate-600 cursor-pointer">
+              <p className="font-semibold text-sm">{note.authorName || ""}</p>
+            </div>
+          </Link>
+        </div>
+      </div>
+      <div className="p-4 rounded shadow flex flex-col justify-center items-center">
+        <img
+          src={note.imageUrl}
+          alt={note.title}
+          className="w-full h-64 object-cover mb-4 rounded"
+        />
+        <h2 className="text-xl font-bold mb-2">{note.title}</h2>
+        <NoteStats
+          comprehensions={note.comprehensions.length}
+          attendances={note.attendances.length}
+        />
+        <Link
+          to={`/notes/${note._id}`}
+          className="mt-4 text-blue-500 hover:underline w-full"
         >
-          Feed More <span className="font-extrabold">. . .</span>
-        </button>
-      )}
+          <button className=" w-full mt-5 bg-green-600 p-2 text-white rounded font-bold">
+            Feed More
+          </button>
+        </Link>
+      </div>
     </div>
   );
 };
