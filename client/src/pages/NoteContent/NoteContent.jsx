@@ -45,11 +45,11 @@ const NoteContent = () => {
     <div className=" mx-auto p-4">
       <div className="bg-white rounded-lg p-2">
         <h1 className="text-3xl font-bold mb-4">{note?.title}</h1>
-        <img
+        {/* <img
           src={note?.imageUrl}
           alt={note?.title}
           className="w-full h-auto mb-4 rounded"
-        />
+        /> */}
         <div
           dangerouslySetInnerHTML={{ __html: note.content }}
           className="prose mb-4"
