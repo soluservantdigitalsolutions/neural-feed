@@ -5,7 +5,7 @@ import { BarLoader } from "react-spinners";
 import { useDropzone } from "react-dropzone";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import {  richTextEditorModules } from "../../utils/modules";
+import { richTextEditorModules } from "../../utils/modules";
 
 const NoteUpload = () => {
   const [title, setTitle] = useState("");
@@ -62,7 +62,7 @@ const NoteUpload = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/api/notes/create-note",
+        "https://neural-feed-backend-2yg8.onrender.com//api/notes/create-note",
         formData,
         {
           headers: {

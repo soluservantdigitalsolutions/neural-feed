@@ -51,7 +51,7 @@ const FeedPage = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/upload/feeds/${id}`
+          `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeds/${id}`
         );
         setLoading(false);
         setFeed(res.data.singleFeed);
@@ -69,7 +69,9 @@ const FeedPage = () => {
       setLoading(true);
       try {
         await axios
-          .get(`http://localhost:3000/api/upload/random`)
+          .get(
+            `https://neural-feed-backend-2yg8.onrender.com//api/upload/random`
+          )
           .then((response) => {
             setVideo(response.data.randomFeeds);
           });
@@ -85,7 +87,9 @@ const FeedPage = () => {
   useEffect(() => {
     const getFeedOwnerData = async () => {
       try {
-        const res = await axios.get(`http://localhost:3000/api/users/${id}`);
+        const res = await axios.get(
+          `https://neural-feed-backend-2yg8.onrender.com//api/users/${id}`
+        );
         setFeedOwner(res.data.user);
       } catch (err) {
         console.log(err);
@@ -102,7 +106,7 @@ const FeedPage = () => {
 
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/upload/feeder/${feed?.userId}`
+          `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeder/${feed?.userId}`
         );
 
         setLoading(false);
@@ -119,7 +123,7 @@ const FeedPage = () => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -135,67 +139,67 @@ const FeedPage = () => {
     }
   };
 
-const handleEnroll = async (id) => {
-  // Optimistically update state
-  setLoading(true);
-  setEnrollmentStatus(true);
-
-  try {
-    const response = await axios.put(
-      `http://localhost:3000/api/users/enroll/${feed?.userId}`,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-    setLoading(false);
-    // Append the new enrollment to the existing enrollments
-    dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
-    console.log("Enrollment Successful");
-
-    // Update feeder state
-    setFeeder([...feeder, currentUser?.user._id]);
-  } catch (err) {
-    setLoading(false);
-    console.log(err);
-    console.log("Enrollment failed");
-
-    // Revert state if request failed
-    setEnrollmentStatus(false);
-  }
-};
-const handleDropout = async (id) => {
-  // Optimistically update state
-  setLoading(true);
-  setEnrollmentStatus(false);
-
-  try {
-    const response = await axios.put(
-      `http://localhost:3000/api/users/dropout/${feed?.userId}`,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
-    setLoading(false);
-    dispatch(updateEnrollments(response.data.updatedUser.enrollments));
-    console.log("User Dropped out Unfortunately");
-
-    // Update feeder state
-    setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
-  } catch (err) {
-    setLoading(false);
-    console.log(err);
-    console.log("Dropout failed");
-
-    // Revert state if request failed
+  const handleEnroll = async (id) => {
+    // Optimistically update state
+    setLoading(true);
     setEnrollmentStatus(true);
-  }
-};
+
+    try {
+      const response = await axios.put(
+        `https://neural-feed-backend-2yg8.onrender.com//api/users/enroll/${feed?.userId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+      // Append the new enrollment to the existing enrollments
+      dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
+      console.log("Enrollment Successful");
+
+      // Update feeder state
+      setFeeder([...feeder, currentUser?.user._id]);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      console.log("Enrollment failed");
+
+      // Revert state if request failed
+      setEnrollmentStatus(false);
+    }
+  };
+  const handleDropout = async (id) => {
+    // Optimistically update state
+    setLoading(true);
+    setEnrollmentStatus(false);
+
+    try {
+      const response = await axios.put(
+        `https://neural-feed-backend-2yg8.onrender.com//api/users/dropout/${feed?.userId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+      console.log("User Dropped out Unfortunately");
+
+      // Update feeder state
+      setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      console.log("Dropout failed");
+
+      // Revert state if request failed
+      setEnrollmentStatus(true);
+    }
+  };
   const handleAnswerSubmit = async (feed) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upload/updateComprehensionAndHats",
+        "https://neural-feed-backend-2yg8.onrender.com//api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,

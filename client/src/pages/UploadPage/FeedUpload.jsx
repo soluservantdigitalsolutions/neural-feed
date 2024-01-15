@@ -71,12 +71,16 @@ const FeedUpload = () => {
     };
 
     try {
-      await axios.post("http://localhost:3000/api/upload/feeds", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      });
+      await axios.post(
+        "https://neural-feed-backend-2yg8.onrender.com//api/upload/feeds",
+        data,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
       setLoading(false);
       setSuccess("Video Uploaded Successfully");
       navigate("/");

@@ -24,10 +24,8 @@ import { addAttendance } from "../../redux/feedSlice";
 import { Link } from "react-router-dom";
 import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
-import Skeleton from 'react-loading-skeleton';
+import Skeleton from "react-loading-skeleton";
 import SkeletonLoader from "../../components/SkeletonLoader/SkeletonLoader";
-
-
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -60,7 +58,9 @@ const Home = ({ type }) => {
       setLoading(true);
       try {
         await axios
-          .get(`http://localhost:3000/api/upload/random`)
+          .get(
+            `https://neural-feed-backend-2yg8.onrender.com//api/upload/random`
+          )
           .then((response) => {
             setVideo(response.data.randomFeeds);
             console.log(video);
@@ -81,7 +81,7 @@ const Home = ({ type }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/enroll/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com//api/users/enroll/${id}`,
         {},
         {
           withCredentials: true,
@@ -118,7 +118,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/dropOut/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com//api/users/dropOut/${id}`,
         {},
         {
           withCredentials: true,
@@ -178,7 +178,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upload/updateComprehensionAndHats",
+        "https://neural-feed-backend-2yg8.onrender.com//api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -221,7 +221,7 @@ const Home = ({ type }) => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -241,39 +241,39 @@ const Home = ({ type }) => {
   //     </div>
   //   );
 
-
   return (
     <div className="flex flex-col gap-10 justify-center border p-5 ">
-    {loading ? (
-      Array.from({ length: 10 }).map((_, i) => <SkeletonLoader key={i} />)
-    ) : (
-      video.map((feed) => (
-        <div
-          key={feed._id}
-          className="VideoDiv flex flex-col gap-3 w-full justify-between items-center "
-        >
-          <div className="VideoMetaDataDiv flex gap-5 justify-start ">
-            <div className="ProfileImageDiv ">
-              <img
-                src={feed.profileImage ? feed.profileImage : UserProfileImage}
-                alt=""
-                className="w-10 h-10 rounded-full object-cover transition cursor-pointer "
-                // loading="true"
-              />
-            </div>
-            <div className="UserNameAndDetailsDiv ">
-              <Link to={`/profile/${feed.username}`}>
-                <div className="UsernameDiv cursor-pointer">
-                  <h1 className="font-bold">{feed.username}</h1>
+      {loading
+        ? Array.from({ length: 10 }).map((_, i) => <SkeletonLoader key={i} />)
+        : video.map((feed) => (
+            <div
+              key={feed._id}
+              className="VideoDiv flex flex-col gap-3 w-full justify-between items-center "
+            >
+              <div className="VideoMetaDataDiv flex gap-5 justify-start ">
+                <div className="ProfileImageDiv ">
+                  <img
+                    src={
+                      feed.profileImage ? feed.profileImage : UserProfileImage
+                    }
+                    alt=""
+                    className="w-10 h-10 rounded-full object-cover transition cursor-pointer "
+                    // loading="true"
+                  />
                 </div>
-              </Link>
-              <Link to={`/feeds/${feed._id}`}>
-                <div className="VideoCaptionDiv cursor-pointer underline font-bold">
-                  <p>{feed.caption}</p>
+                <div className="UserNameAndDetailsDiv ">
+                  <Link to={`/profile/${feed.username}`}>
+                    <div className="UsernameDiv cursor-pointer">
+                      <h1 className="font-bold">{feed.username}</h1>
+                    </div>
+                  </Link>
+                  <Link to={`/feeds/${feed._id}`}>
+                    <div className="VideoCaptionDiv cursor-pointer underline font-bold">
+                      <p>{feed.caption}</p>
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            </div>
-            {/* <div className="EnrollButtonDiv flex items-center justify-center">
+                {/* <div className="EnrollButtonDiv flex items-center justify-center">
               {currentUser.user.enrollments.includes(feed.userId) ? (
                 <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                   <button
@@ -294,56 +294,62 @@ const Home = ({ type }) => {
                 />
               )}
             </div> */}
-          </div>
-          <div
-            onMouseEnter={() =>
-              setIsHover((prevState) => ({ ...prevState, [feed._id]: true }))
-            }
-            onMouseLeave={() =>
-              setIsHover((prevState) => ({ ...prevState, [feed._id]: false }))
-            }
-            className="VideoFileDiv flex justify-center items-center rounded flex-col"
-          >
-            <div className=" md:flex items-end gap-2">
-              <div className=" flex justify-center flex-col">
-                <video
-                  src={feed.video}
-                  className="w-80 rounded transition max-w-lg self-center "
-                  ref={(el) => (videoRefs.current[feed._id] = el)}
-                  // onClick={onVideoPress}
-                  // autoPlay
-                  controls
-                  onPlay={() => handleAttendance(feed._id)} // Add this line
-                ></video>
               </div>
-              <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
-                <div className="flex md:flex-col items-baseline md:items-center gap-1">
-                  <FcIdea className="text-2xl " />
-                  <h1 className=" font-bold text--600">
-                    {feed.comprehensions.length}
-                  </h1>
-                </div>
-                <div className="flex md:flex-col items-baseline md:items-center gap-1">
-                  <MdCoPresent className="text-3xl font-bold text-green-700 " />
-                  <h1 className=" font-bold text--600">
-                    {feed.attendances.length}
-                  </h1>
+              <div
+                onMouseEnter={() =>
+                  setIsHover((prevState) => ({
+                    ...prevState,
+                    [feed._id]: true,
+                  }))
+                }
+                onMouseLeave={() =>
+                  setIsHover((prevState) => ({
+                    ...prevState,
+                    [feed._id]: false,
+                  }))
+                }
+                className="VideoFileDiv flex justify-center items-center rounded flex-col"
+              >
+                <div className=" md:flex items-end gap-2">
+                  <div className=" flex justify-center flex-col">
+                    <video
+                      src={feed.video}
+                      className="w-80 rounded transition max-w-lg self-center "
+                      ref={(el) => (videoRefs.current[feed._id] = el)}
+                      // onClick={onVideoPress}
+                      // autoPlay
+                      controls
+                      onPlay={() => handleAttendance(feed._id)} // Add this line
+                    ></video>
+                  </div>
+                  <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
+                    <div className="flex md:flex-col items-baseline md:items-center gap-1">
+                      <FcIdea className="text-2xl " />
+                      <h1 className=" font-bold text--600">
+                        {feed.comprehensions.length}
+                      </h1>
+                    </div>
+                    <div className="flex md:flex-col items-baseline md:items-center gap-1">
+                      <MdCoPresent className="text-3xl font-bold text-green-700 " />
+                      <h1 className=" font-bold text--600">
+                        {feed.attendances.length}
+                      </h1>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          {alert.show && (
-            <Alert
-              isOpen={isOpen}
-              openModal={openModal}
-              closeModal={closeModal}
-              message={alert.message}
-            />
-          )}
+              {alert.show && (
+                <Alert
+                  isOpen={isOpen}
+                  openModal={openModal}
+                  closeModal={closeModal}
+                  message={alert.message}
+                />
+              )}
 
-          <hr className="text-black border w-48 border-black m-5" />
-        </div>
-      )))}
+              <hr className="text-black border w-48 border-black m-5" />
+            </div>
+          ))}
     </div>
   );
 };
