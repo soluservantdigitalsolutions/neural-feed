@@ -69,7 +69,9 @@ function App() {
 
         <Route exact path="/test/:feedId" element={<TestPage />} />
       </Routes>
-      <BottomNavbar />
+      {location.pathname !== "/login" && location.pathname !== "/register" && (
+        <BottomNavbar />
+      )}
     </>
   );
 }
