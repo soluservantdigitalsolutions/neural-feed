@@ -22,7 +22,7 @@ const NoteContent = () => {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com//api/notes/${id}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/notes/${id}`
         );
         setNote(response.data);
         console.log(response);

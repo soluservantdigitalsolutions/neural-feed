@@ -23,7 +23,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com//api/users/profile/${username}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/users/profile/${username}`
         );
         setLoading(false);
         setUser(res.data.user);
@@ -40,7 +40,7 @@ const UserProfile = () => {
       setLoading(true);
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com//api/upload/profile/feeds/${username}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/upload/profile/feeds/${username}`
         );
         setLoading(false);
         setUserFeeds(response.data.feeds);

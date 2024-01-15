@@ -51,7 +51,7 @@ const FeedPage = () => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeds/${id}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/${id}`
         );
         setLoading(false);
         setFeed(res.data.singleFeed);
@@ -70,7 +70,7 @@ const FeedPage = () => {
       try {
         await axios
           .get(
-            `https://neural-feed-backend-2yg8.onrender.com//api/upload/random`
+            `https://neural-feed-backend-2yg8.onrender.com/api/upload/random`
           )
           .then((response) => {
             setVideo(response.data.randomFeeds);
@@ -88,7 +88,7 @@ const FeedPage = () => {
     const getFeedOwnerData = async () => {
       try {
         const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com//api/users/${id}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/users/${id}`
         );
         setFeedOwner(res.data.user);
       } catch (err) {
@@ -106,7 +106,7 @@ const FeedPage = () => {
 
       try {
         const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeder/${feed?.userId}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeder/${feed?.userId}`
         );
 
         setLoading(false);
@@ -123,7 +123,7 @@ const FeedPage = () => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com//api/upload/feeds/attendances/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,
@@ -146,7 +146,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com//api/users/enroll/${feed?.userId}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/enroll/${feed?.userId}`,
         {},
         {
           withCredentials: true,
@@ -175,7 +175,7 @@ const FeedPage = () => {
 
     try {
       const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com//api/users/dropout/${feed?.userId}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/dropout/${feed?.userId}`,
         {},
         {
           withCredentials: true,
@@ -199,7 +199,7 @@ const FeedPage = () => {
   const handleAnswerSubmit = async (feed) => {
     try {
       const response = await axios.post(
-        "https://neural-feed-backend-2yg8.onrender.com//api/upload/updateComprehensionAndHats",
+        "https://neural-feed-backend-2yg8.onrender.com/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
