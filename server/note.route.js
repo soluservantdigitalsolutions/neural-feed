@@ -26,8 +26,8 @@ router.delete("/:id", verifyToken, deleteNote);
 3;
 
 router.post("/:id/attendances", verifyToken, addAttendances);
-router.put(
-  "/:id/comprehensionAndHats",
+router.post(
+  "/updateComprehensionAndHats",
   verifyToken,
   updateComprehensionAndHats
 );
