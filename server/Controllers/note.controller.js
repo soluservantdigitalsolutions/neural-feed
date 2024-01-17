@@ -1,4 +1,5 @@
 const NoteModel = require("../Models/note.model.js");
+const UserModel = require("../Models/UserModel.js")
 const createError = require("../error.js");
 
 const postNote = async (req, res, next) => {
