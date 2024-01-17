@@ -21,7 +21,7 @@ const postFeed = async (req, res, next) => {
     // Update the user's admissions field
     const user = await UserModel.findById(req.userId);
     user.admissions.push(newFeed._id);
-    
+
     await user.save();
 
     res.status(200).json({
@@ -220,7 +220,7 @@ const search = async (req, res, next) => {
   }
 };
 
-updateComprehensionAndHats = async (req, res, next) => {
+const updateComprehensionAndHats = async (req, res, next) => {
   try {
     // Get selected options and feed id from request body
     const { selectedOptions, feedId } = req.body;
