@@ -17,6 +17,7 @@ import FeedUpload from "./pages/UploadPage/FeedUpload";
 import NoteUpload from "./pages/NoteUpload/NoteUpload";
 import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 import NoteContent from "./pages/NoteContent/NoteContent";
+import NoteTestPage from "./pages/NoteTestPage/NoteTestPage";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -67,7 +68,9 @@ function App() {
           element={currentUser ? <NoteContent /> : <Navigate to="/login" />}
         />
 
-        <Route exact path="/test/:feedId" element={<TestPage />} />
+        <Route exact path="/feeds/tests/:feedId" element={<TestPage />} />
+
+        <Route exact path="/notes/tests/:noteId" element={<NoteTestPage />} />
       </Routes>
       {location.pathname !== "/login" && location.pathname !== "/register" && (
         <BottomNavbar />
