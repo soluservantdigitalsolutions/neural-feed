@@ -67,7 +67,12 @@ const noteSchema = new Schema(
         },
       },
     ],
+    category: {
+      type: String,
+      required: true,
+    },
   },
+
   {
     timestamps: true,
   }
