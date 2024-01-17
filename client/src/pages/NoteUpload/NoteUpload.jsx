@@ -5,7 +5,7 @@ import { BarLoader } from "react-spinners";
 import { useDropzone } from "react-dropzone";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import { richTextEditorModules } from "../../utils/modules";
+import { categories, richTextEditorModules } from "../../utils/modules";
 
 const NoteUpload = () => {
   const [title, setTitle] = useState("");
@@ -18,6 +18,7 @@ const NoteUpload = () => {
   ]);
   const [previewUrl, setPreviewUrl] = useState(null);
   const [hasImage, setHasImage] = useState(false);
+  const [category, setCategory] = useState("");
 
   const addTest = () => {
     setTests([
@@ -59,6 +60,7 @@ const NoteUpload = () => {
     formData.append("tags", tags);
     formData.append("image", image);
     formData.append("tests", JSON.stringify(tests));
+    formData.append("category", category); // Add this line
 
     try {
       await axios.post(
@@ -210,6 +212,22 @@ const NoteUpload = () => {
               onChange={(e) => setTags(e.target.value)}
               className="outline-none border rounded p-3 w-full"
             />
+          </div>
+          <div className="captionDiv">
+            <h1 className="Caption font-semibold">Category</h1>
+            <select
+              name="category"
+              id=""
+              onChange={(e) => setCategory(e.target.value)}
+              className="  outline-none border rounded p-3 w-full"
+            >
+              <option value="">Select a category</option>
+              {categories.map((category, index) => (
+                <option key={index} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="captionDiv">
             {!hasImage ? (
