@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://neural-feed-backend-2yg8.onrender.comapi",
+  baseURL: "https://neural-feed-backend-2yg8.onrender.com/api",
   withCredentials: true,
 });
 
