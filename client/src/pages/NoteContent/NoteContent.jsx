@@ -106,7 +106,7 @@ const NoteContent = () => {
             </div>
           </div>
         </div>
-        <TestButton feedId={note?._id} />
+        <TestButton contentType="notes" feedId={note?._id} />
       </div>
     </div>
   );

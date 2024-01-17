@@ -296,7 +296,7 @@ const FeedPage = () => {
               </div>
             </div>
           </div>
-          <TestButton feedId={feed?._id} />
+          <TestButton contentType="feeds" feedId={feed?._id} />
         </div>
         <div className="bg-gray-200 w-full border rounded-lg">
           <div className="attendances">
