@@ -26,6 +26,7 @@ const FeedUpload = () => {
     { question: "", options: { A: "", B: "", C: "", D: "" }, answer: "" },
   ]);
   const [category, setCategory] = useState("");
+  const [tags, setTags] = useState("");
 
   useEffect(() => {
     // Revoke the old feed preview Blob URL
@@ -68,6 +69,7 @@ const FeedUpload = () => {
       description: desc,
       category,
       tests,
+      tags,
     };
 
     try {
@@ -246,6 +248,16 @@ const FeedUpload = () => {
             >
               Add Test
             </button>
+            <div className="captionDiv mt-10">
+              <h1 className="Caption font-semibold">Tags</h1>
+              <input
+                type="text"
+                name="tags"
+                id=""
+                onChange={(e) => setTags(e.target.value)}
+                className="outline-none border rounded p-3 w-full"
+              />
+            </div>
             <div className="captionDiv">
               <h1 className="Caption font-semibold">Category</h1>
               <select
