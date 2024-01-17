@@ -6,16 +6,17 @@ const postNote = async (req, res, next) => {
     const imageUrl = req.file ? req.file.path : null;
     const tests = JSON.parse(req.body.tests);
 
-    const newNote = await NoteModel.create({
-      authorId: req.userId,
-      authorName: req.username,
-      profileImage: req.profileImage,
-      title: req.body.title,
-      content: req.body.content,
-      tags: req.body.tags,
-      tests: tests,
-      imageUrl: imageUrl,
-    });
+ const newNote = await NoteModel.create({
+   authorId: req.userId,
+   authorName: req.username,
+   profileImage: req.profileImage,
+   title: req.body.title,
+   content: req.body.content,
+   tags: req.body.tags,
+   tests: tests,
+   imageUrl: imageUrl,
+   category: req.body.category, // Add this line
+ });
 
     res.status(201).json(newNote);
   } catch (err) {
