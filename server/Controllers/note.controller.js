@@ -1,5 +1,5 @@
 const NoteModel = require("../Models/note.model.js");
-const UserModel = require("../Models/UserModel.js")
+const UserModel = require("../Models/UserModel.js");
 const createError = require("../error.js");
 
 const postNote = async (req, res, next) => {
@@ -163,9 +163,15 @@ const addAttendances = async (req, res, next) => {
       }
 
       // If not, push user's ID
-      const attendedNote = await NoteModel.findByIdAndUpdate(req.params.id, {
-        $push: { attendances: req.user.id },
-      });
+      const attendedNote = await NoteModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $push: { attendances: req.user.id },
+        },
+        {
+          new: true,
+        }
+      );
       res.status(200).json({
         message: "You have an additional attendance",
         attendedNote,
@@ -181,6 +187,19 @@ const addAttendances = async (req, res, next) => {
   }
 };
 
+const getUserNotes = async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    const user = await UserModel.findOne({ username: username });
+    if (!user) {
+      return next(createError(404, "User not found"));
+    }
+    const userNotes = await NoteModel.find({ authorId: user._id });
+    res.status(200).json(userNotes);
+  } catch (err) {
+    next(createError(500, err.message));
+  }
+};
 module.exports = {
   postNote,
   getNotes,
@@ -189,4 +208,5 @@ module.exports = {
   deleteNote,
   addAttendances,
   updateComprehensionAndHats,
+  getUserNotes,
 };
