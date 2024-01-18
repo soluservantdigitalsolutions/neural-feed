@@ -8,6 +8,7 @@ const {
   deleteNote,
   addAttendances,
   updateComprehensionAndHats,
+  getUserNotes,
 } = require("./Controllers/note.controller.js");
 const { parser } = require("./config/cloudinary.js");
 const verifyToken = require("./middleware/verifyToken.js");
@@ -31,5 +32,8 @@ router.post(
   verifyToken,
   updateComprehensionAndHats
 );
+
+router.get("/users/:username", verifyToken, getUserNotes);
+
 
 module.exports = router;
