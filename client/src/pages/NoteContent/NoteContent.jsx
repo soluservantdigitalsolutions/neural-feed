@@ -14,9 +14,8 @@ const NoteContent = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
   const [feeder, setFeeder] = useState(null);
+  const [enrollmentStatus, setEnrollmentStatus] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // Define handleDropout and handleEnroll functions here
 
   useEffect(() => {
     const fetchNote = async () => {
@@ -33,6 +32,68 @@ const NoteContent = () => {
 
     fetchNote();
   }, [id]);
+
+  useEffect(() => {
+    const getFeederAdmissions = async () => {
+      try {
+        const res = await axios.get(
+          `https://neural-feed-backend-2yg8.onrender.com/api/users/${note?.authorId}`
+        );
+        setFeeder(res.data.user.admissions);
+        setEnrollmentStatus(
+          res.data.user.admissions.includes(currentUser?.user._id)
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    if (note) {
+      getFeederAdmissions();
+    }
+  }, [note, currentUser?.user._id]);
+
+  const handleEnroll = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.put(
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/enroll/${note?.authorId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+      setEnrollmentStatus(true);
+      dispatch(updateEnrollments([...currentUser.enrollments, note?._id]));
+      console.log("Enrollment Successful");
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      console.log("Enrollment failed");
+    }
+  };
+
+  const handleDropout = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.put(
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/dropout/${note?.authorId}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      setLoading(false);
+      setEnrollmentStatus(false);
+      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+      console.log("User Dropped out Unfortunately");
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      console.log("Dropout failed");
+    }
+  };
 
   if (!note)
     return (
@@ -82,12 +143,10 @@ const NoteContent = () => {
             </Link>
           </div>
           <div className="enrollAndShareDiv flex">
-            {feeder?.includes(currentUser?.user._id) ? (
+            {enrollmentStatus ? (
               <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
                 <button
-                  onClick={() => {
-                    handleDropout();
-                  }}
+                  onClick={handleDropout}
                   className="text-white text-lg p-1 hover:bg-green-600 transition hover:text-white active:bg-green-700 cursor-pointer"
                 >
                   Enrolled
@@ -95,9 +154,7 @@ const NoteContent = () => {
               </div>
             ) : (
               <SecondaryButton
-                onClick={() => {
-                  handleEnroll();
-                }}
+                onClick={handleEnroll}
                 SecondaryButtonText="Enroll"
               />
             )}
