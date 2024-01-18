@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FcIdea } from "react-icons/fc";
-import { MdCoPresent}from "react-icons/md"
+import { MdCoPresent } from "react-icons/md";
+import { NoteContext } from "../../context/noteContext";
 
-const NoteStats = ({ comprehensions, attendances }) => {
+const NoteStats = ({ noteId, comprehensions, attendances }) => {
+  const { notes } = useContext(NoteContext);
+  const note = notes.find((n) => n._id === noteId);
   return (
     <div className="flex gap-4">
       <div className="flex items-center">

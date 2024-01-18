@@ -1,8 +1,35 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import NoteStats from "../NoteStats/NoteStats";
+import { useDispatch, useSelector } from "react-redux";
+import { addAttendance } from "../../redux/feedSlice";
+import axios from "axios";
+import { NoteContext } from "../../context/noteContext";
 
 const NotePreview = ({ note }) => {
+  const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  const { notes } = useContext(NoteContext);
+
+  const handleAttendance = async () => {
+    try {
+      const response = await axios.post(
+        `https://neural-feed-backend-2yg8.onrender.com/api/notes/${note._id}/attendances`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+      // Dispatch the addAttendance action with the noteId and userId
+      dispatch(
+        addAttendance({ noteId: note._id, userId: currentUser.user._id })
+      );
+      console.log(note);
+      console.log("Attended Successfully");
+    } catch (error) {
+      console.error("Error updating attendances:", error);
+    }
+  };
   return (
     <div className="border m-5">
       <div className="feedOwnerInfoDiv p-4 flex justify-between">
@@ -29,12 +56,16 @@ const NotePreview = ({ note }) => {
         <NoteStats
           comprehensions={note.comprehensions.length}
           attendances={note.attendances.length}
+          noteId={note._id}
         />
         <Link
           to={`/notes/${note._id}`}
           className="mt-4 text-blue-500 hover:underline w-full"
         >
-          <button className=" w-full mt-5 bg-green-600 p-2 text-white rounded font-bold">
+          <button
+            onClick={handleAttendance}
+            className=" w-full mt-5 bg-green-600 p-2 text-white rounded font-bold"
+          >
             Feed More
           </button>
         </Link>
