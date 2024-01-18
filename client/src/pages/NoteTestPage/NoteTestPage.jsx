@@ -78,26 +78,6 @@ const NoteTestPage = () => {
     }
   };
 
-  const handleEnroll = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com/api/notes/enroll/${note?.authorId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setLoading(false);
-      setIsEnrolled(true);
-      // Handle additional state updates or UI feedback here
-    } catch (error) {
-      setLoading(false);
-      console.error("Error enrolling in note:", error);
-      // Handle error state or UI feedback here
-    }
-  };
-
   const handleGoHome = () => {
     navigate("/");
   };
