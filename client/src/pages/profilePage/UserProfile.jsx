@@ -174,7 +174,7 @@ const UserProfile = () => {
                   </p>
                   {currentUser.user.username === username && (
                     <Link
-                      to="/upload"
+                      to="/upload/feeds"
                       className="bg-green-600 font-bold text-white px-4 py-2 rounded"
                     >
                       CREATE ONE
@@ -222,6 +222,14 @@ const UserProfile = () => {
                       ? "You have no notes yet"
                       : "This user doesn't have any notes yet"}
                   </p>
+                  {currentUser.user.username === username && (
+                    <Link
+                      to="/upload/notes"
+                      className="bg-green-600 font-bold text-white px-4 py-2 rounded"
+                    >
+                      CREATE ONE
+                    </Link>
+                  )}
                 </div>
               )}
             </div>
