@@ -58,7 +58,7 @@ const NoteUpload = () => {
     formData.append("title", title);
     formData.append("content", content);
     formData.append("tags", tags);
-    formData.append("imageUrl", image);
+    formData.append("image", image);
     formData.append("tests", JSON.stringify(tests));
     formData.append("category", category); // Add this line
 
