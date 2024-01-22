@@ -152,7 +152,6 @@ const FeedUpload = () => {
               <ReactQuill
                 value={desc}
                 onChange={setDesc}
-                modules={richTextEditorModules} // Pass the custom modules to ReactQuill
                 className="resize-none h-screen outline-none  rounded  w-full "
               />
             </div>

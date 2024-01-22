@@ -18,6 +18,7 @@ const verifyToken = require("./middleware/verifyToken.js");
 
 
 router.post("/feeds", verifyToken, postFeed);
+router.get("/feeds/search", search);
 
 router.put("/feeds/:id", verifyToken, updateFeed);
 
@@ -39,8 +40,6 @@ router.get("/random", randomFeeds);
 router.get("/enrolled", verifyToken, enrolledFeeds);
 
 router.get("/feeds/tags", getByTags);
-
-router.get("/feeds/search", search);
 
 router.get("/profile/feeds/:username", getUserFeeds);
 

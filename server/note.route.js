@@ -9,6 +9,7 @@ const {
   addAttendances,
   updateComprehensionAndHats,
   getUserNotes,
+  searchNotes,
 } = require("./Controllers/note.controller.js");
 const { parser } = require("./config/cloudinary.js");
 const verifyToken = require("./middleware/verifyToken.js");
@@ -20,6 +21,8 @@ router.post(
   express.json(),
   postNote
 );
+router.get("/search", searchNotes);
+
 router.get("/", getNotes);
 router.get("/:id", getNote);
 router.put("/:id", verifyToken, updateNote);
@@ -34,6 +37,5 @@ router.post(
 );
 
 router.get("/users/:username", verifyToken, getUserNotes);
-
 
 module.exports = router;

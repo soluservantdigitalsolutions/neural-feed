@@ -200,6 +200,25 @@ const getUserNotes = async (req, res, next) => {
     next(createError(500, err.message));
   }
 };
+
+const searchNotes = async (req, res, next) => {
+  try {
+    const searchQuery = req.query.q; // Assuming the query parameter is named 'q'
+    if (!searchQuery) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    // Perform a text search using the text index
+    const notes = await NoteModel.find({
+      $text: { $search: searchQuery },
+    });
+
+    res.status(200).json(notes);
+  } catch (err) {
+    next(createError(500, err.message));
+  }
+};
+
 module.exports = {
   postNote,
   getNotes,
@@ -209,4 +228,5 @@ module.exports = {
   addAttendances,
   updateComprehensionAndHats,
   getUserNotes,
+  searchNotes,
 };

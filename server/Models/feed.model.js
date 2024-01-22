@@ -86,4 +86,6 @@ const feedSchema = new Schema(
   }
 );
 
+feedSchema.index({ caption: "text", description: "text", tags: "text" });
+
 module.exports = mongoose.model("feed", feedSchema);

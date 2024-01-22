@@ -72,10 +72,12 @@ const noteSchema = new Schema(
       required: true,
     },
   },
-
   {
     timestamps: true,
   }
 );
+
+// Create a text index on the title and content fields
+noteSchema.index({ title: "text", content: "text", tags: "text" });
 
 module.exports = mongoose.model("Note", noteSchema);

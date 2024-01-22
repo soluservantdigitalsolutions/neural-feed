@@ -207,16 +207,20 @@ const getByTags = async (req, res, next) => {
 };
 
 const search = async (req, res, next) => {
-  const query = req.query.q;
   try {
-    const feeds = await feedModel
-      .find({ title: { $regex: query, $options: "i" } })
-      .limit(40);
-    res.status(200).json({
-      queryResults: feeds,
+    const searchQuery = req.query.q; // Assuming the query parameter is named 'q'
+    if (!searchQuery) {
+      return res.status(400).json({ message: "Search query is required" });
+    }
+
+    // Perform a text search using the text index
+    const feeds = await feedModel.find({
+      $text: { $search: searchQuery },
     });
+
+    res.status(200).json(feeds);
   } catch (err) {
-    next(err);
+    next(createError(500, err.message));
   }
 };
 

@@ -48,24 +48,20 @@ const NavBar = () => {
         <Logo />
       </div>
       {/* <div className="SearchBarDiv">
-        <FormInput
-          inputType="Search"
-          inputPlaceholder="Looking For..."
-          Label="Search"
-          LabelForName="Search"
-          inputName="Search"
-        />
+        <Link to="/search">
+          <SubmitBtn ButtonText="SEARCH" className="p-1" />
+        </Link>
       </div> */}
       <div className="UploadMessageNotificationsAndProfilediv flex items-center justify-center gap-2">
         {currentUser ? (
           <>
             <div className="UploadDiv hidden md:block">
-              <Link to="upload">
+              <Link to="/upload/feed">
                 <SubmitBtn ButtonText="+ FEED" className="p-1" />
               </Link>
             </div>
             <div className="UploadDiv hidden md:block">
-              <Link to="upload">
+              <Link to="/upload/note">
                 <SubmitBtn ButtonText="+ NOTE" className="p-1" />
               </Link>
             </div>
