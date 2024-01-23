@@ -80,12 +80,12 @@ function App() {
 
         <Route exact path="/notes/tests/:noteId" element={<NoteTestPage />} />
       </Routes>
-      {location.pathname !== "/login" &&
-        location.pathname !== "/register" &&
-        location.pathname !== "/feeds/:id" &&
-        location.pathname !== "/notes/:id" &&
-        location.pathname !== "/feeds/tests/:feedId" &&
-        location.pathname !== "/notes/tests/:noteId" && <BottomNavbar />}
+      {!location.pathname.startsWith("/login") &&
+        !location.pathname.startsWith("/register") &&
+        !location.pathname.startsWith("/feeds/") &&
+        !location.pathname.startsWith("/notes/") &&
+        !location.pathname.startsWith("/feeds/tests/") &&
+        !location.pathname.startsWith("/notes/tests/") && <BottomNavbar />}
     </>
   );
 }
