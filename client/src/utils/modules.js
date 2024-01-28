@@ -94,3 +94,13 @@ export const categories = [
   "Law & Government",
   "Medicine & Healthcare",
 ];
+
+export const copyToClipboard = async (baseUrl, id) => {
+  const url = `${baseUrl}/${id}`;
+  try {
+    await navigator.clipboard.writeText(url);
+    alert(`${url} copied to clipboard`);
+  } catch (err) {
+    console.error("Failed to copy URL: ", err);
+  }
+};
