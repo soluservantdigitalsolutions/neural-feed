@@ -50,14 +50,7 @@ const ChatBox = () => {
     }
   }, [messages]);
 
-  useEffect(() => {
-    const askInitialQuestion = async () => {
-      const initialQuestion = "What concept are you trying to understand";
-      const response = await generateResponse(initialQuestion);
-      setMessages([{ text: response, sender: "AI" }]);
-    };
-    askInitialQuestion();
-  }, []);
+
 
   return (
     <div className="w-screen flex justify-center border-8 h-full ">
