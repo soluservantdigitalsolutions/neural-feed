@@ -39,7 +39,7 @@ const Home = ({ type }) => {
   const [loading, setLoading] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
-  const userData = currentUser.user;
+  const userData = currentUser && currentUser.user ? currentUser.user : null;
   const [isOpen, setIsOpen] = useState(false);
   const [alert, setAlert] = useState({ show: false, message: "" });
   const updatedFeeds = useSelector((state) => state.feed.feeds);
