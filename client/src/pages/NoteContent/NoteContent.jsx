@@ -4,9 +4,9 @@ import axios from "axios";
 import { BarLoader } from "react-spinners";
 import { useDispatch, useSelector } from "react-redux";
 import { updateEnrollments } from "../../redux/userSlice";
-import ShareButton from "../../components/Share/ShareButton";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
 import TestButton from "../../components/TestButton/TestButton";
+import NoteShareButton from "../../components/Share/NoteShareButton";
 
 const NoteContent = () => {
   const [note, setNote] = useState(null);
@@ -163,7 +163,7 @@ const NoteContent = () => {
               />
             )}
             <div className="shareFeedDiv flex gap-3 items-center">
-              <ShareButton note={note} />
+              <NoteShareButton note={note} />
             </div>
           </div>
         </div>
