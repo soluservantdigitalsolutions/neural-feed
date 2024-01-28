@@ -18,6 +18,7 @@ import { updateEnrollments, updateHats } from "../../redux/userSlice";
 import Alert from "../../components/Alert/Alert";
 import TestPage from "../TestPage/TestPage";
 import TestButton from "../../components/TestButton/TestButton";
+import { dropoutUser, enrollUser, getFeed, getFeedOwner, getFeedOwnerData, getRandomFeeds, submitAnswer, updateAttendance } from "../../api/api";
 
 const FeedPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,190 +47,125 @@ const FeedPage = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
-  useEffect(() => {
-    const getFeed = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/${id}`
-        );
-        setLoading(false);
-        setFeed(res.data.singleFeed);
-      } catch (err) {
-        setLoading(false);
+ useEffect(() => {
+   const fetchFeed = async () => {
+     setLoading(true);
+     try {
+       const feed = await getFeed(id);
+       setFeed(feed);
+     } catch (err) {
+       console.log(err);
+     } finally {
+       setLoading(false);
+     }
+   };
+   fetchFeed();
+ }, [id]);
 
-        console.log(err);
-      }
-    };
-    getFeed();
-  }, [id]);
+ useEffect(() => {
+   const fetchFeeds = async () => {
+     setLoading(true);
+     try {
+       const randomFeeds = await getRandomFeeds();
+       setVideo(randomFeeds);
+     } catch (err) {
+       console.log(err);
+     } finally {
+       setLoading(false);
+     }
+   };
+   fetchFeeds();
+ }, []);
 
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      setLoading(true);
-      try {
-        await axios
-          .get(
-            `https://neural-feed-backend-2yg8.onrender.com/api/upload/random`
-          )
-          .then((response) => {
-            setVideo(response.data.randomFeeds);
-          });
-        setLoading(false);
-      } catch (err) {
-        setLoading(false);
+ useEffect(() => {
+   const fetchFeedOwnerData = async () => {
+     try {
+       const feedOwnerData = await getFeedOwnerData(id);
+       setFeedOwner(feedOwnerData);
+     } catch (err) {
+       console.log(err);
+     }
+   };
+   if (feed) {
+     fetchFeedOwnerData();
+   }
+ }, [feed]);
 
-        console.log(err);
-      }
-    };
-    fetchFeeds();
-  }, []);
-  useEffect(() => {
-    const getFeedOwnerData = async () => {
-      try {
-        const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/users/${id}`
-        );
-        setFeedOwner(res.data.user);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    if (feed) {
-      getFeedOwnerData();
-    }
-  }, [feed]);
+ useEffect(() => {
+   const fetchFeedOwner = async () => {
+     setLoading(true);
+     try {
+       const feedOwner = await getFeedOwner(feed?.userId);
+       setFeeder(feedOwner);
+     } catch (err) {
+       console.log(err);
+     } finally {
+       setLoading(false);
+     }
+   };
+   fetchFeedOwner();
+ }, [feed]);
 
-  useEffect(() => {
-    const getFeedOwner = async () => {
-      setLoading(true);
+ const handleAttendance = async () => {
+   try {
+     const response = await updateAttendance(id);
+     setAttendance(response);
+     dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
+   } catch (error) {
+     console.error("Error updating attendances:", error);
+   }
+ };
 
-      try {
-        const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeder/${feed?.userId}`
-        );
+ const handleEnroll = async (id) => {
+   setLoading(true);
+   setEnrollmentStatus(true);
+   try {
+     const response = await enrollUser(feed?.userId);
+     setLoading(false);
+     dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
+     setFeeder([...feeder, currentUser?.user._id]);
+   } catch (err) {
+     setLoading(false);
+     console.log(err);
+     setEnrollmentStatus(false);
+   }
+ };
 
-        setLoading(false);
-        setFeeder(res.data.feedOwner.admissions);
-        console.log(res);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    getFeedOwner();
-  }, [feed]);
+ const handleDropout = async (id) => {
+   setLoading(true);
+   setEnrollmentStatus(false);
+   try {
+     const response = await dropoutUser(feed?.userId);
+     setLoading(false);
+     dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+     setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
+   } catch (err) {
+     setLoading(false);
+     console.log(err);
+     setEnrollmentStatus(true);
+   }
+ };
 
-  const handleAttendance = async () => {
-    // Make a request to the server to update the attendances
-    try {
-      const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/attendances/${id}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setAttendance(response.data);
+ const handleAnswerSubmit = async (feed) => {
+   try {
+     const response = await submitAnswer(selectedOption, feed._id);
+     if (response.message === "Updated successfully!") {
+       openModal();
+       dispatch(updateHats(response.updatedUser.hats));
+       setAlert({ show: true, message: "Your answer is correct!" });
+     } else {
+       openModal();
+       console.log("Answer provided is incorrect");
+       setAlert({
+         show: true,
+         message: "Your answer is incorrect. Please try again.",
+       });
+     }
+   } catch (err) {
+     console.log(err);
+   }
+ };
 
-      dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
-    } catch (error) {
-      setLoading(false);
-
-      console.error("Error updating attendances:", error);
-    }
-  };
-
-  const handleEnroll = async (id) => {
-    // Optimistically update state
-    setLoading(true);
-    setEnrollmentStatus(true);
-
-    try {
-      const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com/api/users/enroll/${feed?.userId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setLoading(false);
-      // Append the new enrollment to the existing enrollments
-      dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
-      console.log("Enrollment Successful");
-
-      // Update feeder state
-      setFeeder([...feeder, currentUser?.user._id]);
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-      console.log("Enrollment failed");
-
-      // Revert state if request failed
-      setEnrollmentStatus(false);
-    }
-  };
-  const handleDropout = async (id) => {
-    // Optimistically update state
-    setLoading(true);
-    setEnrollmentStatus(false);
-
-    try {
-      const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com/api/users/dropout/${feed?.userId}`,
-        {},
-        {
-          withCredentials: true,
-        }
-      );
-      setLoading(false);
-      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
-      console.log("User Dropped out Unfortunately");
-
-      // Update feeder state
-      setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
-    } catch (err) {
-      setLoading(false);
-      console.log(err);
-      console.log("Dropout failed");
-
-      // Revert state if request failed
-      setEnrollmentStatus(true);
-    }
-  };
-  const handleAnswerSubmit = async (feed) => {
-    try {
-      const response = await axios.post(
-        "https://neural-feed-backend-2yg8.onrender.com/api/upload/updateComprehensionAndHats",
-        {
-          selectedOption: selectedOption,
-          feedId: feed._id,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (response.data.message === "Updated successfully!") {
-        // Do something after successful update
-        openModal();
-        dispatch(updateHats(response.data.updatedUser.hats));
-        setAlert({ show: true, message: "Your answer is correct!" });
-      } else {
-        // Handle case when selected option does not match the feed answer
-
-        openModal();
-
-        console.log("Answer provided is incorrect");
-        setAlert({
-          show: true,
-          message: "Your answer is incorrect. Please try again.",
-        });
-      }
-    } catch (err) {
-      // Handle error
-      console.log(err);
-    }
-  };
   if (loading)
     return (
       <div className="flex justify-center items-center h-[100vh]">

@@ -85,6 +85,7 @@ function App() {
         !location.pathname.startsWith("/feeds/") &&
         !location.pathname.startsWith("/notes/") &&
         !location.pathname.startsWith("/feeds/tests/") &&
+        !location.pathname.startsWith("/chat") &&
         !location.pathname.startsWith("/notes/tests/") && <BottomNavbar />}
     </>
   );
