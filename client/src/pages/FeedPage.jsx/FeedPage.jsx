@@ -1,24 +1,26 @@
 import React, { useEffect } from "react";
-import testVideo from "../../assets/Are You Using This EQ Trick- Left and Right Channel EQ.mp4";
-import testImage from "../../assets/user (1).png";
 import { useState } from "react";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
-import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { BarLoader } from "react-spinners";
-import ShareButton from "../../components/Share/ShareButton";
-import Test from "../../components/TestDropdown/Test";
-import SubmitBtn from "../../components/SubmitButton/SubmitBtn";
 import DOMPurify from "dompurify";
 import FeedPosts from "../../components/FeedPosts/FeedPosts";
 import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { addAttendance } from "../../redux/feedSlice";
 import { updateEnrollments, updateHats } from "../../redux/userSlice";
-import Alert from "../../components/Alert/Alert";
-import TestPage from "../TestPage/TestPage";
 import TestButton from "../../components/TestButton/TestButton";
-import { dropoutUser, enrollUser, getFeed, getFeedOwner, getFeedOwnerData, getRandomFeeds, submitAnswer, updateAttendance } from "../../api/api";
+import {
+  dropoutUser,
+  enrollUser,
+  getFeed,
+  getFeedOwner,
+  getFeedOwnerData,
+  getRandomFeeds,
+  submitAnswer,
+  updateAttendance,
+} from "../../api/api";
+import FeedShareButton from "../../components/Share/FeedShareButton";
 
 const FeedPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,124 +49,124 @@ const FeedPage = () => {
   const closeModal = () => {
     setIsOpen(false);
   };
- useEffect(() => {
-   const fetchFeed = async () => {
-     setLoading(true);
-     try {
-       const feed = await getFeed(id);
-       setFeed(feed);
-     } catch (err) {
-       console.log(err);
-     } finally {
-       setLoading(false);
-     }
-   };
-   fetchFeed();
- }, [id]);
+  useEffect(() => {
+    const fetchFeed = async () => {
+      setLoading(true);
+      try {
+        const feed = await getFeed(id);
+        setFeed(feed);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeed();
+  }, [id]);
 
- useEffect(() => {
-   const fetchFeeds = async () => {
-     setLoading(true);
-     try {
-       const randomFeeds = await getRandomFeeds();
-       setVideo(randomFeeds);
-     } catch (err) {
-       console.log(err);
-     } finally {
-       setLoading(false);
-     }
-   };
-   fetchFeeds();
- }, []);
+  useEffect(() => {
+    const fetchFeeds = async () => {
+      setLoading(true);
+      try {
+        const randomFeeds = await getRandomFeeds();
+        setVideo(randomFeeds);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeeds();
+  }, []);
 
- useEffect(() => {
-   const fetchFeedOwnerData = async () => {
-     try {
-       const feedOwnerData = await getFeedOwnerData(id);
-       setFeedOwner(feedOwnerData);
-     } catch (err) {
-       console.log(err);
-     }
-   };
-   if (feed) {
-     fetchFeedOwnerData();
-   }
- }, [feed]);
+  useEffect(() => {
+    const fetchFeedOwnerData = async () => {
+      try {
+        const feedOwnerData = await getFeedOwnerData(id);
+        setFeedOwner(feedOwnerData);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    if (feed) {
+      fetchFeedOwnerData();
+    }
+  }, [feed]);
 
- useEffect(() => {
-   const fetchFeedOwner = async () => {
-     setLoading(true);
-     try {
-       const feedOwner = await getFeedOwner(feed?.userId);
-       setFeeder(feedOwner);
-     } catch (err) {
-       console.log(err);
-     } finally {
-       setLoading(false);
-     }
-   };
-   fetchFeedOwner();
- }, [feed]);
+  useEffect(() => {
+    const fetchFeedOwner = async () => {
+      setLoading(true);
+      try {
+        const feedOwner = await getFeedOwner(feed?.userId);
+        setFeeder(feedOwner);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFeedOwner();
+  }, [feed]);
 
- const handleAttendance = async () => {
-   try {
-     const response = await updateAttendance(id);
-     setAttendance(response);
-     dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
-   } catch (error) {
-     console.error("Error updating attendances:", error);
-   }
- };
+  const handleAttendance = async () => {
+    try {
+      const response = await updateAttendance(id);
+      setAttendance(response);
+      dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
+    } catch (error) {
+      console.error("Error updating attendances:", error);
+    }
+  };
 
- const handleEnroll = async (id) => {
-   setLoading(true);
-   setEnrollmentStatus(true);
-   try {
-     const response = await enrollUser(feed?.userId);
-     setLoading(false);
-     dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
-     setFeeder([...feeder, currentUser?.user._id]);
-   } catch (err) {
-     setLoading(false);
-     console.log(err);
-     setEnrollmentStatus(false);
-   }
- };
+  const handleEnroll = async (id) => {
+    setLoading(true);
+    setEnrollmentStatus(true);
+    try {
+      const response = await enrollUser(feed?.userId);
+      setLoading(false);
+      dispatch(updateEnrollments([...currentUser.user.enrollments, id]));
+      setFeeder([...feeder, currentUser?.user._id]);
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      setEnrollmentStatus(false);
+    }
+  };
 
- const handleDropout = async (id) => {
-   setLoading(true);
-   setEnrollmentStatus(false);
-   try {
-     const response = await dropoutUser(feed?.userId);
-     setLoading(false);
-     dispatch(updateEnrollments(response.data.updatedUser.enrollments));
-     setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
-   } catch (err) {
-     setLoading(false);
-     console.log(err);
-     setEnrollmentStatus(true);
-   }
- };
+  const handleDropout = async (id) => {
+    setLoading(true);
+    setEnrollmentStatus(false);
+    try {
+      const response = await dropoutUser(feed?.userId);
+      setLoading(false);
+      dispatch(updateEnrollments(response.data.updatedUser.enrollments));
+      setFeeder(feeder.filter((user) => user !== currentUser?.user._id));
+    } catch (err) {
+      setLoading(false);
+      console.log(err);
+      setEnrollmentStatus(true);
+    }
+  };
 
- const handleAnswerSubmit = async (feed) => {
-   try {
-     const response = await submitAnswer(selectedOption, feed._id);
-     if (response.message === "Updated successfully!") {
-       openModal();
-       dispatch(updateHats(response.updatedUser.hats));
-       setAlert({ show: true, message: "Your answer is correct!" });
-     } else {
-       openModal();
-       console.log("Answer provided is incorrect");
-       setAlert({
-         show: true,
-         message: "Your answer is incorrect. Please try again.",
-       });
-     }
-   } catch (err) {
-     console.log(err);
-   }
- };
+  const handleAnswerSubmit = async (feed) => {
+    try {
+      const response = await submitAnswer(selectedOption, feed._id);
+      if (response.message === "Updated successfully!") {
+        openModal();
+        dispatch(updateHats(response.updatedUser.hats));
+        setAlert({ show: true, message: "Your answer is correct!" });
+      } else {
+        openModal();
+        console.log("Answer provided is incorrect");
+        setAlert({
+          show: true,
+          message: "Your answer is incorrect. Please try again.",
+        });
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   if (loading)
     return (
@@ -228,7 +230,7 @@ const FeedPage = () => {
                 />
               )}
               <div className="shareFeedDiv flex gap-3 items-center">
-                <ShareButton feed={feed} />
+                <FeedShareButton feed={feed} />
               </div>
             </div>
           </div>
