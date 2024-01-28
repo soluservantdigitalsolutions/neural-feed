@@ -1,10 +1,10 @@
 import React, { useState, useEffect, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { Transition, Dialog } from "@headlessui/react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import { BarLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 const TestPage = () => {
   const { feedId } = useParams();
@@ -16,15 +16,18 @@ const TestPage = () => {
   });
   const [selectedOptions, setSelectedOptions] = useState({});
   const [loading, setLoading] = useState(false);
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
+  const { currentUser } = useSelector((state) => state.user); // Adjust according to your state management
+
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFeed = async () => {
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/${feedId}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/feeds/${feedId}`
         );
-        setFeed(response.data.singleFeed);
+        setFeed(response.data);
       } catch (err) {
         console.error(err);
       }
@@ -35,6 +38,12 @@ const TestPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    // Check if there is a current user
+    if (!currentUser) {
+      // If no current user, show the sign-up prompt
+      setShowSignUpPrompt(true);
+      return; // Prevent further execution
+    }
     setLoading(true);
 
     try {
@@ -146,91 +155,43 @@ const TestPage = () => {
           </button>
         )}
       </form>
-      <Transition appear show={open} as={Fragment}>
+      <Transition appear show={showSignUpPrompt} as={Fragment}>
         <Dialog
-          style={{
-            backgroundColor: "rgba(255, 255, 255, 0.1)",
-            backdropFilter: "blur(10px)",
-          }}
           as="div"
           className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={() => setOpen(false)}
+          onClose={() => setShowSignUpPrompt(false)}
         >
           <div className="min-h-screen px-4 text-center">
             <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-
             <span
               className="inline-block h-screen align-middle"
               aria-hidden="true"
             >
               &#8203;
             </span>
-
             <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
               <Dialog.Title
                 as="h3"
                 className="text-lg font-medium leading-6 text-gray-900"
               >
-                Test Result
+                Sign Up
               </Dialog.Title>
-
-              {result.correctAnswers === result.totalQuestions ? (
-                <>
-                  <p className=" text-gray-500">
-                    <b className="text-green-600 text-xl">You're on fire!</b>{" "}
-                    You'd be unstoppable if you keep going like this. You got{" "}
-                    <b className="text-green-600 text-xl">
-                      {" "}
-                      {result.correctAnswers}
-                    </b>{" "}
-                    out of{" "}
-                    <b className="text-green-600 text-xl">
-                      {" "}
-                      {result.totalQuestions}
-                    </b>{" "}
-                    questions right. Hence, you get{" "}
-                    <b className="text-green-600 text-lg">
-                      {" "}
-                      {result.correctAnswers}
-                    </b>{" "}
-                    hats. Let's do some more shall we?
-                  </p>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  Sign up to earn Graduation hats for your answered questions to
+                  be motivated to consume and retain more knowledge.
+                </p>
+              </div>
+              <div className="mt-4">
+                <Link to="/register">
                   <button
                     type="button"
-                    className="px-4 py-2 mt-2.5  font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={handleGoHome}
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
                   >
-                    Continue
+                    Register
                   </button>
-                </>
-              ) : (
-                <>
-                  <p className=" text-gray-500">
-                    You got{" "}
-                    <b className="text-red-600 text-lg">
-                      {" "}
-                      {result.correctAnswers}
-                    </b>{" "}
-                    out of{" "}
-                    <b className="text-green-600 text-lg">
-                      {" "}
-                      {result.totalQuestions}
-                    </b>{" "}
-                    questions right.{" "}
-                    <b className="text-green-600 text-lg">
-                      With Persistence, You can do it!.
-                    </b>{" "}
-                    Go back to feed your neurons and try again
-                  </p>
-                  <button
-                    type="button"
-                    className="px-4 py-2 mt-2.5 font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={handleReFeed}
-                  >
-                    Re-Feed
-                  </button>
-                </>
-              )}
+                </Link>
+              </div>
             </div>
           </div>
         </Dialog>
