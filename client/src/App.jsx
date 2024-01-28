@@ -35,49 +35,15 @@ function App() {
       <Routes>
         <Route exact path="/register" element={<SignUp />} />
         <Route exact path="/login" element={<Login />} />
-        <Route
-          exact
-          path="/"
-          element={currentUser ? <Home /> : <Navigate to="/login" />}
-        />
+        <Route  path="/" element={<Home />} />
         <Route exact path="/feeds/:id" element={<FeedPage />} />
         <Route exact path="/profile/:username" element={<UserProfile />} />
-
-        <Route
-          exact
-          path="/upload/feed"
-          element={currentUser ? <FeedUpload /> : <Navigate to="/login" />}
-        />
-        <Route
-          exact
-          path="/upload/note"
-          element={currentUser ? <NoteUpload /> : <Navigate to="/login" />}
-        />
-        <Route
-          exact
-          path="/chat"
-          element={currentUser ? <ChatPage /> : <Navigate to="/login" />}
-        />
-        <Route
-          exact
-          path="/notes"
-          element={currentUser ? <NotesPage /> : <Navigate to="/login" />}
-        />
-
-        {/* <Route
-          exact
-          path="/search"
-          element={currentUser ? <SearchPage /> : <Navigate to="/login" />}
-        /> */}
-
-        <Route
-          exact
-          path="/notes/:id"
-          element={currentUser ? <NoteContent /> : <Navigate to="/login" />}
-        />
-
+        <Route exact path="/upload/feed" element={<FeedUpload />} />
+        <Route exact path="/upload/note" element={<NoteUpload />} />
+        <Route exact path="/chat" element={<ChatPage />} />
+        <Route exact index path="/notes" element={<NotesPage />} />
+        <Route exact path="/notes/:id" element={<NoteContent />} />
         <Route exact path="/feeds/tests/:feedId" element={<TestPage />} />
-
         <Route exact path="/notes/tests/:noteId" element={<NoteTestPage />} />
       </Routes>
       {!location.pathname.startsWith("/login") &&
