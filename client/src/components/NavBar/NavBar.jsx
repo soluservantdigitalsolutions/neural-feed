@@ -43,7 +43,7 @@ const NavBar = () => {
   };
 
   return (
-    <div className="border flex  justify-between items-center p-3">
+    <div className="border flex justify-between items-center p-3">
       <div className="LogoDiv   ">
         <Logo />
       </div>
