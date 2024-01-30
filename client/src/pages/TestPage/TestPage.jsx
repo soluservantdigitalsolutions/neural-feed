@@ -115,7 +115,7 @@ const TestPage = () => {
           <h1 className="text-2xl font-bold">{feed.caption}</h1>
         </div>
 
-        {feed.tests.map((test, index) => (
+        {feed?.tests.map((test, index) => (
           <div
             key={index}
             className={`p-5 m-0 text-green-900 ${
