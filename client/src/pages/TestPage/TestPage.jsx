@@ -25,7 +25,7 @@ const TestPage = () => {
     const fetchFeed = async () => {
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/feeds/${feedId}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/${feedId}`
         );
         setFeed(response.data);
       } catch (err) {
