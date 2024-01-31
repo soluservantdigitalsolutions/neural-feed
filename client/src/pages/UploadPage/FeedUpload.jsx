@@ -74,7 +74,7 @@ const FeedUpload = () => {
 
     try {
       await axios.post(
-        "https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds",
+        "http://localhost:3000/api/upload/feeds",
         data,
         {
           headers: {

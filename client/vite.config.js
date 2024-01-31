@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://neural-feed-backend-2yg8.onrender.com",
+        target: "http://localhost:3000",
         changeOrigin: true,
       },
     },

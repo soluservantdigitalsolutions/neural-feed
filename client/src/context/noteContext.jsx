@@ -11,7 +11,7 @@ export const NoteProvider = ({ children }) => {
     const fetchNotes = async () => {
       try {
         const response = await axios.get(
-          "https://neural-feed-backend-2yg8.onrender.com/api/notes"
+          "http://localhost:3000/api/notes"
         );
         setNotes(response.data);
         setLoading(false);

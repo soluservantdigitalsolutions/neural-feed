@@ -16,12 +16,13 @@ const NoteContent = () => {
   const [feeder, setFeeder] = useState(null);
   const [enrollmentStatus, setEnrollmentStatus] = useState(false);
   const [loading, setLoading] = useState(false);
+  const isCurrentUser = note?.authorId === currentUser?.user._id;
 
   useEffect(() => {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/notes/${id}`
+          `http://localhost:3000/api/notes/${id}`
         );
         setNote(response.data);
         console.log(response);
@@ -37,7 +38,7 @@ const NoteContent = () => {
     const getFeederAdmissions = async () => {
       try {
         const res = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/users/${note?.authorId}`
+          `http://localhost:3000/api/users/${note?.authorId}`
         );
         setFeeder(res.data.user.admissions);
         setEnrollmentStatus(
@@ -57,7 +58,7 @@ const NoteContent = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com/api/users/enroll/${note?.authorId}`,
+        `http://localhost:3000/api/users/enroll/${note?.authorId}`,
         {},
         {
           withCredentials: true,
@@ -78,7 +79,7 @@ const NoteContent = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `https://neural-feed-backend-2yg8.onrender.com/api/users/dropout/${note?.authorId}`,
+        `http://localhost:3000/api/users/dropout/${note?.authorId}`,
         {},
         {
           withCredentials: true,
@@ -145,7 +146,10 @@ const NoteContent = () => {
           <div className="enrollAndShareDiv flex">
             {enrollmentStatus ? (
               <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
-                <button
+                {isCurrentUser ?(
+                  <button>Edit</button>
+                ) : (
+                  <button
                   onClick={handleDropout}
                   className={`text-white text-lg p-1 ${
                     loading ? "bg-green-500" : "hover:bg-green-600"
@@ -154,6 +158,9 @@ const NoteContent = () => {
                 >
                   {loading ? "Dropping out..." : "Enrolled"}
                 </button>
+                )
+              }
+                
               </div>
             ) : (
               <SecondaryButton

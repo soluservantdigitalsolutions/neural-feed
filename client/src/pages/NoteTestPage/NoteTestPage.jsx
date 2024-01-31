@@ -28,7 +28,7 @@ const NoteTestPage = () => {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/notes/${noteId}`
+          `http://localhost:3000/api/notes/${noteId}`
         );
         setNote(response.data);
         console.log(response);
@@ -52,7 +52,7 @@ const NoteTestPage = () => {
 
     try {
       const response = await axios.post(
-        `https://neural-feed-backend-2yg8.onrender.com/api/notes/updateComprehensionAndHats`, // Corrected endpoint
+        `http://localhost:3000/api/notes/updateComprehensionAndHats`, // Corrected endpoint
         {
           selectedOptions,
           noteId: noteId, // Ensure this is the correct property for the note ID

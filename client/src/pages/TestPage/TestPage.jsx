@@ -25,7 +25,7 @@ const TestPage = () => {
     const fetchFeed = async () => {
       try {
         const response = await axios.get(
-          `https://neural-feed-backend-2yg8.onrender.com/api/feeds/${feedId}`
+          `http://localhost:3000/api/feeds/${feedId}`
         );
         setFeed(response.data);
       } catch (err) {
@@ -48,7 +48,7 @@ const TestPage = () => {
 
     try {
       const response = await axios.post(
-        "https://neural-feed-backend-2yg8.onrender.com/api/upload/updateComprehensionAndHats",
+        "http://localhost:3000/api/upload/updateComprehensionAndHats",
         {
           selectedOptions,
           feedId: feed._id,

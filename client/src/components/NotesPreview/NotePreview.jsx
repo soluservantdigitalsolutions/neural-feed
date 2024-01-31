@@ -14,7 +14,7 @@ const NotePreview = ({ note }) => {
   const handleAttendance = async () => {
     try {
       const response = await axios.post(
-        `https://neural-feed-backend-2yg8.onrender.com/api/notes/${note._id}/attendances`,
+        `http://localhost:3000/api/notes/${note._id}/attendances`,
         {},
         {
           withCredentials: true,
