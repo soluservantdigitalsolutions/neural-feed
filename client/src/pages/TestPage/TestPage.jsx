@@ -27,14 +27,17 @@ const TestPage = () => {
         const response = await axios.get(
           `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/${feedId}`
         );
-        setFeed(response.data);
+
+        setFeed(response?.data.singleFeed);
+        console.log("feed", feed);
+        console.log(response);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchFeed();
-  }, [feedId]);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
