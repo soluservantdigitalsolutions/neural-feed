@@ -21,6 +21,8 @@ import {
   updateAttendance,
 } from "../../api/api";
 import FeedShareButton from "../../components/Share/FeedShareButton";
+import { Transition, Dialog } from "@headlessui/react";
+
 
 const FeedPage = () => {
   const [isOpen, setIsOpen] = useState(false);
