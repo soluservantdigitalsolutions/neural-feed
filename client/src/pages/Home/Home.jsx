@@ -26,6 +26,7 @@ import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
 import Skeleton from "react-loading-skeleton";
 import SkeletonLoader from "../../components/SkeletonLoader/SkeletonLoader";
+import { Transition, Dialog } from "@headlessui/react";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
