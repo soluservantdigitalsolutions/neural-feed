@@ -97,7 +97,7 @@ const FeedPage = () => {
     const fetchFeedOwner = async () => {
       setLoading(true);
       try {
-        const feedOwner = await getFeedOwner(feed?.userId);
+        const feedOwner = await getFeedOwner(feed.userId);
         setFeeder(feedOwner);
       } catch (err) {
         console.log(err);
