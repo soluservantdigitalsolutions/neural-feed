@@ -25,16 +25,19 @@ const TestPage = () => {
     const fetchFeed = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/feeds/${feedId}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/feeds/${feedId}`
         );
-        setFeed(response.data);
+
+        setFeed(response?.data.singleFeed);
+        console.log("feed", feed);
+        console.log(response);
       } catch (err) {
         console.error(err);
       }
     };
 
     fetchFeed();
-  }, [feedId]);
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -115,7 +118,7 @@ const TestPage = () => {
           <h1 className="text-2xl font-bold">{feed.caption}</h1>
         </div>
 
-        {feed.tests.map((test, index) => (
+        {feed?.tests.map((test, index) => (
           <div
             key={index}
             className={`p-5 m-0 text-green-900 ${

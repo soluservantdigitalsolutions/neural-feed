@@ -83,8 +83,11 @@ const NoteUpload = () => {
 
   if (loading)
     return (
-      <div className="flex justify-center items-center h-screen">
-        <BarLoader width={100} height={25} color="#38a169" />
+      <div className="flex justify-center items-center h-[100vh]">
+        <div className="p-5 border rounded-md flex justify-center items-center flex-col shadow">
+          <BarLoader width={100} height={25} color="#38a169" />
+          <h1>Note upload is in progress, Please wait ...</h1>
+        </div>
       </div>
     );
 

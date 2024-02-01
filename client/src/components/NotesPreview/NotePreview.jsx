@@ -1,17 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, Fragment } from "react";
 import { Link } from "react-router-dom";
 import NoteStats from "../NoteStats/NoteStats";
 import { useDispatch, useSelector } from "react-redux";
 import { addAttendance } from "../../redux/feedSlice";
 import axios from "axios";
 import { NoteContext } from "../../context/noteContext";
+import { Dialog, Transition } from "@headlessui/react";
 
 const NotePreview = ({ note }) => {
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const { notes } = useContext(NoteContext);
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
 
   const handleAttendance = async () => {
+    if (!currentUser) {
+      setShowSignUpPrompt(true);
+      return;
+    }
     try {
       const response = await axios.post(
         `http://localhost:3000/api/notes/${note._id}/attendances`,
@@ -20,7 +26,6 @@ const NotePreview = ({ note }) => {
           withCredentials: true,
         }
       );
-      // Dispatch the addAttendance action with the noteId and userId
       dispatch(
         addAttendance({ noteId: note._id, userId: currentUser.user._id })
       );
@@ -70,6 +75,47 @@ const NotePreview = ({ note }) => {
           </button>
         </Link>
       </div>
+      <Transition appear show={showSignUpPrompt} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={() => setShowSignUpPrompt(false)}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium leading-6 text-gray-900"
+              >
+                Sign Up
+              </Dialog.Title>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  Please Register in order for you to support and Consume the
+                  feed
+                </p>
+              </div>
+              <div className="mt-4">
+                <Link to="/register">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                  >
+                    Register
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 };

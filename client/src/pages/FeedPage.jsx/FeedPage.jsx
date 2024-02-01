@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, Fragment } from "react";
 import { useState } from "react";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
 import { Link, useParams } from "react-router-dom";
@@ -21,6 +21,8 @@ import {
   updateAttendance,
 } from "../../api/api";
 import FeedShareButton from "../../components/Share/FeedShareButton";
+import { Transition, Dialog } from "@headlessui/react";
+
 
 const FeedPage = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +37,8 @@ const FeedPage = () => {
   const [attendance, setAttendance] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
   const [feedOwner, setFeedOwner] = useState(null);
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
+
   const dispatch = useDispatch();
   const toggleExpanded = () => {
     setIsExpanded((prevIsExpanded) => !prevIsExpanded);
@@ -97,7 +101,7 @@ const FeedPage = () => {
     const fetchFeedOwner = async () => {
       setLoading(true);
       try {
-        const feedOwner = await getFeedOwner(feed?.userId);
+        const feedOwner = await getFeedOwner(feed.userId);
         setFeeder(feedOwner);
       } catch (err) {
         console.log(err);
@@ -108,15 +112,19 @@ const FeedPage = () => {
     fetchFeedOwner();
   }, [feed]);
 
-  const handleAttendance = async () => {
-    try {
-      const response = await updateAttendance(id);
-      setAttendance(response);
-      dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
-    } catch (error) {
-      console.error("Error updating attendances:", error);
-    }
-  };
+const handleAttendance = async () => {
+  if (!currentUser) {
+    setShowSignUpPrompt(true);
+    return;
+  }
+  try {
+    const response = await updateAttendance(id);
+    setAttendance(response);
+    dispatch(addAttendance({ feedId: id, userId: currentUser.user._id }));
+  } catch (error) {
+    console.error("Error updating attendances:", error);
+  }
+};
 
   const handleEnroll = async (id) => {
     setLoading(true);
@@ -294,6 +302,47 @@ const FeedPage = () => {
           ))}
         </div>
       </div>
+      <Transition appear show={showSignUpPrompt} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={() => setShowSignUpPrompt(false)}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium leading-6 text-gray-900"
+              >
+                Sign Up
+              </Dialog.Title>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  Please Register in order for you to support and Consume the
+                  feed
+                </p>
+              </div>
+              <div className="mt-4">
+                <Link to="/register">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                  >
+                    Register
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 };

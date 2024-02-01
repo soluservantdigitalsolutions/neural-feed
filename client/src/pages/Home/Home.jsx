@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useEffect, useState, Fragment } from "react";
 import UserProfileImage from "../../assets/user (1).png";
 import SecondaryButton from "../../components/SecondaryButton/SecondaryButton";
 import TestVideo from "../../assets/Are You Using This EQ Trick- Left and Right Channel EQ.mp4";
@@ -26,6 +26,7 @@ import { BarLoader } from "react-spinners";
 import TestButton from "../../components/TestButton/TestButton";
 import Skeleton from "react-loading-skeleton";
 import SkeletonLoader from "../../components/SkeletonLoader/SkeletonLoader";
+import { Transition, Dialog } from "@headlessui/react";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -43,6 +44,8 @@ const Home = ({ type }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [alert, setAlert] = useState({ show: false, message: "" });
   const updatedFeeds = useSelector((state) => state.feed.feeds);
+  const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
+
   const dispatch = useDispatch();
 
   const openModal = () => {
@@ -146,17 +149,22 @@ const Home = ({ type }) => {
 
   const videoRefs = useRef({});
 
-  const onVideoPress = (id) => {
-    if (videoIsPlaying[id]) {
-      videoRefs.current[id]?.pause();
-    } else {
-      videoRefs.current[id]?.play();
-    }
-    setVideoIsPlaying((prevState) => ({
-      ...prevState,
-      [id]: !prevState[id],
-    }));
-  };
+const onVideoPress = (id) => {
+  if (!currentUser) {
+    setShowSignUpPrompt(true);
+    return;
+  }
+
+  if (videoIsPlaying[id]) {
+    videoRefs.current[id]?.pause();
+  } else {
+    videoRefs.current[id]?.play();
+  }
+  setVideoIsPlaying((prevState) => ({
+    ...prevState,
+    [id]: !prevState[id],
+  }));
+};
 
   const onMuteButtonPress = (id) => {
     if (isVideoMuted[id]) {
@@ -350,6 +358,47 @@ const Home = ({ type }) => {
               <hr className="text-black border w-48 border-black m-5" />
             </div>
           ))}
+      <Transition appear show={showSignUpPrompt} as={Fragment}>
+        <Dialog
+          as="div"
+          className="fixed inset-0 z-10 overflow-y-auto"
+          onClose={() => setShowSignUpPrompt(false)}
+        >
+          <div className="min-h-screen px-4 text-center">
+            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+            <span
+              className="inline-block h-screen align-middle"
+              aria-hidden="true"
+            >
+              &#8203;
+            </span>
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium leading-6 text-gray-900"
+              >
+                Sign Up
+              </Dialog.Title>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  Please Register in order for you to support and Consume the
+                  feed
+                </p>
+              </div>
+              <div className="mt-4">
+                <Link to="/register">
+                  <button
+                    type="button"
+                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+                  >
+                    Register
+                  </button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </div>
   );
 };
