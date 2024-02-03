@@ -13,10 +13,10 @@ const SearchPage = () => {
     setLoading(true);
     try {
       const feedsResponse = await axios.get(
-        `http://localhost:3000/api/upload/feeds/search?q=${searchQuery}`
+        `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/search?q=${searchQuery}`
       );
       const notesResponse = await axios.get(
-        `http://localhost:3000/api/notes/search?q=${searchQuery}`
+        `https://neural-feed-backend-2yg8.onrender.com/api/notes/search?q=${searchQuery}`
       );
       setSearchResults({
         feeds: feedsResponse.data,

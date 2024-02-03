@@ -64,7 +64,7 @@ const NoteUpload = () => {
 
     try {
       await axios.post(
-        "http://localhost:3000/api/notes/create-note",
+        "https://neural-feed-backend-2yg8.onrender.com/api/notes/create-note",
         formData,
         {
           headers: {

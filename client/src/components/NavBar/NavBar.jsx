@@ -26,7 +26,7 @@ const NavBar = () => {
   const handleLogout = async (req, res) => {
     try {
       await axios.post(
-        "http://localhost:3000/api/auth/logout"
+        "https://neural-feed-backend-2yg8.onrender.com/api/auth/logout"
       );
       // localStorage.setItem("currentUser", null);
       dispatch(logout());

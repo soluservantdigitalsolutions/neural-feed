@@ -62,7 +62,7 @@ const Home = ({ type }) => {
       try {
         await axios
           .get(
-            `http://localhost:3000/api/upload/random`
+            `https://neural-feed-backend-2yg8.onrender.com/api/upload/random`
           )
           .then((response) => {
             setVideo(response.data.randomFeeds);
@@ -84,7 +84,7 @@ const Home = ({ type }) => {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/enroll/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/enroll/${id}`,
         {},
         {
           withCredentials: true,
@@ -121,7 +121,7 @@ const Home = ({ type }) => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/dropOut/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/dropOut/${id}`,
         {},
         {
           withCredentials: true,
@@ -149,22 +149,22 @@ const Home = ({ type }) => {
 
   const videoRefs = useRef({});
 
-const onVideoPress = (id) => {
-  if (!currentUser) {
-    setShowSignUpPrompt(true);
-    return;
-  }
+  const onVideoPress = (id) => {
+    if (!currentUser) {
+      setShowSignUpPrompt(true);
+      return;
+    }
 
-  if (videoIsPlaying[id]) {
-    videoRefs.current[id]?.pause();
-  } else {
-    videoRefs.current[id]?.play();
-  }
-  setVideoIsPlaying((prevState) => ({
-    ...prevState,
-    [id]: !prevState[id],
-  }));
-};
+    if (videoIsPlaying[id]) {
+      videoRefs.current[id]?.pause();
+    } else {
+      videoRefs.current[id]?.play();
+    }
+    setVideoIsPlaying((prevState) => ({
+      ...prevState,
+      [id]: !prevState[id],
+    }));
+  };
 
   const onMuteButtonPress = (id) => {
     if (isVideoMuted[id]) {
@@ -186,7 +186,7 @@ const onVideoPress = (id) => {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/upload/updateComprehensionAndHats",
+        "https://neural-feed-backend-2yg8.onrender.com/api/upload/updateComprehensionAndHats",
         {
           selectedOption: selectedOption,
           feedId: feed._id,
@@ -229,7 +229,7 @@ const onVideoPress = (id) => {
     // Make a request to the server to update the attendances
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/upload/feeds/attendances/${id}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds/attendances/${id}`,
         {},
         {
           withCredentials: true,

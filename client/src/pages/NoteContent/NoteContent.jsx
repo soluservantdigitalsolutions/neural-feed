@@ -22,7 +22,7 @@ const NoteContent = () => {
     const fetchNote = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3000/api/notes/${id}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/notes/${id}`
         );
         setNote(response.data);
         console.log(response);
@@ -38,7 +38,7 @@ const NoteContent = () => {
     const getFeederAdmissions = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/users/${note?.authorId}`
+          `https://neural-feed-backend-2yg8.onrender.com/api/users/${note?.authorId}`
         );
         setFeeder(res.data.user.admissions);
         setEnrollmentStatus(
@@ -58,7 +58,7 @@ const NoteContent = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/enroll/${note?.authorId}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/enroll/${note?.authorId}`,
         {},
         {
           withCredentials: true,
@@ -79,7 +79,7 @@ const NoteContent = () => {
     setLoading(true);
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/users/dropout/${note?.authorId}`,
+        `https://neural-feed-backend-2yg8.onrender.com/api/users/dropout/${note?.authorId}`,
         {},
         {
           withCredentials: true,
