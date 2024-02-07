@@ -146,21 +146,19 @@ const NoteContent = () => {
           <div className="enrollAndShareDiv flex">
             {enrollmentStatus ? (
               <div className="LoginButtonDiv border rounded bg-green-600 flex justify-center items-center font-bold">
-                {isCurrentUser ?(
+                {isCurrentUser ? (
                   <button>Edit</button>
                 ) : (
                   <button
-                  onClick={handleDropout}
-                  className={`text-white text-lg p-1 ${
-                    loading ? "bg-green-500" : "hover:bg-green-600"
-                  } transition hover:text-white active:bg-green-700 cursor-pointer`}
-                  disabled={loading}
-                >
-                  {loading ? "Dropping out..." : "Enrolled"}
-                </button>
-                )
-              }
-                
+                    onClick={handleDropout}
+                    className={`text-white text-lg p-1 ${
+                      loading ? "bg-green-500" : "hover:bg-green-600"
+                    } transition hover:text-white active:bg-green-700 cursor-pointer`}
+                    disabled={loading}
+                  >
+                    {loading ? "Dropping out..." : "Enrolled"}
+                  </button>
+                )}
               </div>
             ) : (
               <SecondaryButton

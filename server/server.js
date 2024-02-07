@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(helmet());
 app.use(
   cors({
-    origin: "https://neuralfeed.onrender.com",
+    origin: "https//neural-feed.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })

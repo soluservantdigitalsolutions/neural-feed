@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const cloudinary = require("../config/cloudinary.js");
 dotenv.config();
 
-Register = async (req, res, next) => {
+const Register = async (req, res, next) => {
   try {
     const passwordHash = bcrypt.hashSync(req.body.password, 10);
     const newUser = new User({
