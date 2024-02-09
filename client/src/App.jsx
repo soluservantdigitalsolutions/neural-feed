@@ -19,6 +19,7 @@ import BottomNavbar from "./components/BottomNavbar/BottomNavbar";
 import NoteContent from "./pages/NoteContent/NoteContent";
 import NoteTestPage from "./pages/NoteTestPage/NoteTestPage";
 import SearchPage from "./pages/Search/SearchPage";
+import ProtectedRoute from "./utils/ProtectedRoutes";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -35,16 +36,54 @@ function App() {
       <Routes>
         <Route exact path="/register" element={<SignUp />} />
         <Route exact path="/login" element={<Login />} />
-        <Route  path="/" element={<Home />} />
-        <Route exact path="/feeds/:id" element={<FeedPage />} />
-        <Route exact path="/profile/:username" element={<UserProfile />} />
-        <Route exact path="/upload/feed" element={<FeedUpload />} />
-        <Route exact path="/upload/note" element={<NoteUpload />} />
-        <Route exact path="/chat" element={<ChatPage />} />
-        <Route exact index path="/notes" element={<NotesPage />} />
-        <Route exact path="/notes/:id" element={<NoteContent />} />
-        <Route exact path="/feeds/tests/:feedId" element={<TestPage />} />
-        <Route exact path="/notes/tests/:noteId" element={<NoteTestPage />} />
+        <Route exact path="/register" element={<SignUp />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route path="/" element={<ProtectedRoute element={<Home />} />} />
+        <Route
+          exact
+          path="/feeds/:id"
+          element={<ProtectedRoute element={<FeedPage />} />}
+        />
+        <Route
+          exact
+          path="/profile/:username"
+          element={<ProtectedRoute element={<UserProfile />} />}
+        />
+        <Route
+          exact
+          path="/upload/feed"
+          element={<ProtectedRoute element={<FeedUpload />} />}
+        />
+        <Route
+          exact
+          path="/upload/note"
+          element={<ProtectedRoute element={<NoteUpload />} />}
+        />
+        <Route
+          exact
+          path="/chat"
+          element={<ProtectedRoute element={<ChatPage />} />}
+        />
+        <Route
+          exact
+          path="/notes"
+          element={<ProtectedRoute element={<NotesPage />} />}
+        />
+        <Route
+          exact
+          path="/notes/:id"
+          element={<ProtectedRoute element={<NoteContent />} />}
+        />
+        <Route
+          exact
+          path="/feeds/tests/:feedId"
+          element={<ProtectedRoute element={<TestPage />} />}
+        />
+        <Route
+          exact
+          path="/notes/tests/:noteId"
+          element={<ProtectedRoute element={<NoteTestPage />} />}
+        />
       </Routes>
       {!location.pathname.startsWith("/login") &&
         !location.pathname.startsWith("/register") &&
