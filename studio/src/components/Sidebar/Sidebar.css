@@ -1,0 +1,40 @@
+.sidebar {
+  min-height: 100vh;
+  width: 300px;
+  background-color: #2f4050;
+}
+
+.sidebarlist a {
+  text-decoration: none;
+  color: white;
+  font-size: 28px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  transition: all 0.5s ease-in-out;
+}
+.sidebarlist {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  padding: 50px;
+  gap: 20px;
+}
+li {
+  list-style: none;
+}
+.profile {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 16px 0px 0px 0px;
+  color: white;
+  gap: 10px;
+}
+
+.sidebarlist a:hover {
+  background-color: #8a9cad;
+  padding: 10px;
+  border-radius: 10px;
+}
