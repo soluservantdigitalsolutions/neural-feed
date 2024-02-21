@@ -125,7 +125,7 @@ const UserProfile = () => {
           </Link>
         </div>
         <div className="BioDIV ">
-          {currentUser && currentUser.username === username && (
+          {user && user.username === username && (
             <Link to={"/profile/edit"}>
               <SecondaryButton SecondaryButtonText="Edit Profile" />
             </Link>
