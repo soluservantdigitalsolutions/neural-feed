@@ -11,6 +11,9 @@ const feedSchema = new Schema(
     profileImage: {
       type: String,
     },
+    thumbnail: {
+      type: String,
+    },
     enrollments: {
       type: [String],
       default: [],

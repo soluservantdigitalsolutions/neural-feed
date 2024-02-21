@@ -20,6 +20,8 @@ import NoteContent from "./pages/NoteContent/NoteContent";
 import NoteTestPage from "./pages/NoteTestPage/NoteTestPage";
 import SearchPage from "./pages/Search/SearchPage";
 import ProtectedRoute from "./utils/ProtectedRoutes";
+import Announcements from "./components/Announcements/Announcements";
+import EditProfile from "./pages/EditProfile/EditProfile";
 
 function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -27,6 +29,7 @@ function App() {
 
   return (
     <>
+      <Announcements />
       {location.pathname !== "/login" && location.pathname !== "/register" && (
         <>
           <NavBar />
@@ -84,6 +87,11 @@ function App() {
           path="/notes/tests/:noteId"
           element={<ProtectedRoute element={<NoteTestPage />} />}
         />
+        <Route
+          exact
+          path="/profile/edit"
+          element={<ProtectedRoute element={<EditProfile />} />}
+        />
       </Routes>
       {!location.pathname.startsWith("/login") &&
         !location.pathname.startsWith("/register") &&
@@ -91,7 +99,9 @@ function App() {
         !location.pathname.startsWith("/notes/") &&
         !location.pathname.startsWith("/feeds/tests/") &&
         !location.pathname.startsWith("/chat") &&
-        !location.pathname.startsWith("/notes/tests/") && <BottomNavbar />}
+        !location.pathname.startsWith("/notes/tests/") &&
+        !location.pathname.startsWith("/profile/edit") &&
+        !location.pathname.startsWith("/upload/feed") && <BottomNavbar />}
     </>
   );
 }

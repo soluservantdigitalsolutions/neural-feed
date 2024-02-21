@@ -3,12 +3,29 @@ import { CSSTransition } from "react-transition-group";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import testProfilePic from "../../assets/user (1).png";
 import { useSelector } from "react-redux/es";
-
+import { getUserProfile } from "../../api/api";
+import { useState } from "react";
 
 const ProfileDropdown = ({ isOpen, toggleOpen, children }) => {
   const node = useRef();
   const { currentUser } = useSelector((state) => state.user);
   const userData = currentUser.user;
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (currentUser) {
+        try {
+          const userInfo = await getUserProfile(userData._id);
+          setUserProfile(userInfo);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [currentUser]);
 
   const handleClickOutside = (e) => {
     if (node.current.contains(e.target)) {
@@ -36,7 +53,11 @@ const ProfileDropdown = ({ isOpen, toggleOpen, children }) => {
       <button onClick={toggleOpen} className="flex items-center gap-2">
         <div className="ProfilePicDiv ">
           <img
-            src={userData.profileImage ? userData.profileImage : testProfilePic}
+            src={
+              userProfile?.profileImage
+                ? userProfile.profileImage
+                : testProfilePic
+            }
             alt="testUser"
             className="rounded-full w-10 h-10 object-cover"
           />

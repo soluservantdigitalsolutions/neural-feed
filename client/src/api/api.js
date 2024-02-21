@@ -76,3 +76,17 @@ export const submitAnswer = async (selectedOption, feedId) => {
   );
   return response.data;
 };
+
+export const updateUserProfile = async (userId, formData) => {
+  const response = await API.put(`/users/${userId}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const getUserProfile = async (userId) => {
+  const response = await API.get(`/users/${userId}`);
+  return response.data.user;
+};

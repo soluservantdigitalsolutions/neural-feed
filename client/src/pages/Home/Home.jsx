@@ -27,6 +27,7 @@ import TestButton from "../../components/TestButton/TestButton";
 import Skeleton from "react-loading-skeleton";
 import SkeletonLoader from "../../components/SkeletonLoader/SkeletonLoader";
 import { Transition, Dialog } from "@headlessui/react";
+import { getUserProfile } from "../../api/api";
 
 const Home = ({ type }) => {
   const [isHover, setIsHover] = useState({});
@@ -45,7 +46,7 @@ const Home = ({ type }) => {
   const [alert, setAlert] = useState({ show: false, message: "" });
   const updatedFeeds = useSelector((state) => state.feed.feeds);
   const [showSignUpPrompt, setShowSignUpPrompt] = useState(false);
-
+  const [userProfileImages, setUserProfileImages] = useState({});
   const dispatch = useDispatch();
 
   const openModal = () => {
@@ -141,6 +142,27 @@ const Home = ({ type }) => {
       console.log("Dropout failed");
     }
   };
+
+  const fetchUserProfileImage = async (userId) => {
+    try {
+      const user = await getUserProfile(userId);
+      setUserProfileImages((prevState) => ({
+        ...prevState,
+        [userId]: {
+          profileImage: user.profileImage,
+          username: user.username,
+        },
+      }));
+    } catch (error) {
+      console.error("Error fetching user profile image:", error);
+    }
+  };
+
+  useEffect(() => {
+    video.forEach((feed) => {
+      fetchUserProfileImage(feed.userId);
+    });
+  }, [video]);
 
   //   const feedTitle =
   //  (
@@ -261,18 +283,19 @@ const Home = ({ type }) => {
               <div className="VideoMetaDataDiv flex gap-5 justify-start ">
                 <div className="ProfileImageDiv ">
                   <img
-                    src={
-                      feed.profileImage ? feed.profileImage : UserProfileImage
-                    }
+                    src={userProfileImages[feed.userId] || UserProfileImage}
                     alt=""
                     className="w-10 h-10 rounded-full object-cover transition cursor-pointer "
-                    // loading="true"
                   />
                 </div>
                 <div className="UserNameAndDetailsDiv ">
-                  <Link to={`/profile/${feed.username}`}>
+                  <Link
+                    to={`/profile/${userProfileImages[feed.userId]?.username}`}
+                  >
                     <div className="UsernameDiv cursor-pointer">
-                      <h1 className="font-bold">{feed.username}</h1>
+                      <h1 className="font-bold">
+                        {userProfileImages[feed.userId]?.username}
+                      </h1>
                     </div>
                   </Link>
                   <Link to={`/feeds/${feed._id}`}>
@@ -320,15 +343,27 @@ const Home = ({ type }) => {
               >
                 <div className=" md:flex items-end gap-2">
                   <div className=" flex justify-center flex-col">
-                    <video
-                      src={feed.video}
-                      className="w-80 rounded transition max-w-lg self-center "
-                      ref={(el) => (videoRefs.current[feed._id] = el)}
-                      // onClick={onVideoPress}
-                      // autoPlay
-                      controls
-                      onPlay={() => handleAttendance(feed._id)} // Add this line
-                    ></video>
+                    <Link to={`/feeds/${feed._id}`}>
+                      <video
+                        src={feed.video}
+                        poster={feed.thumbnail} // Set the thumbnail as the poster
+                        className="w-80 rounded transition max-w-lg self-center "
+                        ref={(el) => (videoRefs.current[feed._id] = el)}
+                        onPlay={() => {
+                          // When the video starts playing, remove the poster
+                          videoRefs.current[feed._id].poster = null;
+                          handleAttendance(feed._id); // Call the attendance function
+                        }}
+                        onPause={() => {
+                          // When the video is paused, set the poster back to the thumbnail
+                          videoRefs.current[feed._id].poster = feed.thumbnail;
+                        }}
+                        onEnded={() => {
+                          // When the video ends, set the poster back to the thumbnail
+                          videoRefs.current[feed._id].poster = feed.thumbnail;
+                        }}
+                      ></video>
+                    </Link>
                   </div>
                   <div className="flex flex-row gap-5 md:flex-col justify-start  border-b-2 md:border-none shadow-sm md:shadow-none items-center mb-10 ">
                     <div className="flex md:flex-col items-baseline md:items-center gap-1">

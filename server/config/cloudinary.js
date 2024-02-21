@@ -14,7 +14,6 @@ const storage = new CloudinaryStorage({
   params: {
     folder: "neural-feed",
     resource_type: "image",
-    public_id: (req, file) => "computed-filename-using-request",
   },
 });
 

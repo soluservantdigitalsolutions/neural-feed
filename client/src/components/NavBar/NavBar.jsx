@@ -11,18 +11,36 @@ import DropdownMenu from "../ProfileDropdown/ProfileDropdown";
 import { signOut } from "firebase/auth";
 import { AiOutlineLogout } from "react-icons/ai";
 import { useNavigate, Link } from "react-router-dom";
-
 import axios from "axios";
 import ProfileDropdown from "../ProfileDropdown/ProfileDropdown";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux/es";
 import { logout } from "../../redux/userSlice";
+import { useEffect } from "react";
+import { getUserProfile } from "../../api/api";
 
 const NavBar = () => {
   const navigate = useNavigate();
   const [user] = useAuthState(Auth);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state) => state.user);
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      if (currentUser) {
+        try {
+          const userData = await getUserProfile(currentUser._id);
+          setUserProfile(userData);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchUserProfile();
+  }, [currentUser]);
+
   const handleLogout = async (req, res) => {
     try {
       await axios.post(

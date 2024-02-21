@@ -12,11 +12,17 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 import { categories, richTextEditorModules } from "../../utils/modules";
-
+import { useDropzone } from "react-dropzone";
+import thumbnailDrop from "../../assets/drag-and-drop.png";
 const FeedUpload = () => {
   const [caption, setCaption] = useState("");
+  console.log(caption);
   const [desc, setDesc] = useState("");
+  console.log(desc);
   const [videoFile, setVideoFile] = useState("");
+  const [thumbnailFile, setThumbnailFile] = useState(null);
+  const [thumbnailPreviewUrl, setThumbnailPreviewUrl] = useState(null);
+  const [hasThumbnail, setHasThumbnail] = useState(false);
   const [success, setSuccess] = useState("");
   const [feedPreview, setFeedPreview] = useState(null);
   const { currentUser } = useSelector((state) => state.user);
@@ -57,21 +63,34 @@ const FeedUpload = () => {
 
   console.log(tests);
 
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*",
+    onDrop: (acceptedFiles) => {
+      setThumbnailFile(acceptedFiles[0]);
+      setThumbnailPreviewUrl(URL.createObjectURL(acceptedFiles[0]));
+      setHasThumbnail(true);
+    },
+  });
+
   // Upload.jsx
   const handleSubmit = async (e) => {
     setLoading(true);
 
     e.preventDefault();
     const url = await UploadVideo(videoFile);
+    const thumbnailUrl = await UploadVideo(thumbnailFile);
+
     const data = {
       caption,
       video: url,
+      thumbnail: thumbnailUrl,
       description: desc,
       category,
       tests,
       tags,
     };
 
+    console.log(data);
     try {
       await axios.post(
         "https://neural-feed-backend-2yg8.onrender.com/api/upload/feeds",
@@ -139,6 +158,33 @@ const FeedUpload = () => {
               </>
             )}
           </div>
+          <div className="captionDiv">
+            <h1 className="Caption font-semibold">Thumbnail</h1>
+            {!hasThumbnail ? (
+              <div
+                {...getRootProps()}
+                className="dropzone border h-52 flex items-center justify-center"
+              >
+                <input {...getInputProps()} />
+                <img src={thumbnailDrop} alt="" className="w-20" />
+              </div>
+            ) : (
+              <div className="flex flex-col ">
+                <img
+                  src={thumbnailPreviewUrl}
+                  alt="Thumbnail Preview"
+                  className=""
+                />
+                <button
+                  onClick={() => setHasThumbnail(false)}
+                  className="border p-2.5 bg-green-600 text-white rounded w-full"
+                >
+                  Change Thumbnail
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="VideoUploadDetailsDiv w-full flex flex-col gap-5">
             <div className="captionDiv">
               <h1 className="Caption font-semibold">Caption</h1>

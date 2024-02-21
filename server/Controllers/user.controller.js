@@ -2,17 +2,40 @@
 const UserModel = require("../Models/UserModel");
 const feedModel = require("../Models/feed.model");
 const createError = require("../error");
+const cloudinary = require("cloudinary");
+const bcrypt = require("bcrypt")
 
 const updateUser = async (req, res, next) => {
   if (req.params.id === req.user.id) {
     try {
+      let updateFields = req.body;
+
+      // Handle password update
+      if (req.body.newPassword && req.body.oldPassword) {
+        const user = await UserModel.findById(req.params.id);
+        const validPassword = await bcrypt.compare(
+          req.body.oldPassword,
+          user.password
+        );
+        if (!validPassword) {
+          return res.status(400).json({ message: "Invalid old password." });
+        }
+        const hashedPassword = await bcrypt.hash(req.body.newPassword, 10);
+        updateFields.password = hashedPassword;
+      }
+
+      // Handle image upload
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path);
+        updateFields.profileImage = result.secure_url;
+      }
+
       const updatedUser = await UserModel.findByIdAndUpdate(
         req.params.id,
-        {
-          $set: req.body,
-        },
+        { $set: updateFields },
         { new: true }
       );
+
       res.status(200).json({
         updatedUser: updatedUser,
       });
@@ -105,7 +128,7 @@ const enroll = async (req, res, next) => {
         new: true,
       }
     );
-    
+
     res.status(200).json({
       message: "User has been Enrolled Successfully",
       updatedUser,
@@ -115,8 +138,6 @@ const enroll = async (req, res, next) => {
     next(err);
   }
 };
-
-
 
 const dropOut = async (req, res, next) => {
   try {

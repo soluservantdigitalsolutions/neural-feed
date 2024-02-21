@@ -150,38 +150,19 @@ const addAttendances = async (req, res, next) => {
       return next(createError(404, "Note not found!"));
     }
 
-    // Check if user's ID already exists in the attendances array
-    if (!note.attendances.includes(req.user.id)) {
-      // If not, check if the user has already attended 5 times
-      if (
-        note.attendances.filter((attendance) => attendance === req.user.id)
-          .length >= 5
-      ) {
-        return res.status(400).json({
-          message: "You have already attended this note 5 times",
-        });
+    const attendedNote = await NoteModel.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { attendances: req.user.id },
+      },
+      {
+        new: true,
       }
-
-      // If not, push user's ID
-      const attendedNote = await NoteModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          $push: { attendances: req.user.id },
-        },
-        {
-          new: true,
-        }
-      );
-      res.status(200).json({
-        message: "You have an additional attendance",
-        attendedNote,
-      });
-    } else {
-      // If user's ID already exists, do nothing
-      res.status(200).json({
-        message: "You have already attended this note",
-      });
-    }
+    );
+    res.status(200).json({
+      message: "You have an additional attendance",
+      attendedNote,
+    });
   } catch (err) {
     next(err);
   }

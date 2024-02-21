@@ -2,27 +2,23 @@
 const UserModel = require("../Models/UserModel.js");
 const feedModel = require("../Models/feed.model.js");
 const createError = require("../error.js");
-const { parser } = require("../config/cloudinary.js");
 
 const postFeed = async (req, res, next) => {
   try {
     const newFeed = await feedModel.create({
       userId: req.userId,
       username: req.username,
-      video: req.body.video, // Here
+      video: req.body.video,
       description: req.body.description,
       profileImage: req.profileImage,
       admissions: req.admissions,
-      tests: req.body.tests, // Make sure this is an array
+      tests: req.body.tests,
       category: req.body.category,
+      thumbnail: req.body.thumbnail,
       ...req.body,
     });
 
-    // Update the user's admissions field
-    const user = await UserModel.findById(req.userId);
-    user.admissions.push(newFeed._id);
-
-    await user.save();
+    await newFeed.save();
 
     res.status(200).json({
       feed: newFeed,
@@ -32,7 +28,6 @@ const postFeed = async (req, res, next) => {
     next(err);
   }
 };
-
 const getFeeds = async (req, res) => {
   try {
     const feeds = await feedModel.find();
@@ -52,22 +47,33 @@ const updateFeed = async (req, res, next) => {
     const feed = await feedModel.findById(req.params.id);
     if (!feed) return next(createError(404, "Feed Not Found!"));
     if (req.user.id === feed.userId) {
-      const updatedVideo = await feedModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        },
-        { new: true }
-      );
+      const upload = parser.single("thumbnail");
+      upload(req, res, async (err) => {
+        if (err) {
+          return next(createError(500, err.message));
+        }
 
-      res.status(200).json({
-        updatedVideo: updatedVideo,
+        const updatedFeedData = {
+          ...req.body,
+          thumbnail: req.file ? req.file.path : feed.thumbnail,
+        };
+
+        const updatedFeed = await feedModel.findByIdAndUpdate(
+          req.params.id,
+          { $set: updatedFeedData },
+          { new: true }
+        );
+
+        res.status(200).json({
+          updatedFeed: updatedFeed,
+        });
       });
     } else {
       return next(createError(403, "You can update only your video!"));
     }
   } catch (err) {
     console.log(err.message);
+    next(err);
   }
 };
 
@@ -120,32 +126,13 @@ const addAttendances = async (req, res, next) => {
       return next(createError(404, "Feed not found!"));
     }
 
-    // Check if user's ID already exists in the attendances array
-    if (!feed.attendances.includes(req.user.id)) {
-      // If not, check if the user has already attended 5 times
-      if (
-        feed.attendances.filter((attendance) => attendance === req.user.id)
-          .length >= 5
-      ) {
-        return res.status(400).json({
-          message: "You have already attended this feed 5 times",
-        });
-      }
-
-      // If not, push user's ID
-      const attendedFeed = await feedModel.findByIdAndUpdate(req.params.id, {
-        $push: { attendances: req.user.id },
-      });
-      res.status(200).json({
-        message: "You have an additional attendance",
-        attendedFeed: attendedFeed,
-      });
-    } else {
-      // If user's ID already exists, do nothing
-      res.status(200).json({
-        message: "You have already attended this feed",
-      });
-    }
+    const attendedFeed = await feedModel.findByIdAndUpdate(req.params.id, {
+      $push: { attendances: req.user.id },
+    });
+    res.status(200).json({
+      message: "You have an additional attendance",
+      attendedFeed: attendedFeed,
+    });
   } catch (err) {
     next(err);
   }

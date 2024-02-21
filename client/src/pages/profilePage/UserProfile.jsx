@@ -47,6 +47,7 @@ const UserProfile = () => {
         );
         setLoading(false);
         setUserFeeds(response.data.feeds);
+        console.log("UserFeeds", userFeeds);
       } catch (err) {
         setLoading(false);
         console.log(err);
@@ -118,11 +119,17 @@ const UserProfile = () => {
             <span> Hats</span>
           </div>
         </div>
-        {/* <div className="BioDIV">
-          <SecondaryButton SecondaryButtonText="Edit Profile" />
-        </div> */}
-        <div className="BioDIV">
-          <p>{user && user.bio ? user.bio : ""}</p>
+        <div className="BioDIV ">
+          <Link to={"/profile/edit"}>
+            <SecondaryButton SecondaryButtonText="Edit Profile" />
+          </Link>
+        </div>
+        <div className="BioDIV ">
+          {currentUser && currentUser.username === username && (
+            <Link to={"/profile/edit"}>
+              <SecondaryButton SecondaryButtonText="Edit Profile" />
+            </Link>
+          )}
         </div>
         {/* <button className=" border-green-600 font-bold text-xl p-2.5 border rounded text-green-600">
           Enroll
@@ -162,7 +169,11 @@ const UserProfile = () => {
               {userFeeds.length > 0 ? (
                 userFeeds.map((feed) => (
                   <Link key={feed._id} to={`/feeds/${feed._id}`}>
-                    <ProfileFeed video={feed.video} caption={feed.caption} />
+                    <ProfileFeed
+                      video={feed.video}
+                      caption={feed.caption}
+                      thumbnail={feed.thumbnail}
+                    />
                   </Link>
                 ))
               ) : (
